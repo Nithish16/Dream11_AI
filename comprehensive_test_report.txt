@@ -1,0 +1,136 @@
+🔬 DREAMTEAMAI COMPREHENSIVE TEST REPORT
+================================================================================
+📅 Test Date: 2025-07-29 10:24:51
+⏱️  Total Duration: 107.79 seconds
+📊 Total Tests: 27
+✅ Passed: 27
+❌ Failed: 0
+📞 API Calls Made: 5
+📈 Success Rate: 100.0%
+
+📋 CATEGORY-WISE TEST RESULTS:
+------------------------------------------------------------
+
+🔧 API:
+   Tests: 5 | Passed: 5 | Rate: 100.0%
+   ✅ fetch_upcoming_matches (0.460s)
+      • Found 30 upcoming matches
+      • Match types: 4
+      • Sample match ID: 105780
+   ✅ fetch_squads (0.438s)
+      • Found squads for 1 teams
+      • Team IDs: ['squads']
+   ✅ fetch_team_squad (0.392s)
+      • Found 18 players
+      • Sample player: BATTERS
+   ✅ fetch_player_stats (0.491s)
+      • Player stats retrieved
+      • Player: Virat Kohli
+   ✅ fetch_venue_stats (0.419s)
+      • Venue stats retrieved
+
+🔧 MATCH RESOLUTION:
+   Tests: 3 | Passed: 3 | Rate: 100.0%
+   ✅ resolve_match_ids (0.438s)
+      • Match found: England vs India
+      • Match ID: 105780
+      • Series ID: 8786
+   ✅ multiple_date_search (1.323s)
+      • Successfully found matches for 1/3 date searches
+   ✅ get_match_summary (0.000s)
+      • Summary length: 162 characters
+      • Summary generated successfully
+
+🔧 DATA AGGREGATION:
+   Tests: 2 | Passed: 2 | Rate: 100.0%
+   ✅ aggregate_all_data (50.295s)
+      • Team 1 players: 11
+      • Team 2 players: 19
+      • Total players: 30
+      • Data completeness: 100.0%
+      • Venue: Kennington Oval
+      • Pitch type: Green
+   ✅ classify_pitch_archetype (1.386s)
+      • Successfully classified 3/3 venues
+
+🔧 FEATURE ENGINEERING:
+   Tests: 6 | Passed: 6 | Rate: 100.0%
+   ✅ calculate_ema (0.000s)
+      • EMA result: 49.89
+   ✅ calculate_consistency_score (0.000s)
+      • Consistency score: 96.49%
+   ✅ calculate_dynamic_opportunity_index (0.000s)
+      • Opportunity index: 1.56
+   ✅ calculate_form_momentum (0.000s)
+      • Form momentum: -0.24
+   ✅ generate_player_features (0.000s)
+      • Player: Test Player
+      • Expected points: 80.0
+      • Captain probability: 79.2%
+      • EMA score: 53.08
+      • Consistency: 89.09
+   ✅ batch_generate_features (0.000s)
+      • Generated features for 3 players
+      • Average expected points: 80.0
+
+🔧 TEAM OPTIMIZATION:
+   Tests: 4 | Passed: 4 | Rate: 100.0%
+   ✅ prepare_players_for_optimization (0.000s)
+      • Prepared 22 players for optimization
+      • Sample player credits: 8.6
+      • Sample player score: 42.92
+   ✅ apply_risk_profile_adjustments (0.000s)
+      • Applied risk adjustments to 11 players
+   ✅ generate_optimal_teams (0.000s)
+      • Generated 1 optimal teams
+      • Team players: 11
+      • Team credits: 103.3
+      • Team score: 965.1
+      • Captain: Player_20
+   ✅ select_captain_vice_captain (0.000s)
+      • Captain: Player_10 (65.2 pts)
+      • Vice-captain: Player_11 (62.9 pts)
+
+🔧 POST-TOSS WORKFLOW:
+   Tests: 2 | Passed: 2 | Rate: 100.0%
+   ✅ simulate_toss_and_playing_xi (0.000s)
+      • Team A XI: 11 players
+      • Team B XI: 11 players
+      • Toss winner: India
+      • Toss decision: bat
+   ✅ calculate_team_confidence_score (0.000s)
+      • Team confidence score: 96.0%
+
+🔧 ONE-CLICK APPS:
+   Tests: 2 | Passed: 2 | Rate: 100.0%
+   ✅ file_existence_check (0.000s)
+      • Found 1/1 application files
+      •   • run_dreamteam.py
+   ✅ file_permissions_check (0.000s)
+      • Found 1 runnable files
+      •   • run_dreamteam.py
+
+🔧 ERROR HANDLING:
+   Tests: 3 | Passed: 3 | Rate: 100.0%
+   ✅ api_error_handling (0.655s)
+      • Tested API error handling with invalid match ID
+      • API correctly returned fallback data for invalid input
+   ✅ empty_data_handling (0.000s)
+      • EMA with empty data: 0.0
+      • Consistency with empty data: 0.0
+   ✅ insufficient_players_handling (0.000s)
+      • Teams generated with no players: 0
+
+📊 DATA QUALITY METRICS:
+----------------------------------------
+   Total Players: 30
+   Data Completeness: 100.0%
+   Venue: Kennington Oval
+   Pitch Type: Green
+
+🚀 OVERALL ASSESSMENT:
+----------------------------------------
+📊 Status: EXCELLENT
+💡 Recommendation: System performing at optimal level
+
+================================================================================
