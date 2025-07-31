@@ -23,32 +23,7 @@ share/python-wheels/
 *.egg
 MANIFEST
 
-# PyInstaller
-*.manifest
-*.spec
-
-# Installer logs
-pip-log.txt
-pip-delete-this-directory.txt
-
-# Unit test / coverage reports
-htmlcov/
-.tox/
-.nox/
-.coverage
-.coverage.*
-.cache
-nosetests.xml
-coverage.xml
-*.cover
-*.py,cover
-.hypothesis/
-.pytest_cache/
-
-# Jupyter Notebook
-.ipynb_checkpoints
-
-# Environment variables
+# Virtual Environments
 .env
 .venv
 env/
@@ -73,16 +48,52 @@ venv.bak/
 ehthumbs.db
 Thumbs.db
 
-# Claude AI specific
-.claude/
-
 # Logs
 *.log
+logs/
 
-# API Keys (if any config files contain them)
-config.json
+# AI Model Files
+*.pkl
+*.joblib
+*.h5
+*.pth
+*.onnx
+saved_models/
+checkpoints/
+rl_models/
+
+# Data Files
+*.csv
+*.json
+*.xlsx
+data/
+cache/
+
+# Temporary Files
+temp/
+tmp/
+*.tmp
+*.bak
+
+# Test Results
+.coverage
+htmlcov/
+.pytest_cache/
+.tox/
+
+# Environment Variables
+.env.local
+.env.development
+.env.test
+.env.production
+
+# API Keys (Security)
+api_keys.txt
 secrets.json
+config/secret*
 
-# Test outputs
-test_output/
-*.test
+# Output Files
+output/
+results/
+teams_*.json
+analysis_*.html

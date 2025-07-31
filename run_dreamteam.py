@@ -520,11 +520,18 @@ def run_quick_preview():
     clear_screen()
     print("📊 QUICK TEAM PREVIEW")
     print("=" * 40)
-    print("Generating basic team recommendations...")
     
+    # Get match ID from user
     try:
-        # Quick match resolution
-        match_info = demo_match_resolver()
+        match_id = input("🔍 Enter Match ID for quick preview: ").strip()
+        if not match_id:
+            print("❌ No match ID provided.")
+            return False
+        
+        print("Generating basic team recommendations...")
+        
+        # Quick match resolution using provided match ID
+        match_info = resolve_match_from_id(match_id)
         
         if match_info:
             print(f"✅ Found match: {match_info['team1Name']} vs {match_info['team2Name']}")
@@ -551,6 +558,9 @@ def run_quick_preview():
         print("❌ Could not generate quick preview")
         return False
     
+    except KeyboardInterrupt:
+        print("\n❌ Operation cancelled by user.")
+        return False
     except Exception as e:
         print(f"❌ Quick preview failed: {e}")
         return False

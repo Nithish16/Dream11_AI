@@ -10,6 +10,7 @@ class PlayerFeatures:
     player_id: int
     player_name: str
     role: str
+    team_name: str = "Unknown"
     
     # Core performance metrics
     ema_score: float = 0.0
@@ -462,6 +463,7 @@ def generate_player_features(player_raw_data: Dict[str, Any],
     player_id = player_raw_data.get('player_id', 0)
     player_name = player_raw_data.get('name', 'Unknown')
     role = player_raw_data.get('role', 'Unknown')
+    team_name = player_raw_data.get('team_name', 'Unknown')
     
     # Extract performance history
     career_stats = player_raw_data.get('career_stats', {})
@@ -512,6 +514,7 @@ def generate_player_features(player_raw_data: Dict[str, Any],
         player_id=player_id,
         player_name=player_name,
         role=role,
+        team_name=team_name,
         ema_score=ema_score,
         time_decayed_average=time_decayed_avg,
         consistency_score=consistency,

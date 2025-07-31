@@ -239,19 +239,56 @@ def aggregate_team_data(team_id: int, series_id: int, squad_data: Dict[str, Any]
     team_short_name = "UNK"
     players = []
     
-    # Method 1: Try to get Playing XI (highest priority)
-    playing_xi = None
+    # Method 1: Try to get ALL players from match center (highest priority for upcoming matches)
+    all_match_players = None
     
-    # If we have a match_id, try extracting from match center first
+    # If we have a match_id, try extracting complete squad from match center first
+    if match_id:
+        try:
+            all_match_players = extract_all_players_from_match_center(match_id, team_id)
+            if all_match_players and len(all_match_players) >= 8:  # Minimum reasonable squad
+                print(f"  🎯 Using complete squad from match center for team {team_id}")
+                for player_info in all_match_players:
+                    player_data = extract_player_data(player_info, team_id, team_name)
+                    players.append(player_data)
+                
+                print(f"  ✅ Found {len(players)} players from match center (complete squad)")
+                # Return immediately - match center data is most reliable
+                team_data = TeamData(
+                    team_id=team_id,
+                    team_name=team_name,
+                    team_short_name=team_short_name,
+                    players=players
+                )
+                
+                # Categorize players by role
+                for player in players:
+                    role = player.role.lower()
+                    if 'wk' in role or 'wicket' in role or 'keeper' in role:
+                        team_data.wicket_keepers.append(player)
+                    elif 'allrounder' in role or 'all-rounder' in role or 'all rounder' in role:
+                        team_data.all_rounders.append(player) 
+                    elif 'bowl' in role:
+                        team_data.bowlers.append(player)
+                    elif 'bat' in role:
+                        team_data.batsmen.append(player)
+                    else:
+                        # Default categorization for unknown roles - assume batsman
+                        team_data.batsmen.append(player)
+                
+                return team_data
+        except Exception as e:
+            print(f"  ⚠️ Match center complete squad extraction failed: {e}")
+    
+    # Fallback: Try to get probable XI only
+    playing_xi = None
     if match_id:
         try:
             playing_xi = extract_playing_xi_from_match_center(match_id, team_id)
         except Exception as e:
-            print(f"  ⚠️ Match center extraction failed: {e}")
+            print(f"  ⚠️ Match center Playing XI extraction failed: {e}")
     
-    # Fallback to original method if match center didn't work
-    if not playing_xi:
-        playing_xi = get_playing_xi(series_id, team_id)
+    # Skip the corrupted get_playing_xi API call as it may return wrong data
     if playing_xi:
         print(f"  🎯 Using Playing XI for team {team_id}")
         for player_info in playing_xi:
@@ -261,63 +298,35 @@ def aggregate_team_data(team_id: int, series_id: int, squad_data: Dict[str, Any]
         
         if players:
             print(f"  ✅ Found {len(players)} players from Playing XI")
-            # Create team data and return early
-            team_data = TeamData(
-                team_id=team_id,
-                team_name=team_name,
-                team_short_name=team_short_name,
-                players=players
-            )
-            return team_data
-    
-    # Method 2: Try using squad data from series API (with filtering)
-    team_squad_id = None
-    if squad_data and not squad_data.get('error'):
-        squads = squad_data.get('squads', [])
-        
-        for squad in squads:
-            if squad.get('teamId') == team_id and not squad.get('isHeader'):
-                team_squad_id = squad.get('squadId')
-                break
-        
-        if team_squad_id:
-            try:
-                detailed_squad = fetch_team_squad(series_id, team_squad_id)
-                if detailed_squad and not detailed_squad.get('error'):
-                    squad_players = detailed_squad.get('player', [])
-                    for player_info in squad_players:
-                        # Skip headers and support staff
-                        if player_info.get('isHeader') or is_support_staff(player_info):
-                            continue
-                        player_data = extract_player_data(player_info, team_id, team_name)
-                        players.append(player_data)
-                        
-                    print(f"  ✅ Found {len(players)} players from squad (filtered)")
-            except Exception as e:
-                print(f"  ❌ Error fetching detailed squad: {e}")
-    
-    # Method 3: Fallback - Direct team squad API (with filtering)
-    if not players:
-        print(f"  ⚠️  Trying direct team squad API for team {team_id}...")
-        try:
-            direct_squad = fetch_team_squad(series_id, team_id)
-            if direct_squad and not direct_squad.get('error'):
-                squad_players = direct_squad.get('player', [])
-                for player_info in squad_players:
-                    # Skip headers and support staff
-                    if player_info.get('isHeader') or is_support_staff(player_info):
-                        continue
-                    player_data = extract_player_data(player_info, team_id, team_name)
-                    players.append(player_data)
+            # Only return early if we have a reasonable squad size (11+ players)
+            if len(players) >= 11:
+                team_data = TeamData(
+                    team_id=team_id,
+                    team_name=team_name,
+                    team_short_name=team_short_name,
+                    players=players
+                )
                 
-                if players:
-                    print(f"  ✅ Found {len(players)} players via direct API (filtered)")
-                else:
-                    print(f"  ⚠️  No valid players found")
+                # Categorize players by role
+                for player in players:
+                    role = player.role.lower()
+                    if 'wk' in role or 'wicket' in role or 'keeper' in role:
+                        team_data.wicket_keepers.append(player)
+                    elif 'allrounder' in role or 'all-rounder' in role or 'all rounder' in role:
+                        team_data.all_rounders.append(player) 
+                    elif 'bowl' in role:
+                        team_data.bowlers.append(player)
+                    elif 'bat' in role:
+                        team_data.batsmen.append(player)
+                    else:
+                        # Default categorization for unknown roles - assume batsman
+                        team_data.batsmen.append(player)
+                
+                return team_data
             else:
-                print(f"  ❌ Direct team squad API failed")
-        except Exception as e:
-            print(f"  ❌ Error with direct team squad: {e}")
+                print(f"  ⚠️  Only {len(players)} players from Playing XI")
+                print(f"  ⚠️  SKIPPING squad APIs - detected data corruption (returning wrong team players)")
+                print(f"  ⚠️  Proceeding with available match center data only")
     
     # Check if no players were found after all attempts
     if not players:
@@ -468,6 +477,9 @@ def aggregate_all_data(resolved_ids: Dict[str, Any]) -> MatchData:
     # Update team name from resolved data if not found in API
     if team1_data.team_name == "Unknown Team":
         team1_data.team_name = team1_name
+        # Also update individual player team names
+        for player in team1_data.players:
+            player.team_name = team1_name
     
     # Check for team1 player data availability
     if team1_data.error:
@@ -479,6 +491,9 @@ def aggregate_all_data(resolved_ids: Dict[str, Any]) -> MatchData:
     # Update team name from resolved data if not found in API
     if team2_data.team_name == "Unknown Team":
         team2_data.team_name = team2_name
+        # Also update individual player team names
+        for player in team2_data.players:
+            player.team_name = team2_name
     
     # Check for team2 player data availability  
     if team2_data.error:
@@ -550,6 +565,74 @@ def print_aggregation_summary(match_data: MatchData) -> None:
     
     print("="*60)
 
+def extract_all_players_from_match_center(match_id: int, team_id: int) -> List[Dict[str, Any]]:
+    """
+    Extract ALL players from match center data (both probable XI and substitutes)
+    This is used when squad APIs are corrupted and we need complete squad data
+    """
+    try:
+        from utils.api_client import fetch_match_center
+        
+        match_data = fetch_match_center(match_id)
+        if not match_data or 'matchInfo' not in match_data:
+            return None
+            
+        match_info = match_data['matchInfo']
+        
+        # Find the correct team
+        team_key = None
+        if 'team1' in match_info and match_info['team1'].get('id') == team_id:
+            team_key = 'team1'
+        elif 'team2' in match_info and match_info['team2'].get('id') == team_id:
+            team_key = 'team2'
+        
+        if not team_key or 'playerDetails' not in match_info[team_key]:
+            return None
+            
+        all_players = match_info[team_key]['playerDetails']
+        valid_players = []
+        
+        for player in all_players:
+            # Include ALL players (both substitute true/false) but filter support staff
+            if is_support_staff(player):
+                continue
+                
+            # Additional validation: Only include actual cricket players with valid roles
+            role = str(player.get('role', '')).lower()
+            player_name = str(player.get('name', '')).lower()
+            
+            # Define valid cricket roles more comprehensively
+            cricket_roles = [
+                'batsman', 'bowler', 'allrounder', 'all-rounder', 'all rounder',
+                'wk-batsman', 'wicket-keeper', 'wicketkeeper', 'wk', 
+                'batting allrounder', 'bowling allrounder', 'right-hand bat',
+                'left-hand bat', 'right-arm fast', 'left-arm fast', 'right-arm medium',
+                'left-arm medium', 'right-arm off break', 'left-arm orthodox',
+                'leg break googly', 'slow left-arm orthodox'
+            ]
+            
+            # Check if player has a valid cricket role
+            has_valid_role = any(cricket_role in role for cricket_role in cricket_roles)
+            
+            # Additional check: Exclude obvious non-players by name patterns
+            non_player_names = ['coach', 'manager', 'analyst', 'physio', 'doctor', 'trainer']
+            is_non_player = any(pattern in player_name for pattern in non_player_names)
+            
+            if has_valid_role and not is_non_player:
+                valid_players.append(player)
+                print(f"    ✅ Added squad player: {player.get('name', 'Unknown')} ({role}) [substitute: {player.get('substitute', 'N/A')}]")
+        
+        if valid_players:
+            print(f"  🎯 Extracted {len(valid_players)} total squad players from match center")
+            return valid_players
+        else:
+            print(f"  ❌ No valid players found in match center")
+            return None
+            
+    except Exception as e:
+        print(f"  ❌ Error extracting all players from match center: {e}")
+        return None
+
 def extract_playing_xi_from_match_center(match_id: int, team_id: int) -> List[Dict[str, Any]]:
     """
     Extract Playing XI from match center data by filtering out support staff and bench players
@@ -578,20 +661,38 @@ def extract_playing_xi_from_match_center(match_id: int, team_id: int) -> List[Di
         playing_xi = []
         
         for player in all_players:
-            # Skip substitutes (bench players)
-            if player.get('substitute', False):
+            # Only include probable XI players (substitute: false indicates probable playing XI)
+            if player.get('substitute', True):  # Default to True if field missing
                 continue
                 
             # Skip support staff using our enhanced filter
             if is_support_staff(player):
                 continue
                 
-            # Only include actual cricket players
+            # Additional validation: Only include actual cricket players with valid roles
             role = str(player.get('role', '')).lower()
-            cricket_roles = ['batsman', 'bowler', 'allrounder', 'wk-batsman', 'wicket-keeper', 'batting allrounder', 'bowling allrounder']
+            player_name = str(player.get('name', '')).lower()
             
-            if any(cricket_role in role for cricket_role in cricket_roles):
+            # Define valid cricket roles more comprehensively
+            cricket_roles = [
+                'batsman', 'bowler', 'allrounder', 'all-rounder', 'all rounder',
+                'wk-batsman', 'wicket-keeper', 'wicketkeeper', 'wk', 
+                'batting allrounder', 'bowling allrounder', 'right-hand bat',
+                'left-hand bat', 'right-arm fast', 'left-arm fast', 'right-arm medium',
+                'left-arm medium', 'right-arm off break', 'left-arm orthodox',
+                'leg break googly', 'slow left-arm orthodox'
+            ]
+            
+            # Check if player has a valid cricket role
+            has_valid_role = any(cricket_role in role for cricket_role in cricket_roles)
+            
+            # Additional check: Exclude obvious non-players by name patterns
+            non_player_names = ['coach', 'manager', 'analyst', 'physio', 'doctor', 'trainer']
+            is_non_player = any(pattern in player_name for pattern in non_player_names)
+            
+            if has_valid_role and not is_non_player:
                 playing_xi.append(player)
+                print(f"    ✅ Added probable XI player: {player.get('name', 'Unknown')} ({role})")
         
         # Limit to 11 players maximum (in case there are extras)
         if len(playing_xi) > 11:
@@ -683,14 +784,18 @@ def is_support_staff(player_info: Dict[str, Any]) -> bool:
     role = str(player_info.get('role', '')).lower()
     name = str(player_info.get('name', '')).lower()
     
-    # Support staff roles to filter out
+    # Support staff roles to filter out (comprehensive list)
     support_roles = [
         'coach', 'manager', 'support', 'staff', 'analyst', 
         'physiotherapist', 'physio', 'trainer', 'assistant',
         'media', 'doctor', 'medical', 'head coach', 'bowling coach',
         'batting coach', 'fielding coach', 'team manager',
         'assistant coach', 'strength and conditioning', 'video analyst',
-        'team doctor', 'chief selector', 'selector'
+        'team doctor', 'chief selector', 'selector', 'psychologist',
+        'massage therapist', 'kit manager', 'security manager',
+        'welfare officer', 'team operations', 'logistics', 'administrator',
+        'coordinator', 'liaison', 'consultant', 'specialist',
+        'performance analyst', 'fitness coach', 'nutritionist'
     ]
     
     # Check if role contains any support staff keywords

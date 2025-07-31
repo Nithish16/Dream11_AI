@@ -32,6 +32,9 @@ class PlayerForOptimization:
     is_captain_candidate: bool = False
     is_vice_captain_candidate: bool = False
     selection_priority: float = 0.0
+    
+    # Enhanced features
+    ownership_prediction: float = 50.0  # Expected ownership percentage
 
 @dataclass
 class OptimalTeam:
@@ -46,6 +49,12 @@ class OptimalTeam:
     risk_level: str = "Balanced"
     pack_type: str = "Pack-1"  # Pack-1 or Pack-2
     strategy: str = "Optimal"  # Optimal, Risk-Adjusted, Form-Based, Value-Picks
+    
+    # Enhanced features
+    confidence_score: float = 3.0  # 1-5 stars rating
+    ownership_prediction: float = 50.0  # Expected ownership percentage
+    contest_recommendation: str = "Both"  # Small, Grand, Both
+    strategic_focus: str = "Balanced"  # Ceiling, Safety, Differential, etc.
     
     # Team composition
     batsmen: List[PlayerForOptimization] = field(default_factory=list)
@@ -246,6 +255,139 @@ def assign_player_credits(player_features: PlayerFeatures) -> float:
     # All players get same credits - prediction purely based on data analysis
     return 8.5
 
+def calculate_ownership_prediction(player: PlayerForOptimization, all_players: List[PlayerForOptimization]) -> float:
+    """
+    Calculate expected ownership percentage for a player
+    Based on credits, performance, and player popularity
+    """
+    # Normalize final score (0-100 scale)
+    max_score = max(p.final_score for p in all_players) if all_players else 100
+    min_score = min(p.final_score for p in all_players) if all_players else 0
+    score_range = max_score - min_score if max_score != min_score else 1
+    normalized_score = ((player.final_score - min_score) / score_range) * 100
+    
+    # Credits factor (lower credits = higher ownership)
+    credit_factor = max(0, (100 - player.credits * 10))  # Assuming credits are 0-10 scale
+    
+    # Role factor (popular roles get higher ownership)
+    role_multiplier = 1.0
+    if 'wk' in player.role.lower():
+        role_multiplier = 1.3  # Wicket keepers are popular
+    elif 'allrounder' in player.role.lower():
+        role_multiplier = 1.2  # All-rounders are popular
+    
+    # Base ownership calculation
+    base_ownership = (normalized_score * 0.6 + credit_factor * 0.4) * role_multiplier
+    
+    # Clamp between 5% and 95%
+    return max(5.0, min(95.0, base_ownership))
+
+def calculate_team_confidence_score(team: OptimalTeam) -> float:
+    """
+    Calculate confidence score (1-5 stars) for a team
+    Based on consistency, risk level, and strategic focus
+    """
+    if not team.players:
+        return 3.0
+    
+    # Factor 1: Average consistency of players
+    avg_consistency = sum(p.consistency_score for p in team.players) / len(team.players)
+    consistency_score = min(5.0, (avg_consistency / 20))  # Normalize to 5
+    
+    # Factor 2: Team balance (role distribution)
+    role_balance = 1.0
+    if len(team.batsmen) >= 3 and len(team.bowlers) >= 3 and len(team.wicket_keepers) >= 1:
+        role_balance = 1.2
+    
+    # Factor 3: Strategy-specific adjustments
+    strategy_bonus = 1.0
+    if team.strategy == "Risk-Adjusted":
+        strategy_bonus = 1.1  # Safer teams get slight bonus
+    elif "Optimal" in team.strategy:
+        strategy_bonus = 1.15  # Optimal strategies get higher confidence
+    
+    # Factor 4: Captain selection quality
+    captain_bonus = 1.0
+    if team.captain and team.captain.final_score > 50:
+        captain_bonus = 1.1
+    
+    confidence = consistency_score * role_balance * strategy_bonus * captain_bonus
+    return max(1.0, min(5.0, confidence))
+
+def determine_contest_recommendation(team: OptimalTeam) -> str:
+    """
+    Determine contest recommendation based on team characteristics
+    """
+    if not team.players:
+        return "Both"
+    
+    # Calculate average ownership
+    avg_ownership = sum(p.ownership_prediction for p in team.players) / len(team.players)
+    
+    # Calculate risk level based on consistency
+    avg_consistency = sum(p.consistency_score for p in team.players) / len(team.players)
+    
+    # Determine recommendation
+    if avg_ownership < 40 and avg_consistency > 60:
+        return "Grand"  # Low ownership, high consistency = good for large contests
+    elif avg_ownership > 60 and avg_consistency > 70:
+        return "Small"  # High ownership, high consistency = good for small contests
+    else:
+        return "Both"  # Balanced approach
+
+def determine_strategic_focus(team: OptimalTeam, strategy: str) -> str:
+    """
+    Determine the strategic focus description for a team
+    """
+    if strategy == "Risk-Adjusted":
+        return "Safety"
+    elif strategy == "Form-Based":
+        return "Ceiling"
+    elif strategy == "Value-Picks":
+        return "Differential"
+    elif "C/VC Variation 1" in strategy:
+        return "Ceiling"
+    elif "C/VC Variation 2" in strategy:
+        return "Safety"
+    elif "C/VC Variation 3" in strategy:
+        return "Differential"
+    else:
+        return "Balanced"
+
+def generate_scenario_alternatives(team: OptimalTeam, all_players: List[PlayerForOptimization]) -> Dict[str, List[str]]:
+    """
+    Generate scenario planning alternatives for key players
+    """
+    scenarios = {
+        "captain_alternatives": [],
+        "vice_captain_alternatives": [], 
+        "risky_player_substitutes": []
+    }
+    
+    # Captain alternatives (top 3 captain candidates not already captain)
+    captain_candidates = [p for p in all_players if p.is_captain_candidate and p != team.captain]
+    captain_candidates.sort(key=lambda x: x.final_score, reverse=True)
+    scenarios["captain_alternatives"] = [p.name for p in captain_candidates[:3]]
+    
+    # Vice-captain alternatives  
+    vc_candidates = [p for p in all_players if p.is_vice_captain_candidate and p != team.vice_captain and p != team.captain]
+    vc_candidates.sort(key=lambda x: x.final_score, reverse=True)
+    scenarios["vice_captain_alternatives"] = [p.name for p in vc_candidates[:3]]
+    
+    # Risky player substitutes (players with low consistency in team)
+    risky_players = [p for p in team.players if p.consistency_score < 40]
+    for risky_player in risky_players[:2]:  # Max 2 risky players
+        # Find similar role replacement
+        role_replacements = [p for p in all_players 
+                           if p.role == risky_player.role 
+                           and p not in team.players 
+                           and p.consistency_score > risky_player.consistency_score]
+        if role_replacements:
+            best_replacement = max(role_replacements, key=lambda x: x.final_score)
+            scenarios["risky_player_substitutes"].append(f"{risky_player.name} → {best_replacement.name}")
+    
+    return scenarios
+
 def prepare_players_for_optimization(player_features_list: List[PlayerFeatures],
                                    match_format: str = "T20",
                                    match_context: Dict[str, Any] = None,
@@ -262,8 +404,13 @@ def prepare_players_for_optimization(player_features_list: List[PlayerFeatures],
         final_score = get_final_player_score(features, match_format, match_context)
         credits = assign_player_credits(features)
         
-        # Determine team name
-        team_name = team_mapping.get(features.player_id, "Team A" if len(players_for_opt) < 16 else "Team B")
+        # Determine team name (use from features if available, otherwise fallback)
+        team_name = getattr(features, 'team_name', None) or team_mapping.get(features.player_id, None)
+        
+        # If still no team name, distribute players alternately between teams
+        if not team_name or team_name == "Unknown":
+            # Use player_id to consistently assign teams
+            team_name = f"Team_{(features.player_id % 2) + 1}"
         
         player_opt = PlayerForOptimization(
             player_id=features.player_id,
@@ -281,6 +428,10 @@ def prepare_players_for_optimization(player_features_list: List[PlayerFeatures],
         )
         
         players_for_opt.append(player_opt)
+    
+    # Calculate ownership predictions for all players
+    for player in players_for_opt:
+        player.ownership_prediction = calculate_ownership_prediction(player, players_for_opt)
     
     return players_for_opt
 
@@ -618,29 +769,138 @@ def is_wicket_keeper(role: str) -> bool:
     role_lower = role.lower()
     return 'wk' in role_lower or 'wicket' in role_lower or 'keeper' in role_lower
 
+def get_team_abbreviation(team_name: str) -> str:
+    """
+    Generate team abbreviation from team name
+    """
+    if not team_name or team_name == "Unknown" or team_name == "Unknown Team":
+        return "UNK"
+    
+    # Common team abbreviations
+    abbreviations = {
+        'india': 'IND',
+        'england': 'ENG', 
+        'australia': 'AUS',
+        'new zealand': 'NZ',
+        'south africa': 'SA',
+        'pakistan': 'PAK',
+        'sri lanka': 'SL',
+        'bangladesh': 'BAN',
+        'west indies': 'WI',
+        'afghanistan': 'AFG',
+        'zimbabwe': 'ZIM',
+        'ireland': 'IRE',
+        'scotland': 'SCO',
+        'netherlands': 'NED',
+        'nepal': 'NEP',
+        'oman': 'OMA',
+        'united arab emirates': 'UAE',
+        'qatar': 'QAT',
+        'kuwait': 'KUW',
+        'saudi arabia': 'SAU',
+        'bahrain': 'BHR',
+        'hong kong': 'HK',
+        'singapore': 'SIN',
+        'malaysia': 'MAL',
+        'thailand': 'THA',
+        'myanmar': 'MYA',
+        'bhutan': 'BHU',
+        'maldives': 'MDV',
+        'usa': 'USA',
+        'united states': 'USA',
+        'canada': 'CAN',
+        'bermuda': 'BER',
+        'namibia': 'NAM',
+        'kenya': 'KEN',
+        'uganda': 'UGA',
+        'tanzania': 'TAN',
+        'botswana': 'BOT',
+        'ghana': 'GHA',
+        'nigeria': 'NIG',
+        'gambia': 'GAM',
+        'sierra leone': 'SLE',
+        'malawi': 'MAW',
+        'mozambique': 'MOZ',
+        'rwanda': 'RWA',
+        'lesotho': 'LES',
+        'swaziland': 'SWA',
+        'zambia': 'ZAM',
+        'cameroon': 'CAM',
+        'ivory coast': 'CIV',
+        'mali': 'MLI',
+        'burkina faso': 'BUR',
+        'senegal': 'SEN',
+        'madagascar': 'MAD',
+        # IPL and domestic teams
+        'mumbai indians': 'MI',
+        'chennai super kings': 'CSK',
+        'royal challengers bangalore': 'RCB',
+        'kolkata knight riders': 'KKR',
+        'delhi capitals': 'DC',
+        'punjab kings': 'PK',
+        'rajasthan royals': 'RR',
+        'sunrisers hyderabad': 'SRH',
+        'gujarat titans': 'GT',
+        'lucknow super giants': 'LSG'
+    }
+    
+    team_lower = team_name.lower().strip()
+    
+    # Check for exact match first
+    if team_lower in abbreviations:
+        return abbreviations[team_lower]
+    
+    # Check for partial matches
+    for full_name, abbr in abbreviations.items():
+        if full_name in team_lower or team_lower in full_name:
+            return abbr
+    
+    # Fallback: Create abbreviation from first letters of words
+    words = team_name.split()
+    if len(words) == 1:
+        # Single word: take first 3 characters
+        return words[0][:3].upper()
+    elif len(words) == 2:
+        # Two words: first letter of each + first letter of second word
+        return (words[0][0] + words[1][0] + words[1][1:2]).upper()[:3]
+    else:
+        # Multiple words: first letter of each word (max 3)
+        return ''.join(word[0] for word in words[:3]).upper()
+
 def print_team_summary(team: OptimalTeam) -> None:
-    """Print comprehensive team summary"""
+    """Print comprehensive team summary with enhanced features"""
+    stars = "⭐" * int(team.confidence_score)
     print(f"\n{'='*60}")
     print(f"🏆 {team.pack_type} TEAM {team.team_id} - {team.strategy.upper()}")
     print(f"{'='*60}")
     print(f"👑 Captain: {team.captain.name if team.captain else 'None'}")
     print(f"🥈 Vice Captain: {team.vice_captain.name if team.vice_captain else 'None'}")
     
+    print(f"\n🎯 TEAM ANALYTICS:")
+    print(f"   💎 Confidence Score: {team.confidence_score:.1f}/5.0 {stars}")
+    print(f"   📊 Strategic Focus: {team.strategic_focus}")
+    print(f"   🎪 Contest Recommendation: {team.contest_recommendation} Leagues")
+    print(f"   📈 Expected Ownership: {team.ownership_prediction:.1f}%")
+    print(f"   💰 Total Credits: {team.total_credits:.1f}/100")
+    print(f"   🎯 Projected Score: {team.total_score:.1f}")
+    
     print(f"\n📋 TEAM COMPOSITION:")
-    print(f"🏏 Batsmen ({len(team.batsmen)}): {', '.join(p.name for p in team.batsmen)}")
-    print(f"⚡ Bowlers ({len(team.bowlers)}): {', '.join(p.name for p in team.bowlers)}")
-    print(f"🔄 All-rounders ({len(team.all_rounders)}): {', '.join(p.name for p in team.all_rounders)}")
-    print(f"🧤 Wicket-keepers ({len(team.wicket_keepers)}): {', '.join(p.name for p in team.wicket_keepers)}")
+    print(f"🏏 Batsmen ({len(team.batsmen)}): {', '.join(f'{p.name} ({get_team_abbreviation(p.team)})' for p in team.batsmen)}")
+    print(f"⚡ Bowlers ({len(team.bowlers)}): {', '.join(f'{p.name} ({get_team_abbreviation(p.team)})' for p in team.bowlers)}")
+    print(f"🔄 All-rounders ({len(team.all_rounders)}): {', '.join(f'{p.name} ({get_team_abbreviation(p.team)})' for p in team.all_rounders)}")
+    print(f"🧤 Wicket-keepers ({len(team.wicket_keepers)}): {', '.join(f'{p.name} ({get_team_abbreviation(p.team)})' for p in team.wicket_keepers)}")
     
     print(f"\n📈 DETAILED PLAYER LIST:")
     for i, player in enumerate(sorted(team.players, key=lambda x: x.final_score, reverse=True), 1):
         captain_indicator = " (C)" if player == team.captain else " (VC)" if player == team.vice_captain else ""
-        print(f"  {i:2d}. {player.name:20s} ({player.role:15s}){captain_indicator}")
+        ownership_indicator = f" [{player.ownership_prediction:.0f}% own]"
+        team_abbr = get_team_abbreviation(player.team)
+        print(f"  {i:2d}. {player.name:20s} ({team_abbr}) ({player.role:12s}){captain_indicator}{ownership_indicator}")
     
     print(f"{'='*60}")
 
 def print_hybrid_teams_summary(hybrid_teams: Dict[str, List[OptimalTeam]]) -> None:
-    """Print summary of all hybrid teams"""
+    """Print enhanced summary of all hybrid teams"""
     print(f"\n{'🎯'*20}")
     print("🏆 HYBRID TEAM STRATEGY SUMMARY")
     print(f"{'🎯'*20}")
@@ -655,19 +915,26 @@ def print_hybrid_teams_summary(hybrid_teams: Dict[str, List[OptimalTeam]]) -> No
             continue
             
         for team in teams:
+            stars = "⭐" * int(team.confidence_score)
             strategy_info = f" ({team.strategy})" if team.strategy != "Optimal" else ""
-            print(f"  🏆 Team {team.team_id}{strategy_info}: "
-                  f"C: {team.captain.name if team.captain else 'None'} | "
-                  f"VC: {team.vice_captain.name if team.vice_captain else 'None'} | "
-                  f"Score: {team.total_score:.1f}")
+            print(f"  🏆 Team {team.team_id}{strategy_info}:")
+            print(f"     👑 C: {team.captain.name if team.captain else 'None'} | 🥈 VC: {team.vice_captain.name if team.vice_captain else 'None'}")
+            print(f"     💎 {team.confidence_score:.1f}/5.0 {stars} | 🎪 {team.contest_recommendation} | 📊 {team.strategic_focus} | 🎯 {team.total_score:.1f}")
     
     print(f"\n{'='*60}")
-    print("💡 STRATEGY EXPLANATION:")
-    print("📦 Pack-1: Same optimal 11 players with 3 different C/VC combinations")
-    print("📦 Pack-2: Alternative teams with different selection strategies")
-    print("   - Risk-Adjusted: Focus on consistent performers")
-    print("   - Form-Based: Emphasizes recent form and momentum")
-    print("   - Value-Picks: Best value for credits ratio")
+    print("💡 ENHANCED STRATEGY EXPLANATION:")
+    print("📦 Pack-1: Same optimal 11 players with strategic C/VC variations")
+    print("   • Team 1: Highest Ceiling (Max Points Potential)")
+    print("   • Team 2: Safest Choice (Consistent Performers)")  
+    print("   • Team 3: Differential Pick (Low Ownership)")
+    print("\n📦 Pack-2: Alternative teams with pitch-based strategies")
+    print("   • Risk-Adjusted: Safety focus for consistent returns")
+    print("   • Form-Based: Ceiling focus based on recent performance")
+    print("   • Value-Picks: Differential focus with best credit value")
+    print(f"\n🎯 CONTEST RECOMMENDATIONS:")
+    print("   • Small: High ownership, high consistency teams")
+    print("   • Grand: Low ownership, differential teams") 
+    print("   • Both: Balanced approach for all contest types")
     print(f"{'='*60}")
 
 def generate_captain_vice_captain_variations(base_team_players: List[PlayerForOptimization], 
@@ -734,6 +1001,7 @@ def generate_captain_vice_captain_variations(base_team_players: List[PlayerForOp
 def generate_pack1_teams(base_team_players: List[PlayerForOptimization]) -> List[OptimalTeam]:
     """
     Generate Pack-1: Same 11 players with 3 different C/VC combinations
+    Enhanced with strategic focus descriptions
     
     Args:
         base_team_players: List of 11 optimally selected players
@@ -747,8 +1015,14 @@ def generate_pack1_teams(base_team_players: List[PlayerForOptimization]) -> List
     cv_variations = generate_captain_vice_captain_variations(base_team_players, 3)
     
     pack1_teams = []
+    strategy_descriptions = [
+        "Highest Ceiling (Max Points Potential)", 
+        "Safest Choice (Consistent Performers)",
+        "Differential Pick (Low Ownership)"
+    ]
     
     for i, (captain, vice_captain) in enumerate(cv_variations, 1):
+        strategy = f"C/VC Variation {i}"
         team = OptimalTeam(
             team_id=i,
             players=base_team_players.copy(),
@@ -756,11 +1030,21 @@ def generate_pack1_teams(base_team_players: List[PlayerForOptimization]) -> List
             vice_captain=vice_captain,
             risk_level="Optimal",
             pack_type="Pack-1",
-            strategy=f"C/VC Variation {i}"
+            strategy=strategy
         )
+        
+        # Calculate enhanced features
+        team.confidence_score = calculate_team_confidence_score(team)
+        team.contest_recommendation = determine_contest_recommendation(team)
+        team.strategic_focus = determine_strategic_focus(team, strategy)
+        
+        # Calculate team ownership prediction
+        team.ownership_prediction = sum(p.ownership_prediction for p in team.players) / len(team.players)
+        
         pack1_teams.append(team)
         
-        print(f"  ✅ Team {i}: C: {captain.name} | VC: {vice_captain.name} | Score: {team.total_score:.1f}")
+        print(f"  ✅ Team {i} ({strategy_descriptions[i-1]}): C: {captain.name} | VC: {vice_captain.name}")
+        print(f"     Score: {team.total_score:.1f} | Confidence: {team.confidence_score:.1f}⭐ | Contest: {team.contest_recommendation}")
     
     return pack1_teams
 
@@ -787,9 +1071,17 @@ def generate_pack2_teams(players_for_opt: List[PlayerForOptimization]) -> List[O
         team1.pack_type = "Pack-2"
         team1.strategy = "Risk-Adjusted"
         team1.team_id = 4
+        
+        # Calculate enhanced features
+        team1.confidence_score = calculate_team_confidence_score(team1)
+        team1.contest_recommendation = determine_contest_recommendation(team1)
+        team1.strategic_focus = determine_strategic_focus(team1, "Risk-Adjusted")
+        team1.ownership_prediction = sum(p.ownership_prediction for p in team1.players) / len(team1.players)
+        
         pack2_teams.append(team1)
         used_players.update(p.player_id for p in team1.players)
-        print(f"  ✅ Team 4 (Risk-Adjusted): Score: {team1.total_score:.1f}")
+        print(f"  ✅ Team 4 (Risk-Adjusted - Consistent Performers): Score: {team1.total_score:.1f}")
+        print(f"     Confidence: {team1.confidence_score:.1f}⭐ | Contest: {team1.contest_recommendation} | Focus: {team1.strategic_focus}")
     
     # Strategy 2: Form-Based (Recent form focus)
     form_based_players = sorted(players_for_opt, key=lambda x: x.form_momentum + x.ema_score, reverse=True)
@@ -807,9 +1099,17 @@ def generate_pack2_teams(players_for_opt: List[PlayerForOptimization]) -> List[O
                 pack_type="Pack-2",
                 strategy="Form-Based"
             )
+            
+            # Calculate enhanced features
+            team2.confidence_score = calculate_team_confidence_score(team2)
+            team2.contest_recommendation = determine_contest_recommendation(team2)
+            team2.strategic_focus = determine_strategic_focus(team2, "Form-Based")
+            team2.ownership_prediction = sum(p.ownership_prediction for p in team2.players) / len(team2.players)
+            
             pack2_teams.append(team2)
             used_players.update(p.player_id for p in team2.players)
-            print(f"  ✅ Team 5 (Form-Based): Score: {team2.total_score:.1f}")
+            print(f"  ✅ Team 5 (Form-Based - Recent Performance): Score: {team2.total_score:.1f}")
+            print(f"     Confidence: {team2.confidence_score:.1f}⭐ | Contest: {team2.contest_recommendation} | Focus: {team2.strategic_focus}")
     
     # Strategy 3: Value-Picks (Best value for credits)
     value_players = sorted(players_for_opt, key=lambda x: x.final_score / x.credits, reverse=True)
@@ -827,8 +1127,16 @@ def generate_pack2_teams(players_for_opt: List[PlayerForOptimization]) -> List[O
                 pack_type="Pack-2",
                 strategy="Value-Picks"
             )
+            
+            # Calculate enhanced features
+            team3.confidence_score = calculate_team_confidence_score(team3)
+            team3.contest_recommendation = determine_contest_recommendation(team3)
+            team3.strategic_focus = determine_strategic_focus(team3, "Value-Picks")
+            team3.ownership_prediction = sum(p.ownership_prediction for p in team3.players) / len(team3.players)
+            
             pack2_teams.append(team3)
-            print(f"  ✅ Team 6 (Value-Picks): Score: {team3.total_score:.1f}")
+            print(f"  ✅ Team 6 (Value-Picks - Best Credit Value): Score: {team3.total_score:.1f}")
+            print(f"     Confidence: {team3.confidence_score:.1f}⭐ | Contest: {team3.contest_recommendation} | Focus: {team3.strategic_focus}")
     
     return pack2_teams
 
@@ -916,9 +1224,15 @@ def generate_hybrid_teams(player_features_list: List[PlayerFeatures],
     print("\n🎯 GENERATING HYBRID TEAM STRATEGY")
     print("="*60)
     
+    # Create team mapping from player features to preserve actual team names
+    team_mapping = {}
+    for features in player_features_list:
+        if hasattr(features, 'team_name') and features.team_name and features.team_name != "Unknown":
+            team_mapping[features.player_id] = features.team_name
+    
     # Prepare players for optimization
     players_for_opt = prepare_players_for_optimization(
-        player_features_list, match_format, match_context
+        player_features_list, match_format, match_context, team_mapping
     )
     
     if len(players_for_opt) < 11:
@@ -977,9 +1291,15 @@ def batch_generate_teams(player_features_list: List[PlayerFeatures],
     if match_context is None:
         match_context = {}
     
+    # Create team mapping from player features to preserve actual team names
+    team_mapping = {}
+    for features in player_features_list:
+        if hasattr(features, 'team_name') and features.team_name and features.team_name != "Unknown":
+            team_mapping[features.player_id] = features.team_name
+    
     # Prepare players for optimization
     players_for_opt = prepare_players_for_optimization(
-        player_features_list, match_format, match_context
+        player_features_list, match_format, match_context, team_mapping
     )
     
     all_teams = {}

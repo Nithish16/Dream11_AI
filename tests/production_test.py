@@ -4,9 +4,15 @@ DreamTeamAI - Production Readiness Test
 Complete end-to-end validation of all phases
 """
 
+import sys
+import os
 import time
 import traceback
 from datetime import datetime
+
+# Add project root to path
+sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+
 from core_logic.match_resolver import resolve_match_ids, get_match_summary
 from core_logic.data_aggregator import aggregate_all_data, print_aggregation_summary
 from core_logic.feature_engine import batch_generate_features, print_feature_summary
