@@ -2,24 +2,40 @@
 
 ## 📋 Quick Start Guide
 
-### 🎯 **Recommended: Enhanced AI System (Maximum Quality)**
+### 🆔 **NEW: Using Match ID (Recommended)**
 
 ```bash
-# Generate optimized teams with ALL AI features (Neural Networks + Quantum Optimization)
-python3 enhanced_dreamteam_ai.py "india vs australia"
+# Direct match targeting using Match ID (most accurate)
+python3 enhanced_dreamteam_ai.py --match-id 12345 --fast-mode
 
-# Or use the universal launcher
-python3 dreamteam.py generate "india vs australia"
+# Using universal launcher with Match ID
+python3 dreamteam.py generate --match-id 12345 --fast-mode
+
+# Auto-detect Match ID (numeric input)
+python3 enhanced_dreamteam_ai.py 12345 --fast-mode
 ```
 
-### ⚡ **Fast Mode (Speed Priority)**
+### 🎯 **Traditional: Team Names**
 
 ```bash
-# Disable quantum optimization for faster processing (~30 seconds vs 2-5 minutes)
+# Generate teams using team names (still supported)
 python3 enhanced_dreamteam_ai.py "india vs australia" --fast-mode
 
-# Or use the universal launcher
+# Explicit team names flag
+python3 enhanced_dreamteam_ai.py --teams "india vs australia" --fast-mode
+
+# Universal launcher with team names
 python3 dreamteam.py generate "india vs australia" --fast-mode
+```
+
+### ⚡ **Maximum AI Mode (2-5 minutes)**
+
+```bash
+# All AI features including quantum optimization
+python3 enhanced_dreamteam_ai.py --match-id 12345
+
+# With team names
+python3 enhanced_dreamteam_ai.py "india vs australia"
 ```
 
 ### 🔧 **Legacy System (Compatibility)**
@@ -140,16 +156,21 @@ python3 dreamteam.py test
 
 ### Enhanced System Options
 ```bash
-python3 enhanced_dreamteam_ai.py "MATCH_QUERY" [OPTIONS]
+python3 enhanced_dreamteam_ai.py [INPUT] [OPTIONS]
 
-Options:
-  --num-teams N          Number of teams to generate (default: 5)
-  --mode MODE           Optimization mode: balanced|aggressive|conservative
-  --fast-mode           Disable quantum for faster processing
-  --disable-quantum     Disable quantum optimization specifically
-  --disable-neural      Disable neural networks
-  --output FILE         Save results to JSON file
-  --help               Show detailed help
+Input Options:
+  --match-id ID         Use specific match ID (e.g., 12345)
+  --teams "QUERY"       Use team names (e.g., "india vs australia")
+  POSITIONAL           Auto-detect match ID (numeric) or team names (text)
+
+General Options:
+  --num-teams N         Number of teams to generate (default: 5)
+  --mode MODE          Optimization mode: balanced|aggressive|conservative
+  --fast-mode          Disable quantum for faster processing (~30 seconds)
+  --disable-quantum    Disable quantum optimization specifically
+  --disable-neural     Disable neural networks
+  --output FILE        Save results to JSON file
+  --help              Show detailed help
 ```
 
 ### Universal Launcher Options
@@ -157,15 +178,20 @@ Options:
 python3 dreamteam.py COMMAND [OPTIONS]
 
 Commands:
-  generate QUERY        Generate optimized teams
+  generate              Generate optimized teams
   test                  Run test suites
   help                  Show detailed help
 
-Generate Options:
+Generate Input Options:
+  --match-id ID         Use specific match ID (e.g., 12345)
+  --teams "QUERY"       Use team names (e.g., "india vs australia")
+  POSITIONAL           Auto-detect match ID (numeric) or team names (text)
+
+Generate General Options:
   --num-teams N         Number of teams (default: 5)
   --mode MODE          balanced|aggressive|conservative
   --legacy             Use legacy system
-  --fast-mode          Fast processing mode
+  --fast-mode          Fast processing mode (~30 seconds)
   --disable-quantum    Disable quantum optimization
   --disable-neural     Disable neural networks
   --output FILE        Output file (JSON)

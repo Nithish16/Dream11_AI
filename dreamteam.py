@@ -31,7 +31,15 @@ Examples:
     
     # Generate command
     gen_parser = subparsers.add_parser('generate', help='Generate optimized teams')
-    gen_parser.add_argument('match_query', help='Match search query (e.g., "india vs australia")')
+    
+    # Match input - either match ID or team query
+    input_group = gen_parser.add_mutually_exclusive_group(required=False)
+    input_group.add_argument('--match-id', type=int, help='Match ID (e.g., 12345)')
+    input_group.add_argument('--teams', help='Team names query (e.g., "india vs australia")')
+    
+    # For backward compatibility, allow positional argument
+    gen_parser.add_argument('match_query', nargs='?', help='Match search query or Match ID (e.g., "india vs australia" or 12345)')
+    
     gen_parser.add_argument('-n', '--num-teams', type=int, default=5, help='Number of teams (default: 5)')
     gen_parser.add_argument('-m', '--mode', choices=['balanced', 'aggressive', 'conservative'], 
                            default='balanced', help='Optimization mode')
@@ -68,18 +76,49 @@ Examples:
 def handle_generate_command(args):
     """Handle team generation command"""
     
+    # Determine input type and process accordingly
+    match_input = None
+    input_type = None
+    
+    if args.match_id:
+        match_input = args.match_id
+        input_type = 'match_id'
+    elif args.teams:
+        match_input = args.teams
+        input_type = 'team_query'
+    elif args.match_query:
+        # Try to determine if it's a match ID (numeric) or team query
+        try:
+            match_id_test = int(args.match_query)
+            match_input = match_id_test
+            input_type = 'match_id'
+        except ValueError:
+            match_input = args.match_query
+            input_type = 'team_query'
+    else:
+        print("❌ Error: Please provide either --match-id, --teams, or a positional argument")
+        return
+    
     if args.legacy:
         print("🔄 Using Legacy Standard System...")
         os.system(f'python run_dreamteam.py')
     else:
         print("🚀 Using Enhanced AI System...")
         
-        cmd_parts = [
-            'python enhanced_dreamteam_ai.py',
-            f'"{args.match_query}"',
+        cmd_parts = ['python enhanced_dreamteam_ai.py']
+        
+        # Add match input based on type
+        if input_type == 'match_id':
+            cmd_parts.extend(['--match-id', str(match_input)])
+            print(f"🆔 Using Match ID: {match_input}")
+        else:
+            cmd_parts.extend(['--teams', f'"{match_input}"'])
+            print(f"🎯 Using Team Query: {match_input}")
+        
+        cmd_parts.extend([
             f'--num-teams {args.num_teams}',
             f'--mode {args.mode}'
-        ]
+        ])
         
         if args.disable_neural:
             cmd_parts.append('--disable-neural')
@@ -139,11 +178,14 @@ that uses cutting-edge machine learning algorithms to generate optimal teams.
   Basic Team Generation (ALL AI FEATURES ENABLED):
     python dreamteam.py generate "india vs australia"
 
+  Using Match ID (Direct match targeting):
+    python dreamteam.py generate --match-id 12345 --fast-mode
+
   Fast Mode (Disable Quantum for Speed):
     python dreamteam.py generate "pak vs eng" --fast-mode
 
   Advanced Configuration:
-    python dreamteam.py generate "sa vs nz" --num-teams 10 --mode aggressive
+    python dreamteam.py generate --teams "sa vs nz" --num-teams 10 --mode aggressive
 
   Testing All Features:
     python dreamteam.py test --all
@@ -159,13 +201,15 @@ that uses cutting-edge machine learning algorithms to generate optimal teams.
   • 35% accuracy improvement over baseline
 
 🔧 CONFIGURATION OPTIONS:
-  --num-teams       : Number of teams to generate (1-20)
-  --mode           : balanced | aggressive | conservative
-  --fast-mode      : Disable quantum for faster processing (~30 seconds)
+  --match-id ID     : Use specific match ID (e.g., 12345)
+  --teams "QUERY"   : Use team names (e.g., "india vs australia")
+  --num-teams N     : Number of teams to generate (1-20)
+  --mode MODE       : balanced | aggressive | conservative
+  --fast-mode       : Disable quantum for faster processing (~30 seconds)
   --disable-quantum : Disable quantum optimization (enabled by default)
   --disable-neural  : Disable neural network predictions
-  --legacy         : Use original standard system
-  --output         : Save results to JSON file
+  --legacy          : Use original standard system
+  --output FILE     : Save results to JSON file
 
 📖 DOCUMENTATION:
   • README.md                          : Main documentation
