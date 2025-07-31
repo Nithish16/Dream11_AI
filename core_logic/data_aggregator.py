@@ -239,21 +239,22 @@ def aggregate_team_data(team_id: int, series_id: int, squad_data: Dict[str, Any]
     team_short_name = "UNK"
     players = []
     
-    # Method 1: Try to get ALL players from match center (highest priority for upcoming matches)
+    # Method 1: Try to get Playing XI first (highest priority for Dream11)
     all_match_players = None
     
-    # If we have a match_id, try extracting complete squad from match center first
+    # Try Playing XI extraction first (this is what we want for Dream11)
     if match_id:
         try:
-            all_match_players = extract_all_players_from_match_center(match_id, team_id)
-            if all_match_players and len(all_match_players) >= 8:  # Minimum reasonable squad
-                print(f"  🎯 Using complete squad from match center for team {team_id}")
-                for player_info in all_match_players:
-                    player_data = extract_player_data(player_info, team_id, team_name)
-                    players.append(player_data)
+            playing_xi = extract_playing_xi_from_match_center(match_id, team_id)
+            if playing_xi and len(playing_xi) >= 8:  # Minimum reasonable playing XI
+                print(f"  🎯 Using Playing XI from match center for team {team_id}")
+                for player_info in playing_xi:
+                    if not is_support_staff(player_info):
+                        player_data = extract_player_data(player_info, team_id, team_name)
+                        players.append(player_data)
                 
-                print(f"  ✅ Found {len(players)} players from match center (complete squad)")
-                # Return immediately - match center data is most reliable
+                print(f"  ✅ Found {len(players)} players from Playing XI")
+                # Return immediately - Playing XI is what we want for Dream11
                 team_data = TeamData(
                     team_id=team_id,
                     team_name=team_name,
@@ -278,7 +279,21 @@ def aggregate_team_data(team_id: int, series_id: int, squad_data: Dict[str, Any]
                 
                 return team_data
         except Exception as e:
-            print(f"  ⚠️ Match center complete squad extraction failed: {e}")
+            print(f"  ⚠️ Playing XI extraction failed: {e}")
+    
+    # Method 2: Fallback to complete squad if Playing XI failed
+    if not players and match_id:
+        try:
+            all_match_players = extract_all_players_from_match_center(match_id, team_id)
+            if all_match_players and len(all_match_players) >= 8:
+                print(f"  🎯 Using complete squad as fallback for team {team_id}")
+                for player_info in all_match_players:
+                    player_data = extract_player_data(player_info, team_id, team_name)
+                    players.append(player_data)
+                
+                print(f"  ✅ Found {len(players)} players from complete squad (fallback)")
+        except Exception as e:
+            print(f"  ⚠️ Complete squad extraction also failed: {e}")
     
     # Fallback: Try to get probable XI only
     playing_xi = None
@@ -662,7 +677,7 @@ def extract_playing_xi_from_match_center(match_id: int, team_id: int) -> List[Di
         
         for player in all_players:
             # Only include probable XI players (substitute: false indicates probable playing XI)
-            if player.get('substitute', True):  # Default to True if field missing
+            if player.get('substitute', True):  # Skip if substitute=True (bench players)
                 continue
                 
             # Skip support staff using our enhanced filter

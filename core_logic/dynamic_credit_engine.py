@@ -6,8 +6,13 @@ Advanced ML-based credit prediction replacing static 8.5 credit system
 
 import numpy as np
 import pandas as pd
-from sklearn.ensemble import XGBRegressor, RandomForestRegressor
+from sklearn.ensemble import RandomForestRegressor
 from sklearn.preprocessing import StandardScaler, LabelEncoder
+try:
+    from xgboost import XGBRegressor
+except ImportError:
+    print("⚠️  XGBoost not available, using RandomForest only")
+    XGBRegressor = None
 from sklearn.model_selection import train_test_split, cross_val_score
 from sklearn.metrics import mean_absolute_error, r2_score
 import joblib
@@ -55,23 +60,27 @@ class DynamicCreditPredictor:
     """Advanced credit prediction system using ensemble ML models"""
     
     def __init__(self):
-        self.models = {
-            'xgboost': XGBRegressor(
+        self.models = {}
+        
+        # Always include RandomForest
+        self.models['random_forest'] = RandomForestRegressor(
+            n_estimators=150,
+            max_depth=8,
+            min_samples_split=5,
+            min_samples_leaf=2,
+            random_state=42
+        )
+        
+        # Add XGBoost if available
+        if XGBRegressor is not None:
+            self.models['xgboost'] = XGBRegressor(
                 n_estimators=200,
                 max_depth=6,
                 learning_rate=0.1,
                 subsample=0.8,
                 colsample_bytree=0.8,
                 random_state=42
-            ),
-            'random_forest': RandomForestRegressor(
-                n_estimators=150,
-                max_depth=8,
-                min_samples_split=5,
-                min_samples_leaf=2,
-                random_state=42
             )
-        }
         
         self.scaler = StandardScaler()
         self.label_encoders = {}

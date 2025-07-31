@@ -31,6 +31,7 @@ class PlayerFeatures:
     injury_risk_factor: float = 0.0
     captain_vice_captain_probability: float = 0.0
     performance_rating: float = 0.0
+    dream11_expected_points: float = 0.0
     
     def __post_init__(self):
         if self.batting_features is None:
@@ -529,6 +530,15 @@ def generate_player_features(player_raw_data: Dict[str, Any],
     # Calculate performance score based on data analysis
     features.performance_rating = calculate_performance_score(
         features, match_context
+    )
+    
+    # Calculate Dream11 expected points based on all factors
+    features.dream11_expected_points = (
+        features.ema_score * 0.35 + 
+        features.consistency_score * 0.25 + 
+        features.dynamic_opportunity_index * 15 +
+        features.performance_rating * 0.25 +
+        features.form_momentum * 10
     )
     
     # Calculate captain/vice-captain probability (simplified)

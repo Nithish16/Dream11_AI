@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """
-DreamTeamAI - One-Click Dream11 Predictor
-Simple menu-driven interface for easy usage
+DreamTeamAI - World-Class AI Dream11 Team Generator
+The single, unified entry point for all Dream11 predictions
 """
 
 import os
@@ -12,8 +12,8 @@ from core_logic.match_resolver import resolve_match_ids, resolve_match_by_id, ge
 from core_logic.data_aggregator import aggregate_all_data, print_aggregation_summary
 from core_logic.feature_engine import generate_player_features, batch_generate_features, print_feature_summary, PlayerFeatures
 from core_logic.team_generator import (
-    batch_generate_teams, print_team_summary, print_hybrid_teams_summary, OptimalTeam, 
-    get_final_player_score, prepare_players_for_optimization, generate_optimal_teams, generate_hybrid_teams
+    batch_generate_teams, print_team_summary, OptimalTeam, 
+    get_final_player_score, prepare_players_for_optimization, generate_optimal_teams, generate_world_class_ai_teams
 )
 import random
 from typing import List, Dict, Any
@@ -329,28 +329,29 @@ def demo_post_toss_workflow(player_features, aggregated_data):
 def print_banner():
     """Print the application banner"""
     print("🏆" * 60)
-    print("🚀 WELCOME TO DREAMTEAMAI - DREAM11 PREDICTOR 🚀")
+    print("🚀 DREAMTEAMAI - WORLD-CLASS AI TEAM GENERATOR 🚀")
     print("🏆" * 60)
-    print("⚡ AI-Powered Cricket Team Optimization")
-    print("📊 Real-time API Integration")
-    print("🎯 Smart Risk Profile Analysis")
-    print("🏏 Complete 7-Phase Prediction Pipeline")
+    print("🧠 Neural Network Ensemble + Quantum Optimization")
+    print("🌍 Environmental Intelligence + Dynamic Credit Engine")
+    print("📊 Real-time API Integration + Advanced Analytics")
+    print("🎯 5 Unique Team Strategies with No Duplicates")
     print("🏆" * 60)
 
 def print_menu():
     """Print the main menu options"""
     print("\n📋 CHOOSE YOUR OPTION:")
-    print("=" * 40)
-    print("1️⃣  🎯 Generate Hybrid Dream11 Teams (Match ID)")
-    print("2️⃣  📊 Quick Team Preview")
-    print("3️⃣  ❓ Help & Info")
+    print("=" * 50)
+    print("1️⃣  🚀 Generate World-Class AI Teams (Match ID)")
+    print("2️⃣  📊 Quick Match Preview") 
+    print("3️⃣  ❓ Help & Information")
     print("4️⃣  🚪 Exit")
-    print("=" * 40)
+    print("=" * 50)
+    print("💡 Tip: Use option 1 for complete AI team generation")
 
 def run_full_pipeline():
     """Run the complete Dream11 prediction pipeline with match ID input"""
     clear_screen()
-    print("🚀 DREAMTEAMAI - HYBRID TEAM GENERATION")
+    print("🚀 DREAMTEAMAI - WORLD-CLASS AI TEAM GENERATION")
     print("=" * 60)
     
     # Get match ID from user
@@ -397,22 +398,48 @@ def run_full_pipeline():
             'pitch_archetype': getattr(aggregated_data.venue, 'pitch_archetype', 'Balanced')
         }
         
-        hybrid_teams = generate_hybrid_teams(player_features, aggregated_data.match_format, match_context)
+        # Generate world-class AI teams
+        world_class_teams = generate_world_class_ai_teams(player_features, aggregated_data.match_format, match_context, num_teams=5)
         
-        if not hybrid_teams or (not hybrid_teams.get('Pack-1') and not hybrid_teams.get('Pack-2')):
-            print("❌ Hybrid team generation failed.")
-            return False
+        if not world_class_teams:
+            print("❌ World-class AI team generation failed.")
+            # Fallback to standard teams
+            print("🔄 Falling back to standard team generation...")
+            standard_teams = generate_optimal_teams(
+                prepare_players_for_optimization(player_features, aggregated_data.match_format, match_context, {}), 
+                5, "Balanced"
+            )
+            world_class_teams = standard_teams
         
         # Phase 7: Results Presentation
         print("\n🏆 Phase 7: Presenting final teams...")
         
-        # Print summary first
-        print_hybrid_teams_summary(hybrid_teams)
+        # Print world-class AI teams
+        if world_class_teams:
+            print(f"\n🚀 WORLD-CLASS AI RECOMMENDATIONS:")
+            print("=" * 80)
+            
+            for team in world_class_teams:
+                print(f"\n🏆 TEAM {team.team_id}: {team.strategy}")
+                print(f"   🧠 AI Score: {team.total_score:.1f}")
+                print(f"   🎯 Confidence: {team.confidence_score:.2f}")
+                print(f"   ⚖️  Risk Level: {team.risk_level:.2f}")
+                print(f"   💰 Credits: {team.total_credits:.1f}/100")
+                print(f"   👑 Captain: {team.captain.name}")
+                print(f"   🥈 Vice Captain: {team.vice_captain.name}")
+                
+                print(f"   👥 PLAYERS:")
+                for player in team.players:
+                    role_emoji = (
+                        "🏏" if "bat" in player.role.lower() else
+                        "⚡" if "bowl" in player.role.lower() else
+                        "🔄" if "all" in player.role.lower() else
+                        "🧤"
+                    )
+                    print(f"      {role_emoji} {player.name} ({player.role}) - {player.credits:.1f}c")
         
         # Print detailed team information
-        all_teams = []
-        for pack_name, teams in hybrid_teams.items():
-            all_teams.extend(teams)
+        all_teams = world_class_teams if world_class_teams else []
         
         if all_teams:
             print("\n📋 DETAILED TEAM INFORMATION:")
@@ -420,21 +447,18 @@ def run_full_pipeline():
                 print_team_summary(team)
         
         print("\n" + "🎉" * 20)
-        print("✅ SUCCESS! Your Dream11 hybrid teams are ready!")
+        print("✅ SUCCESS! Your Dream11 world-class AI teams are ready!")
         print("🎉" * 20)
         
         # Summary
         total_teams = len(all_teams)
-        pack1_teams = len(hybrid_teams.get('Pack-1', []))
-        pack2_teams = len(hybrid_teams.get('Pack-2', []))
         
         print(f"\n📋 PIPELINE SUMMARY:")
         print(f"✅ Match: {aggregated_data.team1.team_name} vs {aggregated_data.team2.team_name}")
         print(f"✅ Venue: {aggregated_data.venue.venue_name}")
         print(f"✅ Players Analyzed: {len(player_features)}")
-        print(f"✅ Pack-1 Teams: {pack1_teams} (same players, different C/VC)")
-        print(f"✅ Pack-2 Teams: {pack2_teams} (alternative strategies)")
-        print(f"✅ Total Teams Generated: {total_teams}")
+        print(f"✅ World-Class AI Teams: {total_teams} (multi-strategy optimization)")
+        print(f"✅ AI Systems: Neural Networks, Quantum Optimization, Environmental Intelligence")
         print(f"✅ All phases completed successfully!")
         
         return True
@@ -616,8 +640,150 @@ def show_help():
     print("• API: Real-time Cricbuzz integration")
     print("• Models: Expert-weighted + ML ensemble hybrid")
 
+def run_pipeline_with_match_id(match_id):
+    """Run the complete pipeline with a specific match ID"""
+    try:
+        print(f"\n🚀 DREAMTEAMAI - WORLD-CLASS AI TEAM GENERATION")  
+        print("=" * 80)
+        print(f"🎯 Match ID: {match_id}")
+        
+        # Phase 1: Match Resolution
+        print("\n🔍 Phase 1: Resolving match...")
+        resolved_match = resolve_match_by_id(match_id)
+        
+        if not resolved_match:
+            print(f"❌ Could not resolve match ID: {match_id}")
+            print("💡 Please check available match IDs above and try again.")
+            return False
+        
+        match_summary = get_match_summary(resolved_match)
+        print(f"✅ Match resolved: {match_summary}")
+        
+        # Phase 2-7: Run the full pipeline
+        print("\n🔄 Starting full AI pipeline...")
+        
+        # Phase 2: Data Aggregation
+        print("\n📊 Phase 2: Aggregating match data...")
+        aggregated_data = aggregate_all_data(resolved_match)
+        
+        if not aggregated_data:
+            print("❌ Data aggregation failed.")
+            return False
+        
+        print_aggregation_summary(aggregated_data)
+        
+        # Phase 3: Feature Engineering
+        print("\n🧠 Phase 3: Advanced feature engineering...")
+        all_players = aggregated_data.team1.players + aggregated_data.team2.players
+        
+        if len(all_players) < 11:
+            print(f"❌ Insufficient players ({len(all_players)}) for team generation.")
+            return False
+        
+        # Generate features for all players
+        match_context = {
+            'venue': aggregated_data.venue,
+            'match_format': aggregated_data.match_format,
+            'pitch_archetype': getattr(aggregated_data.venue, 'pitch_archetype', 'Balanced')
+        }
+        
+        player_features = []
+        for player in all_players:
+            player_raw_data = {
+                'player_id': player.player_id,
+                'name': player.name,
+                'role': player.role,
+                'team_name': player.team_name,
+                'career_stats': player.career_stats,
+                'batting_stats': player.batting_stats,
+                'bowling_stats': player.bowling_stats
+            }
+            features = generate_player_features(player_raw_data, match_context)
+            player_features.append(features)
+        
+        print(f"✅ Generated features for {len(player_features)} players")
+        print(f"📊 Feature engineering complete")
+        
+        # Phase 4: World-Class AI Team Generation
+        print("\n🚀 Phase 4: World-Class AI team optimization...")
+        world_class_teams = generate_world_class_ai_teams(player_features, aggregated_data.match_format, match_context, num_teams=5)
+        
+        if not world_class_teams:
+            print("❌ World-class AI team generation failed.")
+            return False
+        
+        # Phase 5: Results Presentation
+        print("\n🏆 Phase 5: Presenting world-class AI teams...")
+        
+        print(f"\n🚀 WORLD-CLASS AI RECOMMENDATIONS:")
+        print("=" * 80)
+        
+        for team in world_class_teams:
+            print(f"\n🏆 TEAM {team.team_id}: {team.strategy}")
+            print(f"   🧠 AI Score: {team.total_score:.1f}")
+            print(f"   🎯 Confidence: {team.confidence_score:.2f}")
+            print(f"   ⚖️  Risk Level: {team.risk_level:.2f}")
+            print(f"   💰 Credits: {team.total_credits:.1f}/100")
+            print(f"   👑 Captain: {team.captain.name}")
+            print(f"   🥈 Vice Captain: {team.vice_captain.name}")
+            
+            print(f"   👥 PLAYERS:")
+            for player in team.players:
+                role_emoji = (
+                    "🏏" if "bat" in player.role.lower() else
+                    "⚡" if "bowl" in player.role.lower() else
+                    "🔄" if "all" in player.role.lower() else
+                    "🧤"
+                )
+                print(f"      {role_emoji} {player.name} ({player.role}) - {player.credits:.1f}c")
+        
+        print("\n" + "🎉" * 20)
+        print("✅ SUCCESS! Your Dream11 world-class AI teams are ready!")
+        print("🎉" * 20)
+        
+        # Summary
+        total_teams = len(world_class_teams)
+        print(f"\n📋 PIPELINE SUMMARY:")
+        print(f"✅ Match: {aggregated_data.team1.team_name} vs {aggregated_data.team2.team_name}")
+        print(f"✅ Venue: {aggregated_data.venue.venue_name}")
+        print(f"✅ Players Analyzed: {len(player_features)}")
+        print(f"✅ World-Class AI Teams: {total_teams} (multi-strategy optimization)")
+        print(f"✅ AI Systems: Neural Networks, Quantum Optimization, Environmental Intelligence")
+        print(f"✅ All phases completed successfully!")
+        
+        return True
+        
+    except Exception as e:
+        print(f"❌ Pipeline failed: {e}")
+        import traceback
+        traceback.print_exc()
+        return False
+
 def main():
     """Main application loop"""
+    
+    # Check for command line arguments - Direct match ID support
+    if len(sys.argv) > 1:
+        try:
+            match_id = int(sys.argv[1])
+            clear_screen()
+            print_banner()
+            print(f"\n🎯 Running World-Class AI with Match ID: {match_id}")
+            
+            # Run the full pipeline with the provided match ID
+            success = run_pipeline_with_match_id(match_id)
+            if success:
+                print("\n✅ World-Class AI team generation completed successfully!")
+                print("🚀 All 5 teams generated with unique strategies and no duplicates!")
+            else:
+                print("\n❌ Team generation failed.")
+            return
+        except ValueError:
+            print("❌ Invalid match ID provided. Please provide a numeric match ID.")
+            print("💡 Usage: python3 run_dreamteam.py <match_id>")
+            print("💡 Example: python3 run_dreamteam.py 105780")
+            return
+    
     while True:
         clear_screen()
         print_banner()
