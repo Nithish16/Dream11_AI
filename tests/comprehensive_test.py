@@ -33,8 +33,7 @@ from core_logic.feature_engine import (
 from core_logic.team_generator import (
     batch_generate_teams, generate_optimal_teams, OptimalTeam,
     prepare_players_for_optimization, apply_risk_profile_adjustments,
-    select_captain_vice_captain, get_final_player_score,
-    assign_player_credits
+    select_captain_vice_captain
 )
 # Simplified functions for testing since app.py was removed
 import random
@@ -762,10 +761,10 @@ def test_post_toss_workflow(test_result: ComprehensiveTestResult):
                 name=f"Player_{i}",
                 role="Batsman" if i < 4 else "Bowler" if i < 8 else "All-rounder" if i < 10 else "Wicket-keeper",
                 team="Team A",
-                credits=8.5,
-                final_score=40 + i,
                 consistency_score=70 + i,
-                opportunity_index=1.2
+                opportunity_index=1.2,
+                ema_score=50 + i,
+                form_momentum=0.5
             )
             sample_players.append(player)
         

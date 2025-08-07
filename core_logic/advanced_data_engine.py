@@ -500,14 +500,16 @@ class AdvancedDataEngine:
         else:
             consistency = 0.5
         
-        # Role factor - all-rounders often make good captains
+        # BALANCED role factor - equal priority for key roles
         role = player_data.get('role', '').lower()
         if 'allrounder' in role:
-            role_factor = 1.2
-        elif 'batsman' in role:
-            role_factor = 1.1
-        elif 'wicket' in role:
-            role_factor = 1.05
+            role_factor = 1.2  # All-rounders: versatile leaders
+        elif 'batsman' in role or 'bat' in role:
+            role_factor = 1.2  # Star batsmen: proven performers and leaders  
+        elif 'wicket' in role or 'wk' in role or 'keeper' in role:
+            role_factor = 1.2  # Wicket-keepers are batsmen with field awareness
+        elif 'bowl' in role:
+            role_factor = 1.1  # Bowlers: tactical understanding
         else:
             role_factor = 1.0
         

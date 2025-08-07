@@ -37,25 +37,25 @@ def fetch_upcoming_matches():
         if cached_data:
             print("🎯 Cache hit: upcoming matches")
             return cached_data
-
+        
         # Check rate limit
         if not _rate_limiter.can_make_request():
             wait_time = _rate_limiter.get_wait_time()
             print(f"⏰ Rate limited - using cached/fallback data (wait: {wait_time:.1f}s)")
             return _get_sample_matches_data()
-
+        
         # Acquire rate limit slot
         if not _rate_limiter.acquire_request_slot("high"):
             print("🚫 Rate limit hit - using fallback data")
             return _get_sample_matches_data()
-
+    
     try:
         url = f"{API_BASE_URL}/matches/v1/upcoming"
         response = requests.get(url, headers=API_HEADERS, timeout=10)
-
+        
         if RATE_LIMITING_ENABLED:
             _rate_limiter.handle_api_response(dict(response.headers))
-
+        
         if response.status_code == 200:
             try:
                 data = response.json()
@@ -76,7 +76,7 @@ def fetch_upcoming_matches():
                 _rate_limiter.handle_rate_limit_error(429)
             print(f"API returned status {response.status_code}, using fallback")
             return _get_sample_matches_data()
-
+            
     except requests.exceptions.Timeout:
         print("API request timed out, using fallback data")
         return _get_sample_matches_data()
@@ -107,7 +107,7 @@ def fetch_recent_matches():
     try:
         url = f"{API_BASE_URL}/matches/v1/recent"
         response = requests.get(url, headers=API_HEADERS, timeout=15)
-
+        
         if response.status_code == 200:
             try:
                 data = response.json()
@@ -122,7 +122,7 @@ def fetch_recent_matches():
         else:
             print(f"Recent matches API returned status {response.status_code}, using fallback")
             return _get_sample_recent_matches_data()
-
+            
     except requests.exceptions.Timeout:
         print(f"Recent matches API request timed out, using fallback")
         return _get_sample_recent_matches_data()
@@ -239,19 +239,19 @@ def fetch_squads(series_id):
         if cached_data:
             print(f"🎯 Cache hit: squads for series {series_id}")
             return cached_data
-
+        
         # Check rate limit
         if not _rate_limiter.acquire_request_slot("normal"):
             print(f"🚫 Rate limited: squads for series {series_id}")
             return _get_sample_squads_data(series_id)
-
+    
     try:
         url = f"{API_BASE_URL}/series/v1/{series_id}/squads"
         response = requests.get(url, headers=API_HEADERS, timeout=15)
-
+        
         if RATE_LIMITING_ENABLED:
             _rate_limiter.handle_api_response(dict(response.headers))
-
+        
         if response.status_code == 200:
             try:
                 data = response.json()
@@ -272,7 +272,7 @@ def fetch_squads(series_id):
                 _rate_limiter.handle_rate_limit_error(429)
             print(f"Squad API returned status {response.status_code} for series {series_id}, using fallback")
             return _get_sample_squads_data(series_id)
-
+            
     except requests.exceptions.Timeout:
         print(f"Squad API request timed out for series {series_id}, using fallback")
         return _get_sample_squads_data(series_id)
@@ -306,7 +306,7 @@ def _get_sample_squads_data(series_id):
                 "squadId": 15826,
                 "squadType": "squad",
                 "teamId": 2,
-                "teamName": "India",
+                "teamName": "India", 
                 "players": [
                     {"id": 1001, "name": "Virat Kohli", "role": "Batsman"},
                     {"id": 1002, "name": "Rohit Sharma", "role": "Batsman"},
@@ -438,19 +438,19 @@ def fetch_match_center(match_id):
         if cached_data:
             print(f"🎯 Cache hit: match center {match_id}")
             return cached_data
-
+        
         # Check rate limit
         if not _rate_limiter.acquire_request_slot("high"):
             print(f"🚫 Rate limited: match center {match_id}")
             return {"error": "Rate limited", "fallback": True}
-
+    
     try:
         url = f"{API_BASE_URL}/mcenter/v1/{match_id}"
         response = requests.get(url, headers=API_HEADERS, timeout=15)
-
+        
         if RATE_LIMITING_ENABLED:
             _rate_limiter.handle_api_response(dict(response.headers))
-
+        
         if response.status_code == 200:
             data = response.json()
             # Cache match data (30 min for live, 2 hours for completed)
@@ -464,7 +464,7 @@ def fetch_match_center(match_id):
             return {"error": "Rate limited", "status_code": 429}
         else:
             response.raise_for_status()
-
+            
     except requests.exceptions.RequestException as e:
         print(f"Error fetching match center for match {match_id}: {e}")
         return {"error": str(e)}
@@ -523,10 +523,10 @@ def get_api_optimization_status():
             "optimization_enabled": False,
             "message": "API optimization not available - install aiohttp and restart"
         }
-
+    
     rate_limit_status = _rate_limiter.get_status()
     cache_stats = _cache.get_stats()
-
+    
     return {
         "optimization_enabled": True,
         "rate_limiting": {
@@ -553,22 +553,22 @@ def get_api_optimization_status():
 def _calculate_performance_summary(rate_status, cache_stats):
     """Calculate performance improvement summary"""
     total_requests = cache_stats['memory_hits'] + cache_stats['disk_hits'] + cache_stats['misses']
-
+    
     if total_requests == 0:
         return {
             "api_calls_saved": 0,
             "cost_savings_percent": 0,
             "performance_improvement": "No data yet"
         }
-
+    
     api_calls_saved = cache_stats['memory_hits'] + cache_stats['disk_hits']
     cost_savings_percent = (api_calls_saved / total_requests) * 100 if total_requests > 0 else 0
-
+    
     # Estimate monthly cost savings
     monthly_api_calls_saved = api_calls_saved * 30  # Rough estimate
     cost_per_1000 = 5.0  # $5 per 1000 requests typical
     monthly_savings = (monthly_api_calls_saved / 1000) * cost_per_1000
-
+    
     return {
         "api_calls_saved": api_calls_saved,
         "cost_savings_percent": round(cost_savings_percent, 1),
@@ -579,16 +579,16 @@ def _calculate_performance_summary(rate_status, cache_stats):
 def print_optimization_report():
     """Print a detailed optimization report"""
     status = get_api_optimization_status()
-
+    
     if not status["optimization_enabled"]:
         print("❌ API Optimization Status: DISABLED")
         print(f"   {status['message']}")
         return
-
+    
     rate_limit = status["rate_limiting"]
     cache = status["caching"]
     perf = status["performance_summary"]
-
+    
     print("🚀 API OPTIMIZATION STATUS REPORT")
     print("=" * 50)
     print(f"✅ Optimization: ENABLED")

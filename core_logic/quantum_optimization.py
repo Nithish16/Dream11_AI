@@ -243,9 +243,11 @@ class QuantumAnnealingOptimizer:
             if self._get_bit(state, i) == 1:
                 team_indices.append(i)
         
-        # Base energy from team quality
-        team_score = sum(players[i].get('final_score', 0) for i in team_indices)
-        base_energy = -team_score  # Negative because we minimize energy
+        # Base energy from team quality using performance metrics
+        team_performance = sum((players[i].get('ema_score', 50) + 
+                               players[i].get('consistency_score', 50) + 
+                               players[i].get('form_momentum', 0) * 10) for i in team_indices)
+        base_energy = -team_performance  # Negative because we minimize energy
         
         # Constraint penalties
         constraint_penalty = self._calculate_constraint_penalties(team_indices, players, constraints)
@@ -318,8 +320,8 @@ class QuantumAnnealingOptimizer:
             role_synergy = 0.05  # Complementary roles
         
         # Performance correlation
-        score1 = player1.get('final_score', 50)
-        score2 = player2.get('final_score', 50)
+        score1 = player1.get('ema_score', 50) + player1.get('consistency_score', 50)
+        score2 = player2.get('ema_score', 50) + player2.get('consistency_score', 50)
         performance_correlation = abs(score1 - score2) / 100  # Normalized difference
         
         return team_synergy + role_synergy - performance_correlation
@@ -379,7 +381,8 @@ class QuantumAnnealingOptimizer:
         
         # Calculate solution metrics
         quantum_score = -best_energy  # Convert back to maximization
-        classical_score = sum(players[i].get('final_score', 0) for i in best_team_indices if i < len(players))
+        classical_score = sum((players[i].get('ema_score', 50) + players[i].get('consistency_score', 50)) 
+                              for i in best_team_indices if i < len(players))
         entanglement_score = quantum_register.get_entanglement_entropy()
         coherence_factor = self._calculate_coherence_factor(quantum_register)
         measurement_confidence = self._calculate_measurement_confidence(final_measurements, best_state)
@@ -440,12 +443,12 @@ class QuantumAnnealingOptimizer:
         # Ensure team size constraints
         if len(team_indices) > self.team_size:
             # Keep top players by score
-            team_indices.sort(key=lambda i: players[i].get('final_score', 0) if i < len(players) else 0, reverse=True)
+            team_indices.sort(key=lambda i: (players[i].get('ema_score', 50) + players[i].get('consistency_score', 50)) if i < len(players) else 0, reverse=True)
             team_indices = team_indices[:self.team_size]
         elif len(team_indices) < self.team_size:
             # Add remaining best players
             available_players = [i for i in range(len(players)) if i not in team_indices]
-            available_players.sort(key=lambda i: players[i].get('final_score', 0), reverse=True)
+            available_players.sort(key=lambda i: (players[i].get('ema_score', 50) + players[i].get('consistency_score', 50)), reverse=True)
             
             needed = self.team_size - len(team_indices)
             team_indices.extend(available_players[:needed])
@@ -603,7 +606,8 @@ class QuantumInspiredGeneticAlgorithm:
             return 0.0
         
         # Base score from player performance
-        base_score = sum(players[i].get('final_score', 0) for i in team_indices if i < len(players))
+        base_score = sum((players[i].get('ema_score', 50) + players[i].get('consistency_score', 50)) 
+                         for i in team_indices if i < len(players))
         
         # Constraint penalties
         constraint_penalty = 0.0
@@ -736,14 +740,15 @@ class QuantumInspiredGeneticAlgorithm:
         
         # Ensure proper team size
         if len(team_indices) > 11:
-            team_indices.sort(key=lambda i: players[i].get('final_score', 0), reverse=True)
+            team_indices.sort(key=lambda i: (players[i].get('ema_score', 50) + players[i].get('consistency_score', 50)), reverse=True)
             team_indices = team_indices[:11]
         elif len(team_indices) < 11:
             available = [i for i in range(len(players)) if i not in team_indices]
-            available.sort(key=lambda i: players[i].get('final_score', 0), reverse=True)
+            available.sort(key=lambda i: (players[i].get('ema_score', 50) + players[i].get('consistency_score', 50)), reverse=True)
             team_indices.extend(available[:11-len(team_indices)])
         
-        classical_score = sum(players[i].get('final_score', 0) for i in team_indices if i < len(players))
+        classical_score = sum((players[i].get('ema_score', 50) + players[i].get('consistency_score', 50)) 
+                              for i in team_indices if i < len(players))
         
         return QuantumTeamSolution(
             team_indices=team_indices,

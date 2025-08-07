@@ -1,8 +1,12 @@
-# Python
+# Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
 *$py.class
+
+# C extensions
 *.so
+
+# Distribution / packaging
 .Python
 build/
 develop-eggs/
@@ -16,14 +20,31 @@ parts/
 sdist/
 var/
 wheels/
-pip-wheel-metadata/
-share/python-wheels/
 *.egg-info/
 .installed.cfg
 *.egg
-MANIFEST
 
-# Virtual Environments
+# PyInstaller
+*.manifest
+*.spec
+
+# Installer logs
+pip-log.txt
+pip-delete-this-directory.txt
+
+# Unit test / coverage reports
+htmlcov/
+.tox/
+.coverage
+.coverage.*
+.cache
+nosetests.xml
+coverage.xml
+*.cover
+.hypothesis/
+.pytest_cache/
+
+# Environments
 .env
 .venv
 env/
@@ -48,52 +69,32 @@ venv.bak/
 ehthumbs.db
 Thumbs.db
 
-# Logs
-*.log
-logs/
-
-# AI Model Files
-*.pkl
-*.joblib
-*.h5
-*.pth
-*.onnx
-saved_models/
-checkpoints/
-rl_models/
-
-# Data Files
-*.csv
-*.json
-*.xlsx
-data/
-cache/
-
-# Temporary Files
-temp/
-tmp/
+# Project specific - Result files (only saved if --save flag is used)
+dream11_ai_results_*.json
+temp_*
+debug_*
+test_results_*
 *.tmp
-*.bak
+*.log
 
-# Test Results
-.coverage
-htmlcov/
-.pytest_cache/
-.tox/
+# Cache directories (auto-generated)
+.cache/matches/
+.cache/players/
+.cache/squads/
+.cache/venues/
+.cache/weather/
 
-# Environment Variables
-.env.local
-.env.development
-.env.test
-.env.production
+# Documentation builds
+docs/_build/
 
-# API Keys (Security)
-api_keys.txt
-secrets.json
-config/secret*
+# Jupyter Notebook
+.ipynb_checkpoints
 
-# Output Files
-output/
-results/
-teams_*.json
-analysis_*.html
+# pyenv
+.python-version
+# API Optimization
+*.env
+.cache/
+api_usage.log
+cache_stats.json
+rate_limit.log

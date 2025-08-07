@@ -1,0 +1,43 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(mkdir:*)",
+      "Bash(python:*)",
+      "Bash(rm:*)",
+      "Bash(chmod:*)",
+      "Bash(ls:*)",
+      "Bash(timeout:*)",
+      "WebFetch(domain:www.cricbuzz.com)",
+      "Bash(pip3 list:*)",
+      "Bash(pip3 install:*)",
+      "WebFetch(domain:developers.google.com)",
+      "Bash(curl --request GET )",
+      "Bash(--url https://cricbuzz-cricket.p.rapidapi.com/matches/v1/recent )",
+      "Bash(--header 'x-rapidapi-host: cricbuzz-cricket.p.rapidapi.com' )",
+      "Bash(--header 'x-rapidapi-key: dffdea8894mshfa97b71e0282550p18895bjsn5f7c318f35d1')",
+      "Bash(git init:*)",
+      "Bash(git add:*)",
+      "Bash(git commit:*)",
+      "Bash(echo \"Please provide your GitHub username, and I''ll customize these commands:\n\n# Add remote origin (replace YOUR_USERNAME with your actual username)\ngit remote add origin https://github.com/YOUR_USERNAME/Dream11_AI.git\n\n# Set main branch and push\ngit branch -M main\ngit push -u origin main\")",
+      "Bash(git remote add:*)",
+      "Bash(git branch:*)",
+      "Bash(git push:*)",
+      "WebFetch(domain:docs.anthropic.com)",
+      "Bash(find:*)",
+      "Bash(mv:*)",
+      "Bash(touch:*)",
+      "Bash(pip install:*)",
+      "Bash(PYTHONPATH=/Users/nitish.natarajan/Downloads/Dream11_AI python3 tests/comprehensive_test.py)",
+      "Bash(true)",
+      "Bash(PYTHONPATH=. python3 -c:*)",
+      "Bash(PYTHONPATH=. python3 tests/production_test.py)",
+      "Bash(grep:*)",
+      "WebFetch(domain:github.com)",
+      "WebFetch(domain:www.espncricinfo.com)",
+      "Bash(PYTHONPATH=/Users/nitish.natarajan/Downloads/Dream11_AI python3 /Users/nitish.natarajan/Downloads/Dream11_AI/test_world_class_ai.py)",
+      "Bash(PYTHONPATH=/Users/nitish.natarajan/Downloads/Dream11_AI python3 /Users/nitish.natarajan/Downloads/Dream11_AI/debug_validation.py)",
+      "Bash(PYTHONPATH:*)"
+    ],
+    "deny": []
+  }
+}
