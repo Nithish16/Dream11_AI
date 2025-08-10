@@ -16,6 +16,28 @@ import logging
 
 logger = logging.getLogger(__name__)
 
+CACHE_MAGIC = b"D11CACHE\x00\x01"  # magic + version 1
+
+def _safe_pickle_dump(obj: Any, file_obj):
+    file_obj.write(CACHE_MAGIC)
+    pickle.dump(obj, file_obj, protocol=pickle.HIGHEST_PROTOCOL)
+
+def _safe_pickle_load(file_obj):
+    header = file_obj.read(len(CACHE_MAGIC))
+    if header != CACHE_MAGIC:
+        # Legacy file or tampered; rewind and try json, then pickle in restricted way
+        file_obj.seek(0)
+        try:
+            return json.load(file_obj)
+        except Exception:
+            file_obj.seek(0)
+            # Last resort: load pickle but only if created by our structure (dict with expected keys)
+            data = pickle.load(file_obj)
+            if isinstance(data, dict) and {'key', 'data', 'timestamp', 'ttl'}.issubset(set(data.keys())):
+                return data
+            raise ValueError("Unrecognized cache file format")
+    return pickle.load(file_obj)
+
 @dataclass
 class CacheEntry:
     """Individual cache entry with metadata"""
@@ -84,7 +106,7 @@ class SmartCache:
         """Estimate size of data in bytes"""
         try:
             return len(pickle.dumps(data))
-        except:
+        except Exception:
             return len(str(data).encode('utf-8'))
     
     def _evict_lru(self):
@@ -123,7 +145,7 @@ class SmartCache:
             }
             
             with open(disk_path, 'wb') as f:
-                pickle.dump(cache_data, f)
+                _safe_pickle_dump(cache_data, f)
             
             logger.debug(f"💾 Moved {key} to disk cache")
             
@@ -139,7 +161,7 @@ class SmartCache:
         
         try:
             with open(disk_path, 'rb') as f:
-                cache_data = pickle.load(f)
+                cache_data = _safe_pickle_load(f)
             
             # Check if expired
             if time.time() - cache_data['timestamp'] > cache_data['ttl']:
@@ -163,7 +185,7 @@ class SmartCache:
             logger.warning(f"⚠️ Failed to load {key} from disk: {e}")
             try:
                 os.remove(disk_path)
-            except:
+            except Exception:
                 pass
             return None
     
@@ -238,7 +260,7 @@ class SmartCache:
             }
             
             with open(disk_path, 'wb') as f:
-                pickle.dump(cache_data, f)
+                _safe_pickle_dump(cache_data, f)
             
             logger.debug(f"💾 Large item stored directly to disk: {key}")
             
@@ -274,7 +296,7 @@ class SmartCache:
                 disk_path = os.path.join(self.disk_cache_dir, filename)
                 try:
                     with open(disk_path, 'rb') as f:
-                        cache_data = pickle.load(f)
+                        cache_data = _safe_pickle_load(f)
                     
                     if cache_data.get('tags') and any(tag in cache_data['tags'] for tag in tags):
                         key = cache_data['key']
@@ -305,7 +327,7 @@ class SmartCache:
                 disk_path = os.path.join(self.disk_cache_dir, filename)
                 try:
                     with open(disk_path, 'rb') as f:
-                        cache_data = pickle.load(f)
+                        cache_data = _safe_pickle_load(f)
                     
                     if current_time - cache_data['timestamp'] > cache_data['ttl']:
                         to_delete.append(cache_data['key'])
@@ -314,7 +336,7 @@ class SmartCache:
                     # Remove corrupted files
                     try:
                         os.remove(disk_path)
-                    except:
+                    except Exception:
                         pass
         
         # Delete expired items
