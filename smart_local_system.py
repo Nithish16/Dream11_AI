@@ -72,7 +72,7 @@ class SmartLocalSystem:
         try:
             requests.get("https://www.google.com", timeout=5)
             return True
-        except:
+        except requests.exceptions.RequestException:
             return False
     
     def daily_discovery_when_available(self):
