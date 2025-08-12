@@ -248,30 +248,43 @@ def calculate_consistency_score(career_stats: Dict[str, Any]) -> float:
     consistency = max(0, 100 - (variance / avg_score if avg_score > 0 else 100))
     return round(consistency, 2)
 
-def aggregate_team_data(team_id: int, series_id: int, squad_data: Dict[str, Any], match_id: int = None) -> TeamData:
+def aggregate_team_data(team_id: int, series_id: int, squad_data: Dict[str, Any], match_id: int = None, resolved_team_name: str = None, require_playing_xi: bool = True) -> TeamData:
     """
-    Aggregate team data with Playing XI priority and support staff filtering
-    Priority: 1) Playing XI -> 2) Squad (filtered) -> 3) Fallback
+    Aggregate team data with STRICT Playing XI requirement for predictions
+    Priority: 1) Playing XI (ONLY) -> 2) Squad (only if require_playing_xi=False)
+    
+    Args:
+        require_playing_xi: If True, only return data if confirmed Playing XI is available.
+                           This should be True for all predictions to ensure accuracy.
     """
-    team_name = "Unknown Team"
-    team_short_name = "UNK"
+    team_name = resolved_team_name or "Unknown Team"
+    team_short_name = team_name[:3].upper() if resolved_team_name else "UNK"
     players = []
 
-    # Method 1: Try to get Playing XI first (highest priority for Dream11)
-    all_match_players = None
-
-    # Try Playing XI extraction first (this is what we want for Dream11)
+    # STRICT Playing XI validation for predictions
+    playing_xi_found = False
+    
+    # Method 1: Try to get Playing XI first (REQUIRED for accurate predictions)
     if match_id:
         try:
             playing_xi = extract_playing_xi_from_match_center(match_id, team_id)
             if playing_xi and len(playing_xi) >= 8:  # Minimum reasonable playing XI
-                print(f"  🎯 Using Playing XI from match center for team {team_id}")
+                print(f"  🎯 Found Playing XI from match center for team {team_id}")
                 for player_info in playing_xi:
                     if not is_support_staff(player_info):
                         player_data = extract_player_data(player_info, team_id, team_name)
                         players.append(player_data)
 
-                print(f"  ✅ Found {len(players)} players from Playing XI")
+                playing_xi_found = True
+                print(f"  ✅ Confirmed Playing XI: {len(players)} players")
+                
+                # Validate we have exactly 11 players for predictions
+                if require_playing_xi and len(players) != 11:
+                    print(f"  ⚠️ Playing XI incomplete: {len(players)}/11 players")
+                    if len(players) < 10:
+                        print(f"  ❌ Too few players for reliable prediction, skipping...")
+                        return None
+                
                 # Return immediately - Playing XI is what we want for Dream11
                 team_data = TeamData(
                     team_id=team_id,
@@ -299,8 +312,14 @@ def aggregate_team_data(team_id: int, series_id: int, squad_data: Dict[str, Any]
         except Exception as e:
             print(f"  ⚠️ Playing XI extraction failed: {e}")
 
-    # Method 2: Fallback to complete squad if Playing XI failed
-    if not players and match_id:
+    # If require_playing_xi is True and we didn't find Playing XI, return None
+    if require_playing_xi and not playing_xi_found:
+        print(f"  ❌ Playing XI required but not found for team {team_id}")
+        print(f"  🕐 Playing XI usually available 20 minutes before match start")
+        return None
+
+    # Method 2: Fallback to complete squad if Playing XI failed (only if allowed)
+    if not players and match_id and not require_playing_xi:
         try:
             all_match_players = extract_all_players_from_match_center(match_id, team_id)
             if all_match_players and len(all_match_players) >= 8:
@@ -313,53 +332,51 @@ def aggregate_team_data(team_id: int, series_id: int, squad_data: Dict[str, Any]
         except Exception as e:
             print(f"  ⚠️ Complete squad extraction also failed: {e}")
 
-    # Fallback: Try to get probable XI only
-    playing_xi = None
-    if match_id:
+    # Additional fallback: Try alternative Playing XI extraction (only if allowed)
+    if not playing_xi_found and not require_playing_xi and match_id:
         try:
             playing_xi = extract_playing_xi_from_match_center(match_id, team_id)
-        except Exception as e:
-            print(f"  ⚠️ Match center Playing XI extraction failed: {e}")
+            if playing_xi:
+                print(f"  🎯 Using fallback Playing XI for team {team_id}")
+                for player_info in playing_xi:
+                    if not is_support_staff(player_info):
+                        player_data = extract_player_data(player_info, team_id, team_name)
+                        players.append(player_data)
 
-    # Skip the corrupted get_playing_xi API call as it may return wrong data
-    if playing_xi:
-        print(f"  🎯 Using Playing XI for team {team_id}")
-        for player_info in playing_xi:
-            if not is_support_staff(player_info):
-                player_data = extract_player_data(player_info, team_id, team_name)
-                players.append(player_data)
+                if players:
+                    print(f"  ✅ Found {len(players)} players from fallback Playing XI")
+                    # Only return early if we have a reasonable squad size (11+ players)
+                    if len(players) >= 11:
+                        team_data = TeamData(
+                            team_id=team_id,
+                            team_name=team_name,
+                            team_short_name=team_short_name,
+                            players=players
+                        )
 
-        if players:
-            print(f"  ✅ Found {len(players)} players from Playing XI")
-            # Only return early if we have a reasonable squad size (11+ players)
-            if len(players) >= 11:
-                team_data = TeamData(
-                    team_id=team_id,
-                    team_name=team_name,
-                    team_short_name=team_short_name,
-                    players=players
-                )
+                        # Categorize players by role
+                        for player in players:
+                            role = player.role.lower()
+                            if 'wk' in role or 'wicket' in role or 'keeper' in role:
+                                team_data.wicket_keepers.append(player)
+                            elif 'allrounder' in role or 'all-rounder' in role or 'all rounder' in role:
+                                team_data.all_rounders.append(player)
+                            elif 'bowl' in role:
+                                team_data.bowlers.append(player)
+                            elif 'bat' in role:
+                                team_data.batsmen.append(player)
+                            else:
+                                # Default categorization for unknown roles - assume batsman
+                                team_data.batsmen.append(player)
 
-                # Categorize players by role
-                for player in players:
-                    role = player.role.lower()
-                    if 'wk' in role or 'wicket' in role or 'keeper' in role:
-                        team_data.wicket_keepers.append(player)
-                    elif 'allrounder' in role or 'all-rounder' in role or 'all rounder' in role:
-                        team_data.all_rounders.append(player)
-                    elif 'bowl' in role:
-                        team_data.bowlers.append(player)
-                    elif 'bat' in role:
-                        team_data.batsmen.append(player)
+                        return team_data
                     else:
-                        # Default categorization for unknown roles - assume batsman
-                        team_data.batsmen.append(player)
-
-                return team_data
-            else:
-                print(f"  ⚠️  Only {len(players)} players from Playing XI")
-                print(f"  ⚠️  SKIPPING squad APIs - detected data corruption (returning wrong team players)")
-                print(f"  ⚠️  Proceeding with available match center data only")
+                        print(f"  ⚠️ Only {len(players)} players from fallback Playing XI")
+                        if require_playing_xi:
+                            print(f"  ❌ Insufficient players for reliable prediction")
+                            return None
+        except Exception as e:
+            print(f"  ⚠️ Fallback Playing XI extraction failed: {e}")
 
     # Check if no players were found after all attempts
     if not players:
@@ -493,6 +510,17 @@ def aggregate_all_data(resolved_ids: Dict[str, Any]) -> MatchData:
     print(f"🏟️  Venue ID: {venue_id}")
     print(f"🏏 Format: {match_format}")
 
+    # CRITICAL: Validate Playing XI availability before data aggregation
+    if team1_id and team2_id:
+        xi_validation = validate_playing_xi_availability(match_id, team1_id, team2_id)
+        if not xi_validation['ready']:
+            print(f"🚫 PREDICTION SKIPPED: {xi_validation['message']}")
+            print("   ➤ Playing XI must be confirmed before generating predictions")
+            print("   ➤ Try again closer to match start (usually 20 minutes before)")
+            return None
+        else:
+            print(f"✅ Playing XI validated: {xi_validation['message']}")
+
     # Fetch match center data
     match_center_data = {}
     try:
@@ -518,30 +546,24 @@ def aggregate_all_data(resolved_ids: Dict[str, Any]) -> MatchData:
     team2_name = resolved_ids.get('team2Name', 'Team 2')
 
     print(f"🔍 Processing {team1_name} (ID: {team1_id})...")
-    team1_data = aggregate_team_data(team1_id, series_id, squad_data, match_id)
-    # Update team name from resolved data if not found in API
-    if team1_data.team_name == "Unknown Team":
-        team1_data.team_name = team1_name
-        # Also update individual player team names
-        for player in team1_data.players:
-            player.team_name = team1_name
+    team1_data = aggregate_team_data(team1_id, series_id, squad_data, match_id, team1_name, require_playing_xi=True)
 
     # Check for team1 player data availability
-    if team1_data.error:
+    if team1_data is None:
+        print(f"  ❌ Team 1 ({team1_name}): Playing XI not available")
+        return None
+    elif team1_data.error:
         errors.append(f"Team 1 ({team1_name}): {team1_data.error}")
         print(f"  ❌ {team1_data.error}")
 
     print(f"🔍 Processing {team2_name} (ID: {team2_id})...")
-    team2_data = aggregate_team_data(team2_id, series_id, squad_data, match_id)
-    # Update team name from resolved data if not found in API
-    if team2_data.team_name == "Unknown Team":
-        team2_data.team_name = team2_name
-        # Also update individual player team names
-        for player in team2_data.players:
-            player.team_name = team2_name
+    team2_data = aggregate_team_data(team2_id, series_id, squad_data, match_id, team2_name, require_playing_xi=True)
 
     # Check for team2 player data availability
-    if team2_data.error:
+    if team2_data is None:
+        print(f"  ❌ Team 2 ({team2_name}): Playing XI not available")
+        return None
+    elif team2_data.error:
         errors.append(f"Team 2 ({team2_name}): {team2_data.error}")
         print(f"  ❌ {team2_data.error}")
 
@@ -825,6 +847,81 @@ def get_playing_xi(series_id: int, team_id: int) -> List[Dict[str, Any]]:
     except Exception as e:
         print(f"  ❌ Error getting Playing XI: {e}")
         return None
+
+def validate_playing_xi_availability(match_id: int, team1_id: int, team2_id: int) -> Dict[str, Any]:
+    """
+    Validate that Playing XI is available for both teams before making predictions.
+    This function should be called exactly 20 minutes before match start.
+    
+    Returns:
+        Dict with validation results including:
+        - ready: bool - True if both teams have Playing XI
+        - team1_xi: bool - True if team1 has Playing XI
+        - team2_xi: bool - True if team2 has Playing XI
+        - message: str - Status message
+        - players_count: Dict - Number of players found for each team
+    """
+    try:
+        print(f"\n🔍 VALIDATING PLAYING XI AVAILABILITY")
+        print(f"   Match ID: {match_id}")
+        print(f"   Teams: {team1_id} vs {team2_id}")
+        
+        result = {
+            'ready': False,
+            'team1_xi': False,
+            'team2_xi': False,
+            'message': '',
+            'players_count': {'team1': 0, 'team2': 0}
+        }
+        
+        # Check team 1 Playing XI
+        try:
+            team1_xi = extract_playing_xi_from_match_center(match_id, team1_id)
+            if team1_xi and len(team1_xi) >= 10:  # Allow 10+ for flexibility
+                team1_count = len([p for p in team1_xi if not is_support_staff(p)])
+                result['team1_xi'] = True
+                result['players_count']['team1'] = team1_count
+                print(f"   ✅ Team {team1_id}: {team1_count} players in Playing XI")
+            else:
+                print(f"   ❌ Team {team1_id}: Playing XI not available")
+        except Exception as e:
+            print(f"   ❌ Team {team1_id}: Error checking Playing XI - {e}")
+        
+        # Check team 2 Playing XI
+        try:
+            team2_xi = extract_playing_xi_from_match_center(match_id, team2_id)
+            if team2_xi and len(team2_xi) >= 10:  # Allow 10+ for flexibility
+                team2_count = len([p for p in team2_xi if not is_support_staff(p)])
+                result['team2_xi'] = True
+                result['players_count']['team2'] = team2_count
+                print(f"   ✅ Team {team2_id}: {team2_count} players in Playing XI")
+            else:
+                print(f"   ❌ Team {team2_id}: Playing XI not available")
+        except Exception as e:
+            print(f"   ❌ Team {team2_id}: Error checking Playing XI - {e}")
+        
+        # Final validation
+        if result['team1_xi'] and result['team2_xi']:
+            result['ready'] = True
+            result['message'] = f"✅ Playing XI confirmed for both teams ({result['players_count']['team1']} vs {result['players_count']['team2']} players)"
+        elif result['team1_xi'] or result['team2_xi']:
+            missing_team = team2_id if result['team1_xi'] else team1_id
+            result['message'] = f"⚠️ Playing XI missing for team {missing_team}. Wait for announcement."
+        else:
+            result['message'] = "❌ Playing XI not available for either team. Too early for prediction."
+        
+        print(f"   {result['message']}")
+        return result
+        
+    except Exception as e:
+        print(f"   ❌ Error validating Playing XI: {e}")
+        return {
+            'ready': False,
+            'team1_xi': False,
+            'team2_xi': False,
+            'message': f"Error validating Playing XI: {e}",
+            'players_count': {'team1': 0, 'team2': 0}
+        }
 
 def is_support_staff(player_info: Dict[str, Any]) -> bool:
     """

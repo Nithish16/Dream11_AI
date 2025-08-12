@@ -384,37 +384,117 @@ def learn_from_result(learning_system, match_id, winning_team, winning_score, pr
         print("✅ Created auto-learning hook file: auto_learning_hook.py")
 
 def main():
-    """Demo the learning system"""
+    """Learn from the matches that were analyzed"""
     learning_system = Dream11LearningSystem()
     
-    # Example: Learn from match 114008
-    predicted_teams = [
-        {'strategy': 'AI-Optimal', 'score': 558, 'captain': 'Georgia Wareham', 'vice_captain': 'Sophia Dunkley',
-         'players': ['Tammy Beaumont', 'Davina Perrin', 'Emily Windsor', 'Phoebe Litchfield',
-                    'F Davies', 'Linsey Smith', 'Shabnim Ismail', 'Georgia Wareham',
-                    'Katie Levick', 'Sophia Dunkley', 'Hayley Matthews']}
+    print("🧠 LEARNING FROM RECENT MATCH ANALYSIS")
+    print("="*60)
+    
+    # Learn from Match 113874 (The Hundred)
+    print("\n📊 ANALYZING MATCH 113874 (The Hundred)")
+    predicted_teams_113874 = [
+        {
+            'strategy': 'AI-Optimal', 'score': 606, 'captain': 'Duckett', 'vice_captain': 'Willey',
+            'players': ['Aneurin Donald', 'Max Holden', 'Duckett', 'Adam Hose', 'Stoinis', 
+                       'Southee', 'Rehan Ahmed', 'Akeal Hosein', 'Livingstone', 'Willey', 'Joe Clarke']
+        },
+        {
+            'strategy': 'Risk-Balanced', 'score': 551, 'captain': 'Jacob Bethell', 'vice_captain': 'Livingstone',
+            'players': ['Tom Banton', 'Duckett', 'Will Smeed', 'Adam Hose', 'Livingstone', 
+                       'Southee', 'Akeal Hosein', 'Rehan Ahmed', 'Jacob Bethell', 'Stoinis', 'Root']
+        },
+        {
+            'strategy': 'High-Ceiling', 'score': 579, 'captain': 'Adam Hose', 'vice_captain': 'Max Holden',
+            'players': ['Aneurin Donald', 'Max Holden', 'Duckett', 'Adam Hose', 'Stoinis', 
+                       'Southee', 'Rehan Ahmed', 'Sam Cook', 'Willey', 'Livingstone', 'Mousley']
+        }
     ]
     
-    winning_team = {
+    winning_team_113874 = {
         'players': [
-            {'name': 'Tammy Beaumont'}, {'name': 'Armitage'}, {'name': 'Hayley Matthews'},
-            {'name': 'Annabel Sutherland'}, {'name': 'Georgia Wareham'}, {'name': 'Shabnim Ismail'},
-            {'name': 'Kate Cross'}, {'name': 'Linsey Smith'}, {'name': 'F Davies'},
-            {'name': 'Katie Levick'}, {'name': 'Grace Ballinger'}
+            {'name': 'Banton'}, {'name': 'Livingston'}, {'name': 'Holden'}, {'name': 'Willey'}, 
+            {'name': 'Howell'}, {'name': 'Mousley'}, {'name': 'Ahmed'}, {'name': 'Southee'}, 
+            {'name': 'Hosein'}, {'name': 'Ferguson'}, {'name': 'Cook'}
         ],
-        'captain': 'Georgia Wareham',
-        'vice_captain': 'Annabel Sutherland'
+        'captain': 'Ferguson',
+        'vice_captain': 'Southee'
     }
     
-    # Auto-learn
-    analysis = learning_system.auto_learn_from_match("114008", predicted_teams, winning_team, 1082)
+    analysis_113874 = learning_system.auto_learn_from_match("113874", predicted_teams_113874, winning_team_113874, 1000000)
+    
+    # Learn from Match 114661 (ODI)
+    print("\n📊 ANALYZING MATCH 114661 (West Indies vs Pakistan ODI)")
+    predicted_teams_114661 = [
+        {
+            'strategy': 'AI-Optimal', 'score': 627, 'captain': 'Roston Chase', 'vice_captain': 'Saim Ayub',
+            'players': ['Rizwan', 'Saim Ayub', 'Hasan Nawaz', 'Shafique', 'Romario Shepherd', 
+                       'Shaheen Afridi', 'Sufiyan Muqeem', 'Jediah Blades', 'Keacy Carty', 'Roston Chase', 'Talat']
+        },
+        {
+            'strategy': 'Risk-Balanced', 'score': 612, 'captain': 'Roston Chase', 'vice_captain': 'Saim Ayub',
+            'players': ['Rizwan', 'Hasan Nawaz', 'Babar Azam', 'Saim Ayub', 'Roston Chase', 
+                       'Jediah Blades', 'Sufiyan Muqeem', 'Shaheen Afridi', 'Romario Shepherd', 'Keacy Carty', 'Talat']
+        },
+        {
+            'strategy': 'Conditions-Based', 'score': 549, 'captain': 'Babar Azam', 'vice_captain': 'Motie',
+            'players': ['Rizwan', 'Hasan Nawaz', 'Saim Ayub', 'Babar Azam', 'Romario Shepherd', 
+                       'Shaheen Afridi', 'Naseem Shah', 'Jediah Blades', 'Faheem Ashraf', 'Motie', 'Keacy Carty']
+        }
+    ]
+    
+    winning_team_114661 = {
+        'players': [
+            {'name': 'Rizwan'}, {'name': 'Hope'}, {'name': 'Lewis'}, {'name': 'Azam'}, 
+            {'name': 'Shafique'}, {'name': 'Nawaz'}, {'name': 'Chase'}, {'name': 'Motie'}, 
+            {'name': 'Afridi'}, {'name': 'Shah'}, {'name': 'Shimar Joseph'}
+        ],
+        'captain': 'Afridi',
+        'vice_captain': 'Chase'
+    }
+    
+    analysis_114661 = learning_system.auto_learn_from_match("114661", predicted_teams_114661, winning_team_114661, 1000000)
+    
+    # Record specific critical insights
+    learning_system.implement_learning(
+        "player_database_enhancement",
+        "Critical: Ferguson was winning captain but missing from player database. Need complete player database audit.",
+        "Limited/outdated player database",
+        "Enhanced player database with all current squad members and recent performances"
+    )
+    
+    learning_system.implement_learning(
+        "bowling_impact_weighting",
+        "Bowlers often make better captains than predicted. Ferguson (C) and Afridi (C) both were winning captains.",
+        "Underweight bowling impact in captain selection",
+        "Increased weight for bowlers in high-impact situations, especially death bowling specialists"
+    )
+    
+    learning_system.implement_learning(
+        "format_specific_player_selection",
+        "Different formats need different player prioritization. The Hundred needs explosive players, ODI needs consistency.",
+        "Generic player selection across formats",
+        "Format-specific player weighting: The Hundred prioritizes strike rate and death bowling, ODI balances consistency with impact"
+    )
+    
+    # Display final recommendations
+    recommendations = learning_system.get_learning_recommendations()
+    print(f"\n🎯 FINAL LEARNING SUMMARY:")
+    print("="*60)
+    print("✅ Match 113874: AI missed Ferguson (winning captain) completely")
+    print("✅ Match 114661: AI made Chase captain, winner made him VC, Afridi captain")
+    print("✅ Critical Issue: Player database incomplete/outdated")
+    print("✅ Major Learning: Bowlers often outperform as captains vs batsmen")
+    print("✅ Format Insight: The Hundred rewards explosive plays, ODI rewards consistency")
     
     # Create the hook for integration
     learning_system.create_auto_learning_hook()
     
-    print("\n✅ Learning system demo complete!")
-    print("📁 Database created: ai_learning_database.db")
-    print("🔗 Integration hook: auto_learning_hook.py")
+    print("\n🚀 LEARNING SYSTEM UPDATED WITH NEW INSIGHTS!")
+    print("📁 Database: ai_learning_database.db")
+    print("🔗 Hook: auto_learning_hook.py")
+
+# Create alias for backward compatibility
+AILearningSystem = Dream11LearningSystem
 
 if __name__ == "__main__":
     main()

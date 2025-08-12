@@ -1,0 +1,490 @@
+{
+  "match_info": {
+    "match_id": 131455,
+    "teams": "Australia A Women vs India A Women",
+    "venue": "Great Barrier Reef Arena",
+    "format": "T20",
+    "prediction_time": "2025-08-10 13:17:00",
+    "quality_score": 0.9,
+    "playing_xi_confirmed": true
+  },
+  "teams": [
+    {
+      "team_number": 1,
+      "strategy": "AI-Optimal",
+      "quality": "Value",
+      "confidence": 3.9,
+      "captain": "Amy Edgar",
+      "vice_captain": "Minnu Mani",
+      "players": [
+        {
+          "name": "Uma Chetry",
+          "role": "Wicket-keeper",
+          "team": "India A Women",
+          "ema": 29.0,
+          "consistency": 73.0
+        },
+        {
+          "name": "Anika Learoyd",
+          "role": "Batsman",
+          "team": "Australia A",
+          "ema": 46.0,
+          "consistency": 81.0
+        },
+        {
+          "name": "Vrinda Dinesh",
+          "role": "Batsman",
+          "team": "India A Women",
+          "ema": 57.0,
+          "consistency": 86.0
+        },
+        {
+          "name": "Amy Edgar",
+          "role": "Batsman",
+          "team": "Australia A",
+          "ema": 41.0,
+          "consistency": 90.0,
+          "is_captain": true
+        },
+        {
+          "name": "Raghvi Bist",
+          "role": "All-rounder",
+          "team": "India A Women",
+          "ema": 29.0,
+          "consistency": 68.0
+        },
+        {
+          "name": "Shabnam Shakil",
+          "role": "Bowler",
+          "team": "India A Women",
+          "ema": 10.0,
+          "consistency": 73.0
+        },
+        {
+          "name": "Prestwidge",
+          "role": "Bowler",
+          "team": "Australia A",
+          "ema": 13.0,
+          "consistency": 65.0
+        },
+        {
+          "name": "Tanuja Kanwar",
+          "role": "Bowler",
+          "team": "India A Women",
+          "ema": 6.0,
+          "consistency": 51.0
+        },
+        {
+          "name": "Sianna Ginger",
+          "role": "All-rounder",
+          "team": "Australia A",
+          "ema": 40.0,
+          "consistency": 67.0
+        },
+        {
+          "name": "Tess Flintoff",
+          "role": "All-rounder",
+          "team": "Australia A",
+          "ema": 27.0,
+          "consistency": 61.0
+        },
+        {
+          "name": "Minnu Mani",
+          "role": "All-rounder",
+          "team": "India A Women",
+          "ema": 39.0,
+          "consistency": 74.0,
+          "is_vice_captain": true
+        }
+      ]
+    },
+    {
+      "team_number": 2,
+      "strategy": "Risk-Balanced",
+      "quality": "Value",
+      "confidence": 3.9,
+      "captain": "Anika Learoyd",
+      "vice_captain": "Prema Rawat",
+      "players": [
+        {
+          "name": "Uma Chetry",
+          "role": "Wicket-keeper",
+          "team": "India A Women",
+          "ema": 29.0,
+          "consistency": 73.0
+        },
+        {
+          "name": "Anika Learoyd",
+          "role": "Batsman",
+          "team": "Australia A",
+          "ema": 46.0,
+          "consistency": 81.0,
+          "is_captain": true
+        },
+        {
+          "name": "Amy Edgar",
+          "role": "Batsman",
+          "team": "Australia A",
+          "ema": 41.0,
+          "consistency": 90.0
+        },
+        {
+          "name": "Vrinda Dinesh",
+          "role": "Batsman",
+          "team": "India A Women",
+          "ema": 57.0,
+          "consistency": 86.0
+        },
+        {
+          "name": "Prema Rawat",
+          "role": "All-rounder",
+          "team": "India A Women",
+          "ema": 30.0,
+          "consistency": 77.0,
+          "is_vice_captain": true
+        },
+        {
+          "name": "Shabnam Shakil",
+          "role": "Bowler",
+          "team": "India A Women",
+          "ema": 10.0,
+          "consistency": 73.0
+        },
+        {
+          "name": "Radha Yadav",
+          "role": "Bowler",
+          "team": "India A Women",
+          "ema": 24.0,
+          "consistency": 74.0
+        },
+        {
+          "name": "Prestwidge",
+          "role": "Bowler",
+          "team": "Australia A",
+          "ema": 13.0,
+          "consistency": 65.0
+        },
+        {
+          "name": "Minnu Mani",
+          "role": "All-rounder",
+          "team": "India A Women",
+          "ema": 39.0,
+          "consistency": 74.0
+        },
+        {
+          "name": "Nicole Faltum",
+          "role": "Wicket-keeper",
+          "team": "Australia A",
+          "ema": 34.0,
+          "consistency": 74.0
+        },
+        {
+          "name": "Raghvi Bist",
+          "role": "All-rounder",
+          "team": "India A Women",
+          "ema": 29.0,
+          "consistency": 68.0
+        }
+      ]
+    },
+    {
+      "team_number": 3,
+      "strategy": "High-Ceiling",
+      "quality": "Value",
+      "confidence": 3.9,
+      "captain": "Vrinda Dinesh",
+      "vice_captain": "Sajeevan Sajana",
+      "players": [
+        {
+          "name": "Uma Chetry",
+          "role": "Wicket-keeper",
+          "team": "India A Women",
+          "ema": 29.0,
+          "consistency": 73.0
+        },
+        {
+          "name": "Anika Learoyd",
+          "role": "Batsman",
+          "team": "Australia A",
+          "ema": 46.0,
+          "consistency": 81.0
+        },
+        {
+          "name": "Vrinda Dinesh",
+          "role": "Batsman",
+          "team": "India A Women",
+          "ema": 57.0,
+          "consistency": 86.0,
+          "is_captain": true
+        },
+        {
+          "name": "Amy Edgar",
+          "role": "Batsman",
+          "team": "Australia A",
+          "ema": 41.0,
+          "consistency": 90.0
+        },
+        {
+          "name": "Raghvi Bist",
+          "role": "All-rounder",
+          "team": "India A Women",
+          "ema": 29.0,
+          "consistency": 68.0
+        },
+        {
+          "name": "Shabnam Shakil",
+          "role": "Bowler",
+          "team": "India A Women",
+          "ema": 10.0,
+          "consistency": 73.0
+        },
+        {
+          "name": "Tanuja Kanwar",
+          "role": "Bowler",
+          "team": "India A Women",
+          "ema": 6.0,
+          "consistency": 51.0
+        },
+        {
+          "name": "Prestwidge",
+          "role": "Bowler",
+          "team": "Australia A",
+          "ema": 13.0,
+          "consistency": 65.0
+        },
+        {
+          "name": "Sianna Ginger",
+          "role": "All-rounder",
+          "team": "Australia A",
+          "ema": 40.0,
+          "consistency": 67.0
+        },
+        {
+          "name": "Sajeevan Sajana",
+          "role": "All-rounder",
+          "team": "India A Women",
+          "ema": 52.0,
+          "consistency": 55.0,
+          "is_vice_captain": true
+        },
+        {
+          "name": "Prema Rawat",
+          "role": "All-rounder",
+          "team": "India A Women",
+          "ema": 30.0,
+          "consistency": 77.0
+        }
+      ]
+    },
+    {
+      "team_number": 4,
+      "strategy": "Value-Optimal",
+      "quality": "Value",
+      "confidence": 3.9,
+      "captain": "Vrinda Dinesh",
+      "vice_captain": "Raghvi Bist",
+      "players": [
+        {
+          "name": "Uma Chetry",
+          "role": "Wicket-keeper",
+          "team": "India A Women",
+          "ema": 29.0,
+          "consistency": 73.0
+        },
+        {
+          "name": "Anika Learoyd",
+          "role": "Batsman",
+          "team": "Australia A",
+          "ema": 46.0,
+          "consistency": 81.0
+        },
+        {
+          "name": "Vrinda Dinesh",
+          "role": "Batsman",
+          "team": "India A Women",
+          "ema": 57.0,
+          "consistency": 86.0,
+          "is_captain": true
+        },
+        {
+          "name": "Amy Edgar",
+          "role": "Batsman",
+          "team": "Australia A",
+          "ema": 41.0,
+          "consistency": 90.0
+        },
+        {
+          "name": "Raghvi Bist",
+          "role": "All-rounder",
+          "team": "India A Women",
+          "ema": 29.0,
+          "consistency": 68.0,
+          "is_vice_captain": true
+        },
+        {
+          "name": "Shabnam Shakil",
+          "role": "Bowler",
+          "team": "India A Women",
+          "ema": 10.0,
+          "consistency": 73.0
+        },
+        {
+          "name": "Prestwidge",
+          "role": "Bowler",
+          "team": "Australia A",
+          "ema": 13.0,
+          "consistency": 65.0
+        },
+        {
+          "name": "Tanuja Kanwar",
+          "role": "Bowler",
+          "team": "India A Women",
+          "ema": 6.0,
+          "consistency": 51.0
+        },
+        {
+          "name": "Prema Rawat",
+          "role": "All-rounder",
+          "team": "India A Women",
+          "ema": 30.0,
+          "consistency": 77.0
+        },
+        {
+          "name": "Sajeevan Sajana",
+          "role": "All-rounder",
+          "team": "India A Women",
+          "ema": 52.0,
+          "consistency": 55.0
+        },
+        {
+          "name": "Sianna Ginger",
+          "role": "All-rounder",
+          "team": "Australia A",
+          "ema": 40.0,
+          "consistency": 67.0
+        }
+      ]
+    },
+    {
+      "team_number": 5,
+      "strategy": "Conditions-Based",
+      "quality": "Value",
+      "confidence": 4.3,
+      "captain": "Prema Rawat",
+      "vice_captain": "Nicole Faltum",
+      "players": [
+        {
+          "name": "Nicole Faltum",
+          "role": "Wicket-keeper",
+          "team": "Australia A",
+          "ema": 34.0,
+          "consistency": 74.0,
+          "is_vice_captain": true
+        },
+        {
+          "name": "Anika Learoyd",
+          "role": "Batsman",
+          "team": "Australia A",
+          "ema": 46.0,
+          "consistency": 81.0
+        },
+        {
+          "name": "Vrinda Dinesh",
+          "role": "Batsman",
+          "team": "India A Women",
+          "ema": 57.0,
+          "consistency": 86.0
+        },
+        {
+          "name": "Amy Edgar",
+          "role": "Batsman",
+          "team": "Australia A",
+          "ema": 41.0,
+          "consistency": 90.0
+        },
+        {
+          "name": "Raghvi Bist",
+          "role": "All-rounder",
+          "team": "India A Women",
+          "ema": 29.0,
+          "consistency": 68.0
+        },
+        {
+          "name": "Shabnam Shakil",
+          "role": "Bowler",
+          "team": "India A Women",
+          "ema": 10.0,
+          "consistency": 73.0
+        },
+        {
+          "name": "Prestwidge",
+          "role": "Bowler",
+          "team": "Australia A",
+          "ema": 13.0,
+          "consistency": 65.0
+        },
+        {
+          "name": "Tanuja Kanwar",
+          "role": "Bowler",
+          "team": "India A Women",
+          "ema": 6.0,
+          "consistency": 51.0
+        },
+        {
+          "name": "Prema Rawat",
+          "role": "All-rounder",
+          "team": "India A Women",
+          "ema": 30.0,
+          "consistency": 77.0,
+          "is_captain": true
+        },
+        {
+          "name": "Sajeevan Sajana",
+          "role": "All-rounder",
+          "team": "India A Women",
+          "ema": 52.0,
+          "consistency": 55.0
+        },
+        {
+          "name": "Sianna Ginger",
+          "role": "All-rounder",
+          "team": "Australia A",
+          "ema": 40.0,
+          "consistency": 67.0
+        }
+      ]
+    }
+  ],
+  "key_insights": {
+    "top_performers": [
+      {
+        "name": "Amy Edgar",
+        "ema": 41.0,
+        "consistency": 90.0,
+        "reason": "Highest consistency"
+      },
+      {
+        "name": "Vrinda Dinesh",
+        "ema": 57.0,
+        "consistency": 86.0,
+        "reason": "Highest EMA score"
+      },
+      {
+        "name": "Sajeevan Sajana",
+        "ema": 52.0,
+        "consistency": 55.0,
+        "reason": "High potential"
+      }
+    ],
+    "recommended_captains": ["Amy Edgar", "Vrinda Dinesh", "Anika Learoyd"],
+    "pitch_conditions": "Green pitch - favors bowlers",
+    "team_balance": "Good balance between experienced and emerging players"
+  },
+  "system_metrics": {
+    "processing_time": "27.72s",
+    "quality_score": 0.9,
+    "api_calls": 3,
+    "cache_hit_rate": "62.5%",
+    "cost_savings": "62.5%"
+  }
+}

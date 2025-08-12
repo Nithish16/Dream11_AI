@@ -1,5 +1,5 @@
-# Dream11 AI - Production Requirements
-# This is the main requirements file for the production system
+# Dream11 AI - Optimized Production Requirements
+# Streamlined dependencies for fast, reliable deployment
 
-# Import from our comprehensive production requirements
--r requirements_production_final.txt
+# Import optimized requirements (lightweight version)
+-r requirements_optimized.txt

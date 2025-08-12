@@ -417,3 +417,25 @@ dep_manager = DependencyManager()
 def get_dependency_manager() -> DependencyManager:
     """Get the global dependency manager instance"""
     return dep_manager
+
+def verify_dependencies():
+    """
+    Quick dependency verification for imports
+    Returns True if all critical dependencies are available
+    """
+    try:
+        manager = DependencyManager()
+        deps = manager.check_core_dependencies()
+        
+        # Check critical imports
+        critical_deps = ['requests', 'python-dateutil']
+        all_good = True
+        
+        for dep in critical_deps:
+            if dep not in deps or not deps[dep]['available']:
+                all_good = False
+                break
+        
+        return all_good
+    except:
+        return False

@@ -71,6 +71,26 @@ class OptimalTeam:
             # Categorize players by role
             self._categorize_players()
 
+    @property
+    def total_score(self) -> float:
+        """Compatibility aggregate used by legacy tests.
+
+        Computes a simple aggregate score from available player metrics
+        without relying on deprecated credit/score fields.
+        """
+        if not self.players:
+            return 0.0
+        # Weighted blend of consistent, opportunity and form-driven metrics
+        aggregate = 0.0
+        for p in self.players:
+            aggregate += (
+                (p.ema_score * 0.4) +
+                (p.consistency_score * 0.3) +
+                (p.opportunity_index * 10.0 * 0.2) +
+                ((p.form_momentum + 1.0) * 10.0 * 0.1)
+            )
+        return round(aggregate, 2)
+
     def _calculate_team_quality(self) -> str:
         """Calculate team quality based on player metrics"""
         if not self.players:
@@ -361,7 +381,10 @@ def calculate_ownership_prediction(player: PlayerForOptimization, all_players: L
     # Enhanced performance factor (using consistency and form)
     performance_factor = (player.ema_score + player.consistency_score) / 2
     max_performance = max((p.ema_score + p.consistency_score) / 2 for p in all_players) if all_players else 100
-    normalized_efficiency = (performance_factor / max_performance) * 100
+    # Guard against division by zero when data is degenerate
+    normalized_efficiency = 0.0
+    if max_performance and max_performance > 0:
+        normalized_efficiency = (performance_factor / max_performance) * 100
 
     # Enhanced role factor with more nuanced multipliers
     role_multiplier = 1.0
@@ -2276,7 +2299,11 @@ def batch_generate_teams(player_features_list: List[PlayerFeatures],
         if hasattr(features, 'team_name') and features.team_name and features.team_name != "Unknown":
             team_mapping[features.player_id] = features.team_name
 
-    # Prepare players for optimization with series context
+    # Prepare players for optimization with series context (optional)
+    series_context = None
+    if isinstance(match_context, dict):
+        series_context = match_context.get('series_context')
+
     players_for_opt = prepare_players_for_optimization(
         player_features_list, match_format, match_context, team_mapping, series_context
     )

@@ -1,0 +1,496 @@
+{
+  "match_info": {
+    "match_id": 113898,
+    "teams": "Trent Rockets vs Northern Superchargers",
+    "venue": "Trent Bridge",
+    "format": "The Hundred",
+    "prediction_time": "2025-08-10 22:19:42",
+    "quality_score": 0.9,
+    "playing_xi_confirmed": true,
+    "pitch_conditions": "Flat",
+    "match_state": "upcoming"
+  },
+  "teams": [
+    {
+      "team_number": 1,
+      "strategy": "AI-Optimal",
+      "quality": "Value",
+      "confidence": 3.4,
+      "captain": "Imad Wasim",
+      "vice_captain": "Max Holden",
+      "players": [
+        {
+          "name": "Alsop",
+          "role": "Wicket-keeper",
+          "team": "Trent Rockets",
+          "ema": 41.0,
+          "consistency": 65.0
+        },
+        {
+          "name": "Harry Brook",
+          "role": "Batsman",
+          "team": "Northern Superchargers",
+          "ema": 54.0,
+          "consistency": 90.0
+        },
+        {
+          "name": "Dan Lawrence",
+          "role": "Batsman",
+          "team": "Northern Superchargers",
+          "ema": 22.0,
+          "consistency": 79.0
+        },
+        {
+          "name": "Max Holden",
+          "role": "Batsman",
+          "team": "Trent Rockets",
+          "ema": 29.0,
+          "consistency": 77.0,
+          "is_vice_captain": true
+        },
+        {
+          "name": "Imad Wasim",
+          "role": "All-rounder",
+          "team": "Northern Superchargers",
+          "ema": 49.0,
+          "consistency": 72.0,
+          "is_captain": true
+        },
+        {
+          "name": "Matthew Potts",
+          "role": "Bowler",
+          "team": "Northern Superchargers",
+          "ema": 3.0,
+          "consistency": 58.0
+        },
+        {
+          "name": "Adil Rashid",
+          "role": "Bowler",
+          "team": "Northern Superchargers",
+          "ema": 21.0,
+          "consistency": 61.0
+        },
+        {
+          "name": "Sam Cook",
+          "role": "Bowler",
+          "team": "Trent Rockets",
+          "ema": 13.0,
+          "consistency": 69.0
+        },
+        {
+          "name": "Stoinis",
+          "role": "All-rounder",
+          "team": "Trent Rockets",
+          "ema": 29.0,
+          "consistency": 58.0
+        },
+        {
+          "name": "Tom Lawes",
+          "role": "All-rounder",
+          "team": "Northern Superchargers",
+          "ema": 18.0,
+          "consistency": 56.0
+        },
+        {
+          "name": "Rehan Ahmed",
+          "role": "All-rounder",
+          "team": "Trent Rockets",
+          "ema": 35.0,
+          "consistency": 63.0
+        }
+      ]
+    },
+    {
+      "team_number": 2,
+      "strategy": "Risk-Balanced",
+      "quality": "Value",
+      "confidence": 3.9,
+      "captain": "Graham Clark",
+      "vice_captain": "Adam Hose",
+      "players": [
+        {
+          "name": "Michael Pepper",
+          "role": "Wicket-keeper",
+          "team": "Northern Superchargers",
+          "ema": 36.0,
+          "consistency": 82.0
+        },
+        {
+          "name": "Harry Brook",
+          "role": "Batsman",
+          "team": "Northern Superchargers",
+          "ema": 54.0,
+          "consistency": 90.0
+        },
+        {
+          "name": "Adam Hose",
+          "role": "Batsman",
+          "team": "Trent Rockets",
+          "ema": 36.0,
+          "consistency": 86.0,
+          "is_vice_captain": true
+        },
+        {
+          "name": "Zak Crawley",
+          "role": "Batsman",
+          "team": "Northern Superchargers",
+          "ema": 36.0,
+          "consistency": 85.0
+        },
+        {
+          "name": "Imad Wasim",
+          "role": "All-rounder",
+          "team": "Northern Superchargers",
+          "ema": 49.0,
+          "consistency": 72.0
+        },
+        {
+          "name": "Akeal Hosein",
+          "role": "Bowler",
+          "team": "Trent Rockets",
+          "ema": 12.0,
+          "consistency": 72.0
+        },
+        {
+          "name": "Matthew Potts",
+          "role": "Bowler",
+          "team": "Northern Superchargers",
+          "ema": 3.0,
+          "consistency": 58.0
+        },
+        {
+          "name": "Sam Cook",
+          "role": "Bowler",
+          "team": "Trent Rockets",
+          "ema": 13.0,
+          "consistency": 69.0
+        },
+        {
+          "name": "Graham Clark",
+          "role": "All-rounder",
+          "team": "Northern Superchargers",
+          "ema": 40.0,
+          "consistency": 75.0,
+          "is_captain": true
+        },
+        {
+          "name": "Dan Lawrence",
+          "role": "Batsman",
+          "team": "Northern Superchargers",
+          "ema": 22.0,
+          "consistency": 79.0
+        },
+        {
+          "name": "Max Holden",
+          "role": "Batsman",
+          "team": "Trent Rockets",
+          "ema": 29.0,
+          "consistency": 77.0
+        }
+      ]
+    },
+    {
+      "team_number": 3,
+      "strategy": "High-Ceiling",
+      "quality": "Value",
+      "confidence": 3.8,
+      "captain": "Harry Brook",
+      "vice_captain": "Stoinis",
+      "players": [
+        {
+          "name": "Tom Banton",
+          "role": "Wicket-keeper",
+          "team": "Trent Rockets",
+          "ema": 32.0,
+          "consistency": 63.0
+        },
+        {
+          "name": "Harry Brook",
+          "role": "Batsman",
+          "team": "Northern Superchargers",
+          "ema": 54.0,
+          "consistency": 90.0,
+          "is_captain": true
+        },
+        {
+          "name": "Max Holden",
+          "role": "Batsman",
+          "team": "Trent Rockets",
+          "ema": 29.0,
+          "consistency": 77.0
+        },
+        {
+          "name": "Zak Crawley",
+          "role": "Batsman",
+          "team": "Northern Superchargers",
+          "ema": 36.0,
+          "consistency": 85.0
+        },
+        {
+          "name": "Stoinis",
+          "role": "All-rounder",
+          "team": "Trent Rockets",
+          "ema": 29.0,
+          "consistency": 58.0,
+          "is_vice_captain": true
+        },
+        {
+          "name": "Matthew Potts",
+          "role": "Bowler",
+          "team": "Northern Superchargers",
+          "ema": 3.0,
+          "consistency": 58.0
+        },
+        {
+          "name": "Sam Cook",
+          "role": "Bowler",
+          "team": "Trent Rockets",
+          "ema": 13.0,
+          "consistency": 69.0
+        },
+        {
+          "name": "Adil Rashid",
+          "role": "Bowler",
+          "team": "Northern Superchargers",
+          "ema": 21.0,
+          "consistency": 61.0
+        },
+        {
+          "name": "Imad Wasim",
+          "role": "All-rounder",
+          "team": "Northern Superchargers",
+          "ema": 49.0,
+          "consistency": 72.0
+        },
+        {
+          "name": "Tom Lawes",
+          "role": "All-rounder",
+          "team": "Northern Superchargers",
+          "ema": 18.0,
+          "consistency": 56.0
+        },
+        {
+          "name": "Rehan Ahmed",
+          "role": "All-rounder",
+          "team": "Trent Rockets",
+          "ema": 35.0,
+          "consistency": 63.0
+        }
+      ]
+    },
+    {
+      "team_number": 4,
+      "strategy": "Value-Optimal",
+      "quality": "Value",
+      "confidence": 3.4,
+      "captain": "Harry Brook",
+      "vice_captain": "Stoinis",
+      "players": [
+        {
+          "name": "Alsop",
+          "role": "Wicket-keeper",
+          "team": "Trent Rockets",
+          "ema": 41.0,
+          "consistency": 65.0
+        },
+        {
+          "name": "Harry Brook",
+          "role": "Batsman",
+          "team": "Northern Superchargers",
+          "ema": 54.0,
+          "consistency": 90.0,
+          "is_captain": true
+        },
+        {
+          "name": "Dan Lawrence",
+          "role": "Batsman",
+          "team": "Northern Superchargers",
+          "ema": 22.0,
+          "consistency": 79.0
+        },
+        {
+          "name": "Zak Crawley",
+          "role": "Batsman",
+          "team": "Northern Superchargers",
+          "ema": 36.0,
+          "consistency": 85.0
+        },
+        {
+          "name": "Imad Wasim",
+          "role": "All-rounder",
+          "team": "Northern Superchargers",
+          "ema": 49.0,
+          "consistency": 72.0
+        },
+        {
+          "name": "Matthew Potts",
+          "role": "Bowler",
+          "team": "Northern Superchargers",
+          "ema": 3.0,
+          "consistency": 58.0
+        },
+        {
+          "name": "Adil Rashid",
+          "role": "Bowler",
+          "team": "Northern Superchargers",
+          "ema": 21.0,
+          "consistency": 61.0
+        },
+        {
+          "name": "Sam Cook",
+          "role": "Bowler",
+          "team": "Trent Rockets",
+          "ema": 13.0,
+          "consistency": 69.0
+        },
+        {
+          "name": "Stoinis",
+          "role": "All-rounder",
+          "team": "Trent Rockets",
+          "ema": 29.0,
+          "consistency": 58.0,
+          "is_vice_captain": true
+        },
+        {
+          "name": "Tom Lawes",
+          "role": "All-rounder",
+          "team": "Northern Superchargers",
+          "ema": 18.0,
+          "consistency": 56.0
+        },
+        {
+          "name": "Rehan Ahmed",
+          "role": "All-rounder",
+          "team": "Trent Rockets",
+          "ema": 35.0,
+          "consistency": 63.0
+        }
+      ]
+    },
+    {
+      "team_number": 5,
+      "strategy": "Conditions-Based",
+      "quality": "Value",
+      "confidence": 3.8,
+      "captain": "Rehan Ahmed",
+      "vice_captain": "Tom Lawes",
+      "players": [
+        {
+          "name": "Tom Banton",
+          "role": "Wicket-keeper",
+          "team": "Trent Rockets",
+          "ema": 32.0,
+          "consistency": 63.0
+        },
+        {
+          "name": "Harry Brook",
+          "role": "Batsman",
+          "team": "Northern Superchargers",
+          "ema": 54.0,
+          "consistency": 90.0
+        },
+        {
+          "name": "Zak Crawley",
+          "role": "Batsman",
+          "team": "Northern Superchargers",
+          "ema": 36.0,
+          "consistency": 85.0
+        },
+        {
+          "name": "Max Holden",
+          "role": "Batsman",
+          "team": "Trent Rockets",
+          "ema": 29.0,
+          "consistency": 77.0
+        },
+        {
+          "name": "Imad Wasim",
+          "role": "All-rounder",
+          "team": "Northern Superchargers",
+          "ema": 49.0,
+          "consistency": 72.0
+        },
+        {
+          "name": "Matthew Potts",
+          "role": "Bowler",
+          "team": "Northern Superchargers",
+          "ema": 3.0,
+          "consistency": 58.0
+        },
+        {
+          "name": "Sam Cook",
+          "role": "Bowler",
+          "team": "Trent Rockets",
+          "ema": 13.0,
+          "consistency": 69.0
+        },
+        {
+          "name": "Akeal Hosein",
+          "role": "Bowler",
+          "team": "Trent Rockets",
+          "ema": 12.0,
+          "consistency": 72.0
+        },
+        {
+          "name": "Tom Lawes",
+          "role": "All-rounder",
+          "team": "Northern Superchargers",
+          "ema": 18.0,
+          "consistency": 56.0,
+          "is_vice_captain": true
+        },
+        {
+          "name": "Stoinis",
+          "role": "All-rounder",
+          "team": "Trent Rockets",
+          "ema": 29.0,
+          "consistency": 58.0
+        },
+        {
+          "name": "Rehan Ahmed",
+          "role": "All-rounder",
+          "team": "Trent Rockets",
+          "ema": 35.0,
+          "consistency": 63.0,
+          "is_captain": true
+        }
+      ]
+    }
+  ],
+  "key_insights": {
+    "top_performers": [
+      {
+        "name": "Harry Brook",
+        "ema": 54.0,
+        "consistency": 90.0,
+        "reason": "Highest EMA and consistency"
+      },
+      {
+        "name": "Imad Wasim",
+        "ema": 49.0,
+        "consistency": 72.0,
+        "reason": "Top all-rounder"
+      },
+      {
+        "name": "Alsop",
+        "ema": 41.0,
+        "consistency": 65.0,
+        "reason": "Quality keeper-batsman"
+      }
+    ],
+    "recommended_captains": [
+      "Harry Brook",
+      "Imad Wasim",
+      "Graham Clark"
+    ],
+    "pitch_conditions": "Flat pitch - favors batsmen",
+    "team_balance": "All-rounder heavy for The Hundred format"
+  },
+  "system_metrics": {
+    "processing_time": "37.02s",
+    "quality_score": 0.9,
+    "api_calls": 3,
+    "cache_hit_rate": "62.5%",
+    "cost_savings": "62.5%"
+  }
+}

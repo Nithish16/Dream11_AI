@@ -1,0 +1,496 @@
+{
+  "match_info": {
+    "match_id": 121136,
+    "teams": "Ireland Women vs Pakistan Women",
+    "venue": "Civil Service Cricket Club",
+    "format": "T20",
+    "prediction_time": "2025-08-10 20:19:08",
+    "quality_score": 1.0,
+    "playing_xi_confirmed": true,
+    "pitch_conditions": "Turning",
+    "match_state": "upcoming"
+  },
+  "teams": [
+    {
+      "team_number": 1,
+      "strategy": "High-Ceiling",
+      "quality": "Value",
+      "confidence": 3.4,
+      "captain": "Gaby Lewis",
+      "vice_captain": "Laura Delany",
+      "players": [
+        {
+          "name": "Amy Hunter",
+          "role": "Wicket-keeper",
+          "team": "Ireland Women",
+          "ema": 34.0,
+          "consistency": 63.0
+        },
+        {
+          "name": "Gaby Lewis",
+          "role": "Batsman",
+          "team": "Ireland Women",
+          "ema": 57.0,
+          "consistency": 71.0,
+          "is_captain": true
+        },
+        {
+          "name": "Rebecca Stokell",
+          "role": "Batsman",
+          "team": "Ireland Women",
+          "ema": 49.0,
+          "consistency": 66.0
+        },
+        {
+          "name": "Leah Paul",
+          "role": "Batsman",
+          "team": "Ireland Women",
+          "ema": 52.0,
+          "consistency": 69.0
+        },
+        {
+          "name": "Orla Prendergast",
+          "role": "All-rounder",
+          "team": "Ireland Women",
+          "ema": 20.0,
+          "consistency": 71.0
+        },
+        {
+          "name": "Fatima Sana",
+          "role": "Bowler",
+          "team": "Pakistan Women",
+          "ema": 7.0,
+          "consistency": 50.0
+        },
+        {
+          "name": "Sadia Iqbal",
+          "role": "Bowler",
+          "team": "Pakistan Women",
+          "ema": 20.0,
+          "consistency": 61.0
+        },
+        {
+          "name": "Nashra Sandhu",
+          "role": "Bowler",
+          "team": "Pakistan Women",
+          "ema": 20.0,
+          "consistency": 52.0
+        },
+        {
+          "name": "Natalia Pervaiz",
+          "role": "All-rounder",
+          "team": "Pakistan Women",
+          "ema": 28.0,
+          "consistency": 55.0
+        },
+        {
+          "name": "Arlene Kelly",
+          "role": "All-rounder",
+          "team": "Ireland Women",
+          "ema": 40.0,
+          "consistency": 75.0
+        },
+        {
+          "name": "Laura Delany",
+          "role": "All-rounder",
+          "team": "Ireland Women",
+          "ema": 25.0,
+          "consistency": 64.0,
+          "is_vice_captain": true
+        }
+      ]
+    },
+    {
+      "team_number": 2,
+      "strategy": "Conditions-Based",
+      "quality": "Value",
+      "confidence": 3.4,
+      "captain": "Muneeba Ali",
+      "vice_captain": "Natalia Pervaiz",
+      "players": [
+        {
+          "name": "Muneeba Ali",
+          "role": "Wicket-keeper",
+          "team": "Pakistan Women",
+          "ema": 49.0,
+          "consistency": 74.0,
+          "is_captain": true
+        },
+        {
+          "name": "Gaby Lewis",
+          "role": "Batsman",
+          "team": "Ireland Women",
+          "ema": 57.0,
+          "consistency": 71.0
+        },
+        {
+          "name": "Rebecca Stokell",
+          "role": "Batsman",
+          "team": "Ireland Women",
+          "ema": 49.0,
+          "consistency": 66.0
+        },
+        {
+          "name": "Leah Paul",
+          "role": "Batsman",
+          "team": "Ireland Women",
+          "ema": 52.0,
+          "consistency": 69.0
+        },
+        {
+          "name": "Orla Prendergast",
+          "role": "All-rounder",
+          "team": "Ireland Women",
+          "ema": 20.0,
+          "consistency": 71.0
+        },
+        {
+          "name": "Sadia Iqbal",
+          "role": "Bowler",
+          "team": "Pakistan Women",
+          "ema": 20.0,
+          "consistency": 61.0
+        },
+        {
+          "name": "Lara McBride",
+          "role": "Bowler",
+          "team": "Ireland Women",
+          "ema": 5.0,
+          "consistency": 64.0
+        },
+        {
+          "name": "Ava Canning",
+          "role": "Bowler",
+          "team": "Ireland Women",
+          "ema": 12.0,
+          "consistency": 62.0
+        },
+        {
+          "name": "Arlene Kelly",
+          "role": "All-rounder",
+          "team": "Ireland Women",
+          "ema": 40.0,
+          "consistency": 75.0
+        },
+        {
+          "name": "Natalia Pervaiz",
+          "role": "All-rounder",
+          "team": "Pakistan Women",
+          "ema": 28.0,
+          "consistency": 55.0,
+          "is_vice_captain": true
+        },
+        {
+          "name": "Shawaal Zulfiqar",
+          "role": "Batsman",
+          "team": "Pakistan Women",
+          "ema": 62.0,
+          "consistency": 76.0
+        }
+      ]
+    },
+    {
+      "team_number": 3,
+      "strategy": "Conditions-Based",
+      "quality": "Value",
+      "confidence": 3.4,
+      "captain": "Shawaal Zulfiqar",
+      "vice_captain": "Orla Prendergast",
+      "players": [
+        {
+          "name": "Muneeba Ali",
+          "role": "Wicket-keeper",
+          "team": "Pakistan Women",
+          "ema": 49.0,
+          "consistency": 74.0
+        },
+        {
+          "name": "Gaby Lewis",
+          "role": "Batsman",
+          "team": "Ireland Women",
+          "ema": 57.0,
+          "consistency": 71.0
+        },
+        {
+          "name": "Shawaal Zulfiqar",
+          "role": "Batsman",
+          "team": "Pakistan Women",
+          "ema": 62.0,
+          "consistency": 76.0,
+          "is_captain": true
+        },
+        {
+          "name": "Rebecca Stokell",
+          "role": "Batsman",
+          "team": "Ireland Women",
+          "ema": 49.0,
+          "consistency": 66.0
+        },
+        {
+          "name": "Orla Prendergast",
+          "role": "All-rounder",
+          "team": "Ireland Women",
+          "ema": 20.0,
+          "consistency": 71.0,
+          "is_vice_captain": true
+        },
+        {
+          "name": "Sadia Iqbal",
+          "role": "Bowler",
+          "team": "Pakistan Women",
+          "ema": 20.0,
+          "consistency": 61.0
+        },
+        {
+          "name": "Nashra Sandhu",
+          "role": "Bowler",
+          "team": "Pakistan Women",
+          "ema": 20.0,
+          "consistency": 52.0
+        },
+        {
+          "name": "Tuba Hassan",
+          "role": "Bowler",
+          "team": "Pakistan Women",
+          "ema": 14.0,
+          "consistency": 57.0
+        },
+        {
+          "name": "Arlene Kelly",
+          "role": "All-rounder",
+          "team": "Ireland Women",
+          "ema": 40.0,
+          "consistency": 75.0
+        },
+        {
+          "name": "Natalia Pervaiz",
+          "role": "All-rounder",
+          "team": "Pakistan Women",
+          "ema": 28.0,
+          "consistency": 55.0
+        },
+        {
+          "name": "Laura Delany",
+          "role": "All-rounder",
+          "team": "Ireland Women",
+          "ema": 25.0,
+          "consistency": 64.0
+        }
+      ]
+    },
+    {
+      "team_number": 4,
+      "strategy": "Conditions-Based",
+      "quality": "Value",
+      "confidence": 3.4,
+      "captain": "Freya Sargent",
+      "vice_captain": "Natalia Pervaiz",
+      "players": [
+        {
+          "name": "Amy Hunter",
+          "role": "Wicket-keeper",
+          "team": "Ireland Women",
+          "ema": 34.0,
+          "consistency": 63.0
+        },
+        {
+          "name": "Gaby Lewis",
+          "role": "Batsman",
+          "team": "Ireland Women",
+          "ema": 57.0,
+          "consistency": 71.0
+        },
+        {
+          "name": "Leah Paul",
+          "role": "Batsman",
+          "team": "Ireland Women",
+          "ema": 52.0,
+          "consistency": 69.0
+        },
+        {
+          "name": "Eyman Fatima",
+          "role": "Batsman",
+          "team": "Pakistan Women",
+          "ema": 62.0,
+          "consistency": 66.0
+        },
+        {
+          "name": "Orla Prendergast",
+          "role": "All-rounder",
+          "team": "Ireland Women",
+          "ema": 20.0,
+          "consistency": 71.0
+        },
+        {
+          "name": "Sadia Iqbal",
+          "role": "Bowler",
+          "team": "Pakistan Women",
+          "ema": 20.0,
+          "consistency": 61.0
+        },
+        {
+          "name": "Tuba Hassan",
+          "role": "Bowler",
+          "team": "Pakistan Women",
+          "ema": 14.0,
+          "consistency": 57.0
+        },
+        {
+          "name": "Ava Canning",
+          "role": "Bowler",
+          "team": "Ireland Women",
+          "ema": 12.0,
+          "consistency": 62.0
+        },
+        {
+          "name": "Freya Sargent",
+          "role": "All-rounder",
+          "team": "Ireland Women",
+          "ema": 47.0,
+          "consistency": 80.0,
+          "is_captain": true
+        },
+        {
+          "name": "Natalia Pervaiz",
+          "role": "All-rounder",
+          "team": "Pakistan Women",
+          "ema": 28.0,
+          "consistency": 55.0,
+          "is_vice_captain": true
+        },
+        {
+          "name": "Arlene Kelly",
+          "role": "All-rounder",
+          "team": "Ireland Women",
+          "ema": 40.0,
+          "consistency": 75.0
+        }
+      ]
+    },
+    {
+      "team_number": 5,
+      "strategy": "Modified-High-Ceiling",
+      "quality": "Value",
+      "confidence": 2.9,
+      "captain": "Rebecca Stokell",
+      "vice_captain": "Amy Hunter",
+      "players": [
+        {
+          "name": "Amy Hunter",
+          "role": "Wicket-keeper",
+          "team": "Ireland Women",
+          "ema": 34.0,
+          "consistency": 63.0,
+          "is_vice_captain": true
+        },
+        {
+          "name": "Gaby Lewis",
+          "role": "Batsman",
+          "team": "Ireland Women",
+          "ema": 57.0,
+          "consistency": 71.0
+        },
+        {
+          "name": "Rebecca Stokell",
+          "role": "Batsman",
+          "team": "Ireland Women",
+          "ema": 49.0,
+          "consistency": 66.0,
+          "is_captain": true
+        },
+        {
+          "name": "Leah Paul",
+          "role": "Batsman",
+          "team": "Ireland Women",
+          "ema": 52.0,
+          "consistency": 69.0
+        },
+        {
+          "name": "Orla Prendergast",
+          "role": "All-rounder",
+          "team": "Ireland Women",
+          "ema": 20.0,
+          "consistency": 71.0
+        },
+        {
+          "name": "Fatima Sana",
+          "role": "Bowler",
+          "team": "Pakistan Women",
+          "ema": 7.0,
+          "consistency": 50.0
+        },
+        {
+          "name": "Sadia Iqbal",
+          "role": "Bowler",
+          "team": "Pakistan Women",
+          "ema": 20.0,
+          "consistency": 61.0
+        },
+        {
+          "name": "Nashra Sandhu",
+          "role": "Bowler",
+          "team": "Pakistan Women",
+          "ema": 20.0,
+          "consistency": 52.0
+        },
+        {
+          "name": "Natalia Pervaiz",
+          "role": "All-rounder",
+          "team": "Pakistan Women",
+          "ema": 28.0,
+          "consistency": 55.0
+        },
+        {
+          "name": "Arlene Kelly",
+          "role": "All-rounder",
+          "team": "Ireland Women",
+          "ema": 40.0,
+          "consistency": 75.0
+        },
+        {
+          "name": "Laura Delany",
+          "role": "All-rounder",
+          "team": "Ireland Women",
+          "ema": 25.0,
+          "consistency": 64.0
+        }
+      ]
+    }
+  ],
+  "key_insights": {
+    "top_performers": [
+      {
+        "name": "Shawaal Zulfiqar",
+        "ema": 62.0,
+        "consistency": 76.0,
+        "reason": "Highest EMA batsman"
+      },
+      {
+        "name": "Eyman Fatima",
+        "ema": 62.0,
+        "consistency": 66.0,
+        "reason": "High-impact batsman"
+      },
+      {
+        "name": "Gaby Lewis",
+        "ema": 57.0,
+        "consistency": 71.0,
+        "reason": "Consistent Irish performer"
+      }
+    ],
+    "recommended_captains": [
+      "Shawaal Zulfiqar",
+      "Gaby Lewis",
+      "Freya Sargent"
+    ],
+    "pitch_conditions": "Turning track - favors spinners",
+    "team_balance": "All-rounder heavy for T20 flexibility"
+  },
+  "system_metrics": {
+    "processing_time": "39.44s",
+    "quality_score": 1.0,
+    "api_calls": 3,
+    "cache_hit_rate": "62.5%",
+    "cost_savings": "62.5%"
+  }
+}

@@ -22,6 +22,7 @@ import argparse
 from datetime import datetime
 from typing import Dict, List, Any, Optional, Union
 # from pathlib import Path  # Removed - not used
+import os
 
 # Configure logging
 logging.basicConfig(
@@ -41,7 +42,9 @@ except ImportError:
 try:
     from core_logic.match_resolver import resolve_match_by_id
     from core_logic.data_aggregator import aggregate_all_data, print_aggregation_summary
-    from core_logic.team_generator import generate_world_class_ai_teams
+    from core_logic.simplified_team_optimizer import generate_world_class_ai_teams
+    from core_logic.unified_api_client import get_global_client
+    from core_logic.unified_database import get_unified_database
 except ImportError as e:
     logger.error(f"Failed to import core components: {e}")
     logger.error("Please ensure all core_logic modules are present and accessible.")
@@ -208,9 +211,13 @@ class Dream11ProductionAI:
     Complete implementation with all capabilities and comprehensive error handling
     """
 
-    def __init__(self, num_teams: int = 5, verbose: bool = False):
+    def __init__(self, num_teams: int = 5, verbose: bool = False, use_async_aggregator: bool = True,
+                 use_enhanced_neural: bool = False, neural_optimization_level: str = 'standard'):
         self.num_teams = num_teams
         self.verbose = verbose
+        self.use_async_aggregator = use_async_aggregator
+        self.use_enhanced_neural = use_enhanced_neural
+        self.neural_optimization_level = neural_optimization_level
         self.dep_manager = get_dependency_manager()
         self.dependency_status = None
         self.advanced_features = {}
@@ -220,8 +227,12 @@ class Dream11ProductionAI:
             'total_players': 0,
             'teams_generated': 0,
             'advanced_features_used': [],
-            'fallback_used': False
+            'fallback_used': False,
+            'late_xi_refresh': False
         }
+
+        # Execution context for downstream components
+        self.match_context: Dict[str, Any] = {}
 
         # Initialize system
         self._initialize_system()
@@ -250,12 +261,27 @@ class Dream11ProductionAI:
         """Initialize advanced features based on available dependencies"""
         status = self.dependency_status
 
-        # Neural Network Engine
+        # Neural Network Engine (optionally enhanced)
         if status['ml']['torch']['available'] or status['ml']['tensorflow']['available']:
-            self.advanced_features['neural_engine'] = self._create_neural_engine()
-            self.performance_metrics['advanced_features_used'].append('neural_engine')
-            if self.verbose:
-                print("🧠 Neural Engine: Enabled")
+            if getattr(self, 'use_enhanced_neural', False):
+                try:
+                    from core_logic.enhanced_neural_engine import create_optimized_neural_engine
+                    self.advanced_features['neural_engine'] = create_optimized_neural_engine(
+                        optimization_level=self.neural_optimization_level
+                    )
+                    self.performance_metrics['advanced_features_used'].append('neural_engine_enhanced')
+                    if self.verbose:
+                        print("🧠 Neural Engine: Enhanced")
+                except Exception as e:
+                    if self.verbose:
+                        print(f"⚠️ Enhanced neural engine unavailable ({e}); using standard")
+                    self.advanced_features['neural_engine'] = self._create_neural_engine()
+                    self.performance_metrics['advanced_features_used'].append('neural_engine')
+            else:
+                self.advanced_features['neural_engine'] = self._create_neural_engine()
+                self.performance_metrics['advanced_features_used'].append('neural_engine')
+                if self.verbose:
+                    print("🧠 Neural Engine: Enabled")
         else:
             self.advanced_features['neural_engine'] = self._create_neural_fallback()
             if self.verbose:
@@ -747,6 +773,12 @@ class Dream11ProductionAI:
                 if aggregated_data.team1 and aggregated_data.team2 else 0
             )
 
+            # Optional: Late Playing XI refresh before heavy processing
+            try:
+                aggregated_data = await self._late_playing_xi_refresh_if_needed(aggregated_data, resolved_match)
+            except Exception as e:
+                logger.warning(f"Late Playing XI refresh skipped due to error: {e}")
+
             # Phase 3: Neural Feature Engineering
             print("🔧 Phase 3: Neural Feature Engineering...")
             player_features = await self._neural_feature_engineering(aggregated_data)
@@ -890,7 +922,21 @@ class Dream11ProductionAI:
         try:
             await asyncio.sleep(0.2)  # Simulate processing time
 
-            aggregated_data = aggregate_all_data(resolved_match)
+            aggregated_data = None
+
+            # Prefer enhanced async data aggregator when enabled and available
+            if self.use_async_aggregator:
+                try:
+                    from core_logic.enhanced_data_aggregator import aggregate_all_data_async
+                    if self.verbose:
+                        print("⚡ Using enhanced async data aggregator")
+                    aggregated_data = await aggregate_all_data_async(resolved_match, enhancement_level="enhanced")
+                except Exception as e:
+                    if self.verbose:
+                        print(f"⚠️ Enhanced async aggregation unavailable, falling back to sync: {e}")
+                    aggregated_data = aggregate_all_data(resolved_match)
+            else:
+                aggregated_data = aggregate_all_data(resolved_match)
 
             if aggregated_data and self._validate_aggregated_data(aggregated_data):
                 if self.verbose:
@@ -904,6 +950,80 @@ class Dream11ProductionAI:
         except Exception as e:
             logger.error(f"Intelligent data aggregation failed: {e}")
             return None
+
+    async def _late_playing_xi_refresh_if_needed(self, aggregated_data, resolved_match: Dict):
+        """Refresh Playing XI close to toss time to improve accuracy.
+        If match is within ~75 minutes and teams lack 11 players, retry extraction from match center.
+        """
+        try:
+            # Determine time window using match_resolver data
+            match_date = resolved_match.get('matchDate')
+            if not match_date:
+                return aggregated_data
+
+            # Parse start time
+            start_ts = None
+            if isinstance(match_date, str) and match_date.isdigit():
+                start_ts = int(match_date) / 1000.0
+            elif isinstance(match_date, int):
+                start_ts = int(match_date) / 1000.0
+            else:
+                # ISO format
+                try:
+                    start_ts = datetime.fromisoformat(match_date.replace('Z', '+00:00')).timestamp()
+                except Exception:
+                    start_ts = None
+
+            if not start_ts:
+                return aggregated_data
+
+            now_ts = time.time()
+            time_until = start_ts - now_ts
+            # Refresh window: within 75 minutes before start
+            if time_until < 0 or time_until > 75 * 60:
+                return aggregated_data
+
+            # If already have >=11 players per side, skip
+            team1_count = len(getattr(aggregated_data.team1, 'players', []) or [])
+            team2_count = len(getattr(aggregated_data.team2, 'players', []) or [])
+            if team1_count >= 11 and team2_count >= 11:
+                return aggregated_data
+
+            if self.verbose:
+                print("🔁 Late Playing XI refresh: attempting match center re-extraction...")
+
+            from core_logic.data_aggregator import extract_playing_xi_from_match_center, PlayerData
+
+            refreshed_any = False
+            for idx, (team_obj, team_id, team_name_key) in enumerate([
+                (aggregated_data.team1, resolved_match.get('team1Id'), 'team1Name'),
+                (aggregated_data.team2, resolved_match.get('team2Id'), 'team2Name'),
+            ]):
+                try:
+                    playing_xi = extract_playing_xi_from_match_center(resolved_match.get('matchId'), team_id)
+                    if playing_xi and len(playing_xi) >= 8:
+                        # Build PlayerData minimally (reuse existing helper from data_aggregator.extract_player_data is sync)
+                        from core_logic.data_aggregator import extract_player_data
+                        new_players: List[PlayerData] = []
+                        for pinfo in playing_xi:
+                            if not pinfo:
+                                continue
+                            pd = extract_player_data(pinfo, team_id, team_obj.team_name)
+                            new_players.append(pd)
+                        if new_players:
+                            team_obj.players = new_players
+                            refreshed_any = True
+                except Exception as e:
+                    logger.debug(f"Late XI refresh failed for team {team_id}: {e}")
+
+            if refreshed_any:
+                self.performance_metrics['late_xi_refresh'] = True
+                if self.verbose:
+                    print("✅ Late Playing XI refresh applied")
+
+            return aggregated_data
+        except Exception:
+            return aggregated_data
 
     def _validate_aggregated_data(self, aggregated_data) -> bool:
         """Validate aggregated data"""
@@ -938,6 +1058,14 @@ class Dream11ProductionAI:
                 'pitch_archetype': aggregated_data.venue.pitch_archetype if aggregated_data.venue else 'Balanced'
             }
 
+            # Save minimal context for downstream steps
+            self.match_context = {
+                'match_format': match_context.get('match_format'),
+                'venue_id': match_context.get('venue_id'),
+                'pitch_archetype': match_context.get('pitch_archetype'),
+                'contest_type': 'gpp'
+            }
+
             for player in all_players:
                 # Convert PlayerData to dict format expected by generate_player_features
                 player_dict = {
@@ -950,6 +1078,14 @@ class Dream11ProductionAI:
 
                 try:
                     features = generate_player_features(player_dict, match_context)
+                    
+                    # Apply fallback stats enhancement if needed
+                    if (features.ema_score == 0.0 and features.consistency_score == 0.0):
+                        from quick_fix_player_stats import enhance_player_with_fallback_stats
+                        features = enhance_player_with_fallback_stats(features, player_dict)
+                        if self.verbose:
+                            print(f"   🔄 Applied fallback stats for {features.player_name}")
+                    
                     player_features_list.append(features)
                 except Exception as e:
                     if self.verbose:
@@ -994,6 +1130,12 @@ class Dream11ProductionAI:
                     }
                     try:
                         features = generate_player_features(player_dict, match_context)
+                        
+                        # Apply fallback stats enhancement if needed
+                        if (features.ema_score == 0.0 and features.consistency_score == 0.0):
+                            from quick_fix_player_stats import enhance_player_with_fallback_stats
+                            features = enhance_player_with_fallback_stats(features, player_dict)
+                        
                         fallback_features.append(features)
                     except:
                         continue
@@ -1011,11 +1153,25 @@ class Dream11ProductionAI:
             # Use existing world-class team generator with quantum optimization
             # Extract player features from aggregated data and format
             match_format = aggregated_data.match_format if hasattr(aggregated_data, 'match_format') else "T20"
-            teams = generate_world_class_ai_teams(
-                player_features,
-                match_format=match_format,
-                num_teams=self.num_teams
-            )
+            
+            # Add timeout to prevent hanging
+            try:
+                teams = await asyncio.wait_for(
+                    asyncio.get_event_loop().run_in_executor(
+                        None, 
+                        generate_world_class_ai_teams,
+                        player_features,
+                        match_format,
+                        self.num_teams
+                    ),
+                    timeout=120.0  # 2 minute timeout
+                )
+            except asyncio.TimeoutError:
+                print("⚠️ Team generation timeout - using fallback method")
+                # Fallback to simple team generation
+                from core_logic.team_generator import generate_optimal_teams_ortools, prepare_players_for_optimization
+                optimized_players = prepare_players_for_optimization(player_features, match_format)
+                teams = generate_optimal_teams_ortools(optimized_players, self.num_teams) if optimized_players else []
 
             # Apply quantum optimization enhancements
             quantum_optimizer = self.advanced_features['quantum_optimizer']
@@ -1033,13 +1189,15 @@ class Dream11ProductionAI:
                         }
                     }
 
-                    optimized_players = quantum_optimizer.optimize_team_composition(
-                        [p.__dict__ if hasattr(p, '__dict__') else p for p in team.players],
-                        constraints
-                    )
-
-                    # Update team with optimized players
-                    team.players = optimized_players
+                    # TEMPORARILY DISABLED: Quantum optimization is removing players
+                    # optimized_players = quantum_optimizer.optimize_team_composition(
+                    #     [p.__dict__ if hasattr(p, '__dict__') else p for p in team.players],
+                    #     constraints
+                    # )
+                    # team.players = optimized_players
+                    
+                    # Keep original players
+                    pass
                     enhanced_teams.append(team)
                 else:
                     enhanced_teams.append(team)
@@ -1170,7 +1328,7 @@ class Dream11ProductionAI:
         """Extract comprehensive match information"""
         try:
             return {
-                'match_id': resolved_match.get('match_id', 'Unknown'),
+                'match_id': resolved_match.get('matchId', 'Unknown'),
                 'team1': {
                     'name': aggregated_data.team1.team_name if aggregated_data.team1 else 'Team1',
                     'players_count': len(aggregated_data.team1.players) if aggregated_data.team1 else 0
@@ -1377,7 +1535,8 @@ def print_teams_to_terminal(results: Dict[str, Any]):
                 elif hasattr(player, 'name'):
                     name = getattr(player, 'name', 'Unknown')[:18]
                     role = getattr(player, 'role', 'Unknown')[:15]
-                    team_name = getattr(player, 'team', 'Unknown')[:12]
+                    # Fix: Use team_name instead of team for UnifiedPlayer objects
+                    team_name = getattr(player, 'team_name', getattr(player, 'team', 'Unknown'))[:12]
                     ema_score = getattr(player, 'ema_score', 0)
                     consistency = getattr(player, 'consistency_score', 0)
                 else:
@@ -1535,6 +1694,54 @@ Examples:
         help='Save results to JSON file (default: terminal only)'
     )
 
+    parser.add_argument(
+        '--no-async-agg',
+        dest='use_async_agg',
+        action='store_false',
+        help='Disable enhanced async data aggregator (use legacy sync)'
+    )
+
+    parser.set_defaults(use_async_agg=True)
+
+    parser.add_argument(
+        '--warm-cache',
+        action='store_true',
+        help='Run one-time predictive cache warm-up before team generation'
+    )
+
+    parser.add_argument(
+        '--predictive-cache',
+        action='store_true',
+        help='Run predictive cache warming service in the background during execution'
+    )
+
+    parser.add_argument(
+        '--metrics-file',
+        type=str,
+        default='production_metrics.jsonl',
+        help='Path to append JSONL run metrics (default: production_metrics.jsonl)'
+    )
+
+    parser.add_argument(
+        '--no-metrics',
+        action='store_true',
+        help='Disable metrics logging to file'
+    )
+
+    parser.add_argument(
+        '--enhanced-neural',
+        action='store_true',
+        help='Use enhanced neural engine for higher-accuracy predictions'
+    )
+
+    parser.add_argument(
+        '--neural-level',
+        type=str,
+        choices=['lightweight', 'standard', 'premium'],
+        default='standard',
+        help='Optimization level for enhanced neural engine'
+    )
+
     return parser
 
 
@@ -1555,8 +1762,30 @@ async def main():
         print("🔍 Verbose mode enabled")
 
     try:
+        # Optionally run predictive cache warm-up/service
+        background_cache_task = None
+        try:
+            if args.warm_cache:
+                from utils.predictive_cache import PredictiveCache
+                predictor = PredictiveCache()
+                print("🔮 Warming predictive cache (one-time)...")
+                warm_result = await predictor.warm_cache_for_upcoming_matches()
+                print(f"   🔮 Cache warm-up: {'✅' if warm_result.get('success') else '❌'} | Matches cached: {warm_result.get('matches_cached', 0)}")
+            if args.predictive_cache:
+                from utils.predictive_cache import start_predictive_caching_service
+                print("🔮 Starting predictive cache warming service in background...")
+                background_cache_task = start_predictive_caching_service()
+        except Exception as e:
+            print(f"⚠️ Predictive caching unavailable: {e}")
+
         # Create production AI instance
-        production_ai = Dream11ProductionAI(args.num_teams, args.verbose)
+        production_ai = Dream11ProductionAI(
+            args.num_teams,
+            args.verbose,
+            use_async_aggregator=args.use_async_agg,
+            use_enhanced_neural=args.enhanced_neural,
+            neural_optimization_level=args.neural_level,
+        )
 
         # Run production pipeline
         results = await production_ai.run_production_pipeline(args.match_id)
@@ -1579,6 +1808,15 @@ async def main():
             else:
                 print("📺 Results displayed in terminal only (no file saved)")
 
+            # Metrics logging (JSONL)
+            try:
+                if not args.no_metrics and args.metrics_file:
+                    metrics_record = _build_metrics_record(results)
+                    _append_metrics_record(args.metrics_file, metrics_record)
+                    print(f"🧾 Metrics appended to: {args.metrics_file}")
+            except Exception as e:
+                logger.warning(f"Metrics logging failed: {e}")
+
             # Quality check
             quality = results.get('quality_score', 0)
             if quality < args.quality_threshold:
@@ -1596,6 +1834,13 @@ async def main():
                 print("💥 Complete system failure")
                 return 1
 
+        # Clean up background predictive cache task if running
+        if background_cache_task:
+            try:
+                background_cache_task.cancel()
+            except Exception:
+                pass
+
         return 0
 
     except KeyboardInterrupt:
@@ -1606,6 +1851,70 @@ async def main():
         logger.error(f"Unexpected error: {e}")
         traceback.print_exc()
         return 1
+
+
+def _build_metrics_record(results: Dict[str, Any]) -> Dict[str, Any]:
+    """Build a concise metrics record for observability."""
+    record: Dict[str, Any] = {}
+    ts = results.get('timestamp') or datetime.now().isoformat()
+    record['timestamp'] = ts
+
+    match_info = results.get('match_info', {})
+    record['match_id'] = match_info.get('match_id') or match_info.get('matchId')
+    record['teams'] = {
+        'team1': match_info.get('team1', {}).get('name') if isinstance(match_info.get('team1'), dict) else match_info.get('team1'),
+        'team2': match_info.get('team2', {}).get('name') if isinstance(match_info.get('team2'), dict) else match_info.get('team2'),
+    }
+
+    perf = results.get('performance_metrics', {})
+    record['processing_time_seconds'] = perf.get('total_processing_time_seconds')
+    record['teams_generated'] = perf.get('teams_generated')
+    record['phases_completed'] = perf.get('phases_completed')
+    record['advanced_features_used'] = perf.get('advanced_features_used', [])
+    record['quality_score'] = results.get('quality_score')
+
+    # API optimization snapshot if available
+    try:
+        from utils.api_client import get_api_optimization_status, RATE_LIMITING_ENABLED
+        if RATE_LIMITING_ENABLED:
+            opt = get_api_optimization_status()
+            rate = opt.get('rate_limiting', {})
+            cache = opt.get('caching', {})
+            perf_sum = opt.get('performance_summary', {})
+            record['api'] = {
+                'requests_today': rate.get('requests_today'),
+                'requests_this_hour': rate.get('requests_this_hour'),
+                'requests_this_minute': rate.get('requests_this_minute'),
+                'tokens_available': rate.get('tokens_available'),
+                'cache_hit_rate_percent': cache.get('hit_rate_percent'),
+                'api_calls_saved': perf_sum.get('api_calls_saved'),
+                'cost_savings_percent': perf_sum.get('cost_savings_percent'),
+            }
+    except Exception:
+        pass
+
+    # Ownership summary if annotated on teams
+    try:
+        teams = results.get('teams', [])
+        if teams:
+            avg_ownerships = []
+            for t in teams:
+                avg_own = getattr(t, 'average_ownership', None)
+                if isinstance(avg_own, (int, float)):
+                    avg_ownerships.append(avg_own)
+            if avg_ownerships:
+                record['avg_team_ownership'] = sum(avg_ownerships)/len(avg_ownerships)
+    except Exception:
+        pass
+
+    return record
+
+
+def _append_metrics_record(path: str, record: Dict[str, Any]) -> None:
+    os.makedirs(os.path.dirname(path), exist_ok=True) if os.path.dirname(path) else None
+    with open(path, 'a') as f:
+        f.write(json.dumps(record, ensure_ascii=False) + "\n")
+
 
 
 if __name__ == "__main__":

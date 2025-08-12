@@ -1,0 +1,140 @@
+{
+  "match_id": "116981",
+  "match_context": {
+    "match_id": "116981",
+    "teams": "Unknown vs Unknown",
+    "format": "unknown",
+    "venue": "Unknown",
+    "series_type": "domestic",
+    "intelligence_level": "api_enhanced",
+    "series": "Unknown"
+  },
+  "teams": [
+    {
+      "strategy": "Format-Optimized Intelligence",
+      "captain": "Player1",
+      "vice_captain": "Player2",
+      "players": [
+        "Player1",
+        "Player2",
+        "Player3",
+        "Player4",
+        "Player5",
+        "Player6",
+        "Player7",
+        "Player8",
+        "Player9",
+        "Player10",
+        "Player11"
+      ],
+      "reasoning": "Player1 selected as captain - Player2 as VC",
+      "intelligence_applied": [
+        "Priority: format_priority"
+      ],
+      "format_context": "unknown - domestic",
+      "confidence_level": "medium"
+    },
+    {
+      "strategy": "Player Intelligence Focus",
+      "captain": "Player1",
+      "vice_captain": "Player2",
+      "players": [
+        "Player1",
+        "Player2",
+        "Player3",
+        "Player4",
+        "Player5",
+        "Player6",
+        "Player7",
+        "Player8",
+        "Player9",
+        "Player10",
+        "Player11"
+      ],
+      "reasoning": "Player1 selected as captain - Player2 as VC",
+      "intelligence_applied": [
+        "Priority: player_priority"
+      ],
+      "format_context": "unknown - domestic",
+      "confidence_level": "medium"
+    },
+    {
+      "strategy": "Proven Winner Patterns",
+      "captain": "Player1",
+      "vice_captain": "Player2",
+      "players": [
+        "Player1",
+        "Player2",
+        "Player3",
+        "Player4",
+        "Player5",
+        "Player6",
+        "Player7",
+        "Player8",
+        "Player9",
+        "Player10",
+        "Player11"
+      ],
+      "reasoning": "Player1 selected as captain - Player2 as VC",
+      "intelligence_applied": [
+        "Priority: proven_patterns"
+      ],
+      "format_context": "unknown - domestic",
+      "confidence_level": "medium"
+    },
+    {
+      "strategy": "Context-Aware Optimization",
+      "captain": "Player1",
+      "vice_captain": "Player2",
+      "players": [
+        "Player1",
+        "Player2",
+        "Player3",
+        "Player4",
+        "Player5",
+        "Player6",
+        "Player7",
+        "Player8",
+        "Player9",
+        "Player10",
+        "Player11"
+      ],
+      "reasoning": "Player1 selected as captain - Player2 as VC",
+      "intelligence_applied": [
+        "Priority: context_aware"
+      ],
+      "format_context": "unknown - domestic",
+      "confidence_level": "medium"
+    },
+    {
+      "strategy": "Ultimate Intelligence Fusion",
+      "captain": "Player1",
+      "vice_captain": "Player2",
+      "players": [
+        "Player1",
+        "Player2",
+        "Player3",
+        "Player4",
+        "Player5",
+        "Player6",
+        "Player7",
+        "Player8",
+        "Player9",
+        "Player10",
+        "Player11"
+      ],
+      "reasoning": "Player1 selected as captain - Player2 as VC",
+      "intelligence_applied": [
+        "Priority: ultimate_fusion"
+      ],
+      "format_context": "unknown - domestic",
+      "confidence_level": "medium"
+    }
+  ],
+  "intelligence_level": "ultimate",
+  "learning_applied": true,
+  "format_intelligence": true,
+  "player_intelligence": true,
+  "generation_time": "2025-08-12T15:29:17.115625",
+  "system_version": "Ultimate v1.0"
+}

@@ -1,0 +1,496 @@
+{
+  "match_info": {
+    "match_id": 114670,
+    "teams": "West Indies vs Pakistan",
+    "venue": "Brian Lara Stadium",
+    "format": "ODI",
+    "prediction_time": "2025-08-10 19:03:34",
+    "quality_score": 0.9,
+    "playing_xi_confirmed": true,
+    "pitch_conditions": "Turning",
+    "match_state": "upcoming"
+  },
+  "teams": [
+    {
+      "team_number": 1,
+      "strategy": "AI-Optimal",
+      "quality": "Value",
+      "confidence": 3.9,
+      "captain": "Motie",
+      "vice_captain": "Hasan Nawaz",
+      "players": [
+        {
+          "name": "Rizwan",
+          "role": "Wicket-keeper",
+          "team": "Pakistan",
+          "ema": 43.0,
+          "consistency": 64.0
+        },
+        {
+          "name": "Lewis",
+          "role": "Batsman",
+          "team": "West Indies",
+          "ema": 37.0,
+          "consistency": 90.0
+        },
+        {
+          "name": "Hasan Nawaz",
+          "role": "Batsman",
+          "team": "Pakistan",
+          "ema": 29.0,
+          "consistency": 88.0,
+          "is_vice_captain": true
+        },
+        {
+          "name": "Shafique",
+          "role": "Batsman",
+          "team": "Pakistan",
+          "ema": 22.0,
+          "consistency": 74.0
+        },
+        {
+          "name": "Keacy Carty",
+          "role": "All-rounder",
+          "team": "West Indies",
+          "ema": 27.0,
+          "consistency": 70.0
+        },
+        {
+          "name": "Jayden Seales",
+          "role": "Bowler",
+          "team": "West Indies",
+          "ema": 29.0,
+          "consistency": 74.0
+        },
+        {
+          "name": "Jediah Blades",
+          "role": "Bowler",
+          "team": "West Indies",
+          "ema": 23.0,
+          "consistency": 65.0
+        },
+        {
+          "name": "Hasan Ali",
+          "role": "Bowler",
+          "team": "Pakistan",
+          "ema": 7.0,
+          "consistency": 61.0
+        },
+        {
+          "name": "Motie",
+          "role": "All-rounder",
+          "team": "West Indies",
+          "ema": 43.0,
+          "consistency": 74.0,
+          "is_captain": true
+        },
+        {
+          "name": "Salman Agha",
+          "role": "All-rounder",
+          "team": "Pakistan",
+          "ema": 51.0,
+          "consistency": 74.0
+        },
+        {
+          "name": "Mohammad Nawaz",
+          "role": "All-rounder",
+          "team": "Pakistan",
+          "ema": 40.0,
+          "consistency": 59.0
+        }
+      ]
+    },
+    {
+      "team_number": 2,
+      "strategy": "Risk-Balanced",
+      "quality": "Value",
+      "confidence": 3.9,
+      "captain": "Motie",
+      "vice_captain": "Shai Hope",
+      "players": [
+        {
+          "name": "Shai Hope",
+          "role": "Wicket-keeper",
+          "team": "West Indies",
+          "ema": 35.0,
+          "consistency": 84.0,
+          "is_vice_captain": true
+        },
+        {
+          "name": "Lewis",
+          "role": "Batsman",
+          "team": "West Indies",
+          "ema": 37.0,
+          "consistency": 90.0
+        },
+        {
+          "name": "Hasan Nawaz",
+          "role": "Batsman",
+          "team": "Pakistan",
+          "ema": 29.0,
+          "consistency": 88.0
+        },
+        {
+          "name": "Babar Azam",
+          "role": "Batsman",
+          "team": "Pakistan",
+          "ema": 54.0,
+          "consistency": 88.0
+        },
+        {
+          "name": "Motie",
+          "role": "All-rounder",
+          "team": "West Indies",
+          "ema": 43.0,
+          "consistency": 74.0,
+          "is_captain": true
+        },
+        {
+          "name": "Jayden Seales",
+          "role": "Bowler",
+          "team": "West Indies",
+          "ema": 29.0,
+          "consistency": 74.0
+        },
+        {
+          "name": "Jediah Blades",
+          "role": "Bowler",
+          "team": "West Indies",
+          "ema": 23.0,
+          "consistency": 65.0
+        },
+        {
+          "name": "Hasan Ali",
+          "role": "Bowler",
+          "team": "Pakistan",
+          "ema": 7.0,
+          "consistency": 61.0
+        },
+        {
+          "name": "Salman Agha",
+          "role": "All-rounder",
+          "team": "Pakistan",
+          "ema": 51.0,
+          "consistency": 74.0
+        },
+        {
+          "name": "Keacy Carty",
+          "role": "All-rounder",
+          "team": "West Indies",
+          "ema": 27.0,
+          "consistency": 70.0
+        },
+        {
+          "name": "Shafique",
+          "role": "Batsman",
+          "team": "Pakistan",
+          "ema": 22.0,
+          "consistency": 74.0
+        }
+      ]
+    },
+    {
+      "team_number": 3,
+      "strategy": "High-Ceiling",
+      "quality": "Value",
+      "confidence": 3.9,
+      "captain": "Salman Agha",
+      "vice_captain": "Sherfane Rutherford",
+      "players": [
+        {
+          "name": "Rizwan",
+          "role": "Wicket-keeper",
+          "team": "Pakistan",
+          "ema": 43.0,
+          "consistency": 64.0
+        },
+        {
+          "name": "Lewis",
+          "role": "Batsman",
+          "team": "West Indies",
+          "ema": 37.0,
+          "consistency": 90.0
+        },
+        {
+          "name": "Shafique",
+          "role": "Batsman",
+          "team": "Pakistan",
+          "ema": 22.0,
+          "consistency": 74.0
+        },
+        {
+          "name": "Hasan Nawaz",
+          "role": "Batsman",
+          "team": "Pakistan",
+          "ema": 29.0,
+          "consistency": 88.0
+        },
+        {
+          "name": "Keacy Carty",
+          "role": "All-rounder",
+          "team": "West Indies",
+          "ema": 27.0,
+          "consistency": 70.0
+        },
+        {
+          "name": "Jayden Seales",
+          "role": "Bowler",
+          "team": "West Indies",
+          "ema": 29.0,
+          "consistency": 74.0
+        },
+        {
+          "name": "Abrar Ahmed",
+          "role": "Bowler",
+          "team": "Pakistan",
+          "ema": 12.0,
+          "consistency": 52.0
+        },
+        {
+          "name": "Jediah Blades",
+          "role": "Bowler",
+          "team": "West Indies",
+          "ema": 23.0,
+          "consistency": 65.0
+        },
+        {
+          "name": "Salman Agha",
+          "role": "All-rounder",
+          "team": "Pakistan",
+          "ema": 51.0,
+          "consistency": 74.0,
+          "is_captain": true
+        },
+        {
+          "name": "Motie",
+          "role": "All-rounder",
+          "team": "West Indies",
+          "ema": 43.0,
+          "consistency": 74.0
+        },
+        {
+          "name": "Sherfane Rutherford",
+          "role": "All-rounder",
+          "team": "West Indies",
+          "ema": 39.0,
+          "consistency": 59.0,
+          "is_vice_captain": true
+        }
+      ]
+    },
+    {
+      "team_number": 4,
+      "strategy": "Value-Optimal",
+      "quality": "Value",
+      "confidence": 3.9,
+      "captain": "Salman Agha",
+      "vice_captain": "Rizwan",
+      "players": [
+        {
+          "name": "Rizwan",
+          "role": "Wicket-keeper",
+          "team": "Pakistan",
+          "ema": 43.0,
+          "consistency": 64.0,
+          "is_vice_captain": true
+        },
+        {
+          "name": "Lewis",
+          "role": "Batsman",
+          "team": "West Indies",
+          "ema": 37.0,
+          "consistency": 90.0
+        },
+        {
+          "name": "Shafique",
+          "role": "Batsman",
+          "team": "Pakistan",
+          "ema": 22.0,
+          "consistency": 74.0
+        },
+        {
+          "name": "Hasan Nawaz",
+          "role": "Batsman",
+          "team": "Pakistan",
+          "ema": 29.0,
+          "consistency": 88.0
+        },
+        {
+          "name": "Keacy Carty",
+          "role": "All-rounder",
+          "team": "West Indies",
+          "ema": 27.0,
+          "consistency": 70.0
+        },
+        {
+          "name": "Jayden Seales",
+          "role": "Bowler",
+          "team": "West Indies",
+          "ema": 29.0,
+          "consistency": 74.0
+        },
+        {
+          "name": "Jediah Blades",
+          "role": "Bowler",
+          "team": "West Indies",
+          "ema": 23.0,
+          "consistency": 65.0
+        },
+        {
+          "name": "Hasan Ali",
+          "role": "Bowler",
+          "team": "Pakistan",
+          "ema": 7.0,
+          "consistency": 61.0
+        },
+        {
+          "name": "Motie",
+          "role": "All-rounder",
+          "team": "West Indies",
+          "ema": 43.0,
+          "consistency": 74.0
+        },
+        {
+          "name": "Salman Agha",
+          "role": "All-rounder",
+          "team": "Pakistan",
+          "ema": 51.0,
+          "consistency": 74.0,
+          "is_captain": true
+        },
+        {
+          "name": "Mohammad Nawaz",
+          "role": "All-rounder",
+          "team": "Pakistan",
+          "ema": 40.0,
+          "consistency": 59.0
+        }
+      ]
+    },
+    {
+      "team_number": 5,
+      "strategy": "Conditions-Based",
+      "quality": "Value",
+      "confidence": 3.9,
+      "captain": "Hasan Nawaz",
+      "vice_captain": "Jayden Seales",
+      "players": [
+        {
+          "name": "Rizwan",
+          "role": "Wicket-keeper",
+          "team": "Pakistan",
+          "ema": 43.0,
+          "consistency": 64.0
+        },
+        {
+          "name": "Lewis",
+          "role": "Batsman",
+          "team": "West Indies",
+          "ema": 37.0,
+          "consistency": 90.0
+        },
+        {
+          "name": "Shafique",
+          "role": "Batsman",
+          "team": "Pakistan",
+          "ema": 22.0,
+          "consistency": 74.0
+        },
+        {
+          "name": "Hasan Nawaz",
+          "role": "Batsman",
+          "team": "Pakistan",
+          "ema": 29.0,
+          "consistency": 88.0,
+          "is_captain": true
+        },
+        {
+          "name": "Keacy Carty",
+          "role": "All-rounder",
+          "team": "West Indies",
+          "ema": 27.0,
+          "consistency": 70.0
+        },
+        {
+          "name": "Jayden Seales",
+          "role": "Bowler",
+          "team": "West Indies",
+          "ema": 29.0,
+          "consistency": 74.0,
+          "is_vice_captain": true
+        },
+        {
+          "name": "Jediah Blades",
+          "role": "Bowler",
+          "team": "West Indies",
+          "ema": 23.0,
+          "consistency": 65.0
+        },
+        {
+          "name": "Hasan Ali",
+          "role": "Bowler",
+          "team": "Pakistan",
+          "ema": 7.0,
+          "consistency": 61.0
+        },
+        {
+          "name": "Salman Agha",
+          "role": "All-rounder",
+          "team": "Pakistan",
+          "ema": 51.0,
+          "consistency": 74.0
+        },
+        {
+          "name": "Motie",
+          "role": "All-rounder",
+          "team": "West Indies",
+          "ema": 43.0,
+          "consistency": 74.0
+        },
+        {
+          "name": "Sherfane Rutherford",
+          "role": "All-rounder",
+          "team": "West Indies",
+          "ema": 39.0,
+          "consistency": 59.0
+        }
+      ]
+    }
+  ],
+  "key_insights": {
+    "top_performers": [
+      {
+        "name": "Babar Azam",
+        "ema": 54.0,
+        "consistency": 88.0,
+        "reason": "Highest EMA score"
+      },
+      {
+        "name": "Salman Agha",
+        "ema": 51.0,
+        "consistency": 74.0,
+        "reason": "Strong all-rounder"
+      },
+      {
+        "name": "Rizwan",
+        "ema": 43.0,
+        "consistency": 64.0,
+        "reason": "Quality keeper-batsman"
+      }
+    ],
+    "recommended_captains": [
+      "Motie",
+      "Salman Agha",
+      "Babar Azam"
+    ],
+    "pitch_conditions": "Turning track - favors spinners",
+    "team_balance": "Strong spin attack with quality all-rounders"
+  },
+  "system_metrics": {
+    "processing_time": "40.16s",
+    "quality_score": 0.9,
+    "api_calls": 3,
+    "cache_hit_rate": "62.5%",
+    "cost_savings": "62.5%"
+  }
+}

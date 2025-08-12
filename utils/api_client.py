@@ -7,9 +7,40 @@ API_BASE_URL = "https://cricbuzz-cricket.p.rapidapi.com"
 
 # Enhanced API Configuration with Environment Variables
 import os
+
+# Load RAPIDAPI_KEY from environment or a local .env file (no external deps)
+def _load_env_key_if_missing():
+    if os.getenv('RAPIDAPI_KEY'):
+        return
+    try:
+        # Attempt to load from project root .env
+        project_root = os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))
+        env_path = os.path.join(project_root, '.env')
+        if os.path.exists(env_path):
+            with open(env_path, 'r') as f:
+                for line in f:
+                    line = line.strip()
+                    if not line or line.startswith('#'):
+                        continue
+                    if '=' in line:
+                        k, v = line.split('=', 1)
+                        k = k.strip()
+                        v = v.strip().strip('"').strip("'")
+                        if k and v and k not in os.environ:
+                            os.environ[k] = v
+    except Exception:
+        # Best-effort only; ignore parsing errors
+        pass
+
+_load_env_key_if_missing()
+
+_RAPIDAPI_KEY = os.getenv('RAPIDAPI_KEY')
+_MISSING_API_KEY = not bool(_RAPIDAPI_KEY)
+
 API_HEADERS = {
     'x-rapidapi-host': 'cricbuzz-cricket.p.rapidapi.com',
-    'x-rapidapi-key': os.getenv('RAPIDAPI_KEY', 'dffdea8894mshfa97b71e0282550p18895bjsn5f7c318f35d1')
+    # Only include the key header if present; otherwise functions will use fallbacks
+    **({'x-rapidapi-key': _RAPIDAPI_KEY} if _RAPIDAPI_KEY else {})
 }
 
 # Import rate limiting and caching
@@ -30,6 +61,9 @@ def fetch_upcoming_matches():
     """
     Fetches upcoming matches from Cricbuzz API with rate limiting and caching
     """
+    if _MISSING_API_KEY:
+        print("⚠️ RAPIDAPI_KEY not set – returning fallback upcoming matches data")
+        return _get_sample_matches_data()
     if RATE_LIMITING_ENABLED:
         # Check cache first
         cache_key = "upcoming_matches"
@@ -91,6 +125,9 @@ def fetch_live_matches():
     """
     Fetches live matches from Cricbuzz API
     """
+    if _MISSING_API_KEY:
+        print("⚠️ RAPIDAPI_KEY not set – live matches not available; returning error")
+        return {"error": "Missing RAPIDAPI_KEY"}
     try:
         url = f"{API_BASE_URL}/matches/v1/live"
         response = requests.get(url, headers=API_HEADERS)
@@ -104,6 +141,9 @@ def fetch_recent_matches():
     """
     Fetches recent/completed matches from Cricbuzz API with improved error handling
     """
+    if _MISSING_API_KEY:
+        print("⚠️ RAPIDAPI_KEY not set – returning fallback recent matches data")
+        return _get_sample_recent_matches_data()
     try:
         url = f"{API_BASE_URL}/matches/v1/recent"
         response = requests.get(url, headers=API_HEADERS, timeout=15)
@@ -232,6 +272,9 @@ def fetch_squads(series_id):
     """
     Fetches squad information for a series from Cricbuzz API with rate limiting and caching
     """
+    if _MISSING_API_KEY:
+        print(f"⚠️ RAPIDAPI_KEY not set – returning fallback squads for series {series_id}")
+        return _get_sample_squads_data(series_id)
     if RATE_LIMITING_ENABLED:
         # Check cache first
         cache_key = f"series_squads_{series_id}"
@@ -287,6 +330,8 @@ def fetch_team_squad(series_id, team_id):
     """
     Fetches specific team squad for a series from Cricbuzz API
     """
+    if _MISSING_API_KEY:
+        return {"error": "Missing RAPIDAPI_KEY"}
     try:
         url = f"{API_BASE_URL}/series/v1/{series_id}/squads/{team_id}"
         response = requests.get(url, headers=API_HEADERS)
@@ -322,6 +367,9 @@ def fetch_player_stats(player_id):
     """
     Fetches player statistics from Cricbuzz API
     """
+    if _MISSING_API_KEY:
+        print(f"⚠️ RAPIDAPI_KEY not set – returning fallback player stats for {player_id}")
+        return _get_sample_player_stats(player_id)
     try:
         url = f"{API_BASE_URL}/stats/v1/player/{player_id}"
         response = requests.get(url, headers=API_HEADERS)
@@ -335,6 +383,8 @@ def fetch_player_career_stats(player_id):
     """
     Fetches player career statistics from Cricbuzz API
     """
+    if _MISSING_API_KEY:
+        return {"error": "Missing RAPIDAPI_KEY"}
     try:
         url = f"{API_BASE_URL}/stats/v1/player/{player_id}/career"
         response = requests.get(url, headers=API_HEADERS)
@@ -348,6 +398,8 @@ def fetch_player_batting_stats(player_id):
     """
     Fetches player batting statistics from Cricbuzz API
     """
+    if _MISSING_API_KEY:
+        return {"error": "Missing RAPIDAPI_KEY"}
     try:
         url = f"{API_BASE_URL}/stats/v1/player/{player_id}/batting"
         response = requests.get(url, headers=API_HEADERS)
@@ -361,6 +413,8 @@ def fetch_player_bowling_stats(player_id):
     """
     Fetches player bowling statistics from Cricbuzz API
     """
+    if _MISSING_API_KEY:
+        return {"error": "Missing RAPIDAPI_KEY"}
     try:
         url = f"{API_BASE_URL}/stats/v1/player/{player_id}/bowling"
         response = requests.get(url, headers=API_HEADERS)
@@ -393,6 +447,9 @@ def fetch_venue_stats(venue_id):
     """
     Fetches venue statistics from Cricbuzz API
     """
+    if _MISSING_API_KEY:
+        print(f"⚠️ RAPIDAPI_KEY not set – returning fallback venue stats for {venue_id}")
+        return _get_sample_venue_stats(venue_id)
     try:
         url = f"{API_BASE_URL}/stats/v1/venue/{venue_id}"
         response = requests.get(url, headers=API_HEADERS)
@@ -406,6 +463,8 @@ def fetch_venue_info(venue_id):
     """
     Fetches venue information from Cricbuzz API
     """
+    if _MISSING_API_KEY:
+        return {"error": "Missing RAPIDAPI_KEY"}
     try:
         url = f"{API_BASE_URL}/venues/v1/{venue_id}"
         response = requests.get(url, headers=API_HEADERS)
@@ -419,6 +478,8 @@ def fetch_venue_matches(venue_id):
     """
     Fetches matches at a venue from Cricbuzz API
     """
+    if _MISSING_API_KEY:
+        return {"error": "Missing RAPIDAPI_KEY"}
     try:
         url = f"{API_BASE_URL}/venues/v1/{venue_id}/matches"
         response = requests.get(url, headers=API_HEADERS)
@@ -432,6 +493,9 @@ def fetch_match_center(match_id):
     """
     Fetches match center information from Cricbuzz API with optimization
     """
+    if _MISSING_API_KEY:
+        print(f"⚠️ RAPIDAPI_KEY not set – returning fallback/empty match center for {match_id}")
+        return {"error": "Missing RAPIDAPI_KEY"}
     if RATE_LIMITING_ENABLED:
         # Check cache first
         cached_data = _cache.get_match_data(str(match_id))
