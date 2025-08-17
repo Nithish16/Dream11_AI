@@ -1,134 +1,151 @@
 # 🏆 Dream11 Ultimate AI System
 
 [![Python 3.8+](https://img.shields.io/badge/python-3.8+-blue.svg)](https://www.python.org/downloads/)
-[![Database-Driven](https://img.shields.io/badge/architecture-database--driven-brightgreen.svg)]()
-[![Ultra-Optimized](https://img.shields.io/badge/optimization-ultra--clean-success.svg)]()
-[![Manual Control](https://img.shields.io/badge/control-manual--preferred-blue.svg)]()
+[![15-Team Portfolio](https://img.shields.io/badge/teams-15--team--portfolio-brightgreen.svg)]()
+[![Performance-Based](https://img.shields.io/badge/selection-performance--based-success.svg)]()
+[![Auto-Cleanup](https://img.shields.io/badge/database-auto--cleanup-blue.svg)]()
 
-> **🎉 ULTRA-OPTIMIZED SYSTEM! 47 files • 1MB total • 100% database-driven • Perfect manual control**
+> **🚀 ULTIMATE 15-TEAM PORTFOLIO SYSTEM! Smart15 Strategy • Performance-Based Selection • Auto Database Cleanup**
 
-## 🚨 **ULTIMATE CRICKET PREDICTION SYSTEM**
+## 🚨 **ULTIMATE 15-TEAM PORTFOLIO SYSTEM**
 
-**The most advanced, clean, and intelligent cricket prediction system with pure database architecture.**
+**The most advanced cricket prediction system generating 15 strategically diversified teams with performance-based selection and intelligent tier distribution.**
 
 ### ⚡ **Quick Start**
 
 ```bash
-# 1. Generate predictions (no files created)
-python3 dream11_ultimate.py 114672 --no-save
+# Generate 15-team portfolio (database-only storage)
+python3 dream11_ultimate.py 113946
 
-# 2. Generate predictions (save to predictions/)
-python3 dream11_ultimate.py 114672
+# Smart15 Portfolio Generator
+python3 dream11_smart15.py 113946
 
-# 3. Post-match analysis (database-only)
-python3 post_match 114672
+# Database cleanup (60-day auto cleanup)
+python3 core_logic/database_cleanup.py --force
 
-# 4. Manage skip series (database-driven)
-python3 database_config.py skip-list
+# View all teams in database
+python3 smart15_database_viewer.py 113946
 ```
 
 ## 🧠 **Ultimate Features**
 
-### 🏆 **The ONE System**
-- **`dream11_ultimate.py`** - Single prediction system with ALL intelligence
-- **Universal Cricket Intelligence** - All 12 cricket formats covered
-- **Database-Driven Architecture** - Zero file dependencies
-- **Complete Manual Control** - Perfect for manual workflows
+### 🏆 **15-Team Portfolio System**
+- **`dream11_ultimate.py`** - Generates 15 strategically diversified teams
+- **Smart15 Strategy** - 5 Core + 7 Diversified + 3 Moonshot teams
+- **Performance-Based Selection** - Pure merit-driven player selection
+- **Complete Team Details** - All 11 players displayed for each team
 
-### 🗄️ **Pure Database Architecture**
-- **No JSON config files** - Everything in databases
-- **Continuous learning** - All insights preserved permanently
-- **Format-specific intelligence** - T20I, ODI, Test, IPL, CPL, The Hundred, etc.
-- **1 Crore winner patterns** - Learns from actual winning teams
+### 🎯 **Intelligent Team Distribution**
+- **🛡️ Tier 1 - Core Teams (5)** - Low risk, high confidence (12% budget each)
+- **⚖️ Tier 2 - Diversified Teams (7)** - Medium risk, balanced (4.3% budget each)
+- **🚀 Tier 3 - Moonshot Teams (3)** - High risk, high reward (3.3% budget each)
+- **Natural Team Balance** - Variable distributions (3-8 to 8-3) based on performance
 
-### ✨ **Ultra-Optimized System**
-- **47 total files** - Down from 114 (59% reduction)
-- **25 Python files** - Only essential algorithms (44% reduction)
-- **1MB total size** - Streamlined from 2.5MB (60% reduction)
-- **276KB databases** - All intelligence preserved
+### 🗄️ **Advanced Database Architecture**
+- **Auto Database Cleanup** - 60-day retention with learning preservation
+- **No JSON Files Created** - Database-only storage
+- **Continuous Learning** - AI/ML insights preserved during cleanup
+- **Format-Specific Intelligence** - All cricket formats supported
+
+### ✨ **Clean & Organized Structure**
+- **Organized File Structure** - `data/`, `docs/`, `config/`, `core_logic/` directories
+- **Performance-Based Logic** - No artificial team balance constraints
+- **Complete Display** - Always shows all 15 teams automatically
+- **Smart Strategy Variety** - 15 different strategic approaches
 
 ## 🎯 **System Architecture**
 
-### 📊 **Core Systems (6 Files)**
+### 📊 **Core Systems**
 ```
-dream11_ultimate.py          # THE ONE prediction system (26KB)
-post_match_database.py        # Database-only post-match analysis (14KB)
-database_config.py           # Database configuration management (4KB)
-ai_learning_system.py        # Continuous learning engine (20KB)
-dream11_ai.py                # Fallback prediction system (82KB)
-dependency_manager.py        # Dependency management (15KB)
-```
-
-### 🗄️ **Learning Databases (7 Files, 276KB)**
-```
-universal_cricket_intelligence.db    # All 12 formats + enhanced tables
-ai_learning_database.db              # Predictions & continuous learning
-smart_local_predictions.db           # Historical prediction data
-format_specific_learning.db          # Format-specific patterns
-optimized_predictions.db             # Optimized prediction storage
-api_usage_tracking.db                # API usage tracking
-dream11_unified.db                   # Legacy unified data
+dream11_ultimate.py          # 15-Team Portfolio Generator
+dream11_smart15.py           # Smart15 Strategy Implementation 
+ai_learning_system.py        # Continuous learning with cleanup
+database_auto_upgrade.py     # Database management & migrations
+smart15_database_viewer.py   # Team portfolio viewer
 ```
 
-### 📁 **Optimized Directory Structure**
+### 🗄️ **Organized File Structure**
 ```
-core_logic/                   # 16 essential algorithm files (413KB)
-utils/                        # 3 essential utility files (35KB)
-predictions/                  # Optional prediction JSON files
-tests/                        # Empty (test files removed for production)
+data/                        # All database files (.db)
+  ├── universal_cricket_intelligence.db
+  ├── ai_learning_database.db
+  ├── smart15_predictions.db
+  └── [12+ specialized databases]
+
+docs/                        # Documentation files
+  ├── SMART15_USAGE_GUIDE.md
+  ├── DATABASE_STORAGE_SOLUTION.md
+  └── [6 comprehensive guides]
+
+config/                      # Configuration files
+  └── smart15_config.json
+
+core_logic/                  # 20+ algorithm modules
+  ├── correlation_diversity_engine.py
+  ├── database_cleanup.py
+  ├── weather_pitch_analyzer.py
+  └── [18+ specialized modules]
+
+utils/                       # Utility functions
+  ├── api_client.py
+  └── predictive_cache.py
+
+predictions/                 # Auto-cleaned (no JSON files)
+tests/                       # Comprehensive test suite
+monitoring/                  # System monitoring tools
+deployment/                  # Deployment scripts
 ```
 
 ## 🚀 **Usage Guide**
 
-### 1. 🎯 **Generate Predictions**
+### 1. 🎯 **Generate 15-Team Portfolio**
 
 ```bash
-# Ultimate predictions with all intelligence (saves to predictions/)
-python3 dream11_ultimate.py 114672
-
-# Clean predictions without file creation
-python3 dream11_ultimate.py 114672 --no-save
-
-# Custom save directory
-python3 dream11_ultimate.py 114672 --save-dir my_teams
+# Generate complete 15-team portfolio
+python3 dream11_ultimate.py 113946
 ```
 
 **Expected Output:**
-- 5 unique team strategies (AI-Optimal, Risk-Balanced, High-Ceiling, Value-Optimal, Conditions-Based)
-- Complete team details with captain/vice-captain selections
-- Strategy explanations and confidence scores
-- All 11 players with roles clearly marked
+- **15 Complete Teams** with all 11 players each
+- **3 Tiers**: 5 Core + 7 Diversified + 3 Moonshot teams
+- **Performance-Based Distribution**: Natural team balance (3-8 to 8-3)
+- **Complete Details**: Captain, VC, risk level, budget allocation
+- **Table Format Display**: Summary + detailed compositions
+- **Strategic Variety**: 15 different approaches and captain choices
 
-### 2. 📊 **Post-Match Analysis**
+### 2. 📊 **Smart15 Portfolio Management**
 
 ```bash
-# Database-only analysis (works with --no-save predictions)
-python3 post_match_database.py 114672
+# Generate Smart15 portfolio with advanced analysis
+python3 dream11_smart15.py 113946
 
-# Or use convenient symlink:
-python3 post_match 114672
+# View saved portfolio teams
+python3 smart15_database_viewer.py 113946
+
+# Database cleanup (auto-runs every 60 days)
+python3 core_logic/database_cleanup.py --dry-run
 ```
 
-**Analysis Features:**
-- Compare AI predictions vs actual player performance
-- Identify successful captain/vice-captain choices
-- Extract learning insights for future predictions
-- Update continuous learning database automatically
+**Portfolio Features:**
+- **Budget Optimization**: 60% Core, 30% Diversified, 10% Moonshot
+- **Risk Distribution**: Low/Medium/High risk teams
+- **Captain Diversity**: 8-12 different captains across 15 teams
+- **Performance Tracking**: Historical success rate monitoring
 
-### 3. ⚙️ **Configuration Management**
+### 3. ⚙️ **Database Management**
 
 ```bash
-# View skip series list (stored in database)
-python3 database_config.py skip-list
+# Auto database cleanup (preserves AI learning)
+python3 core_logic/database_cleanup.py --force
 
-# Add series to skip during automated processing
-python3 database_config.py skip-add "Series Name"
+# Database migrations and upgrades
+python3 database_auto_upgrade.py
 
-# Remove series from skip list
-python3 database_config.py skip-remove "Series Name"
+# System monitoring
+python3 monitoring/system_monitor.py
 
-# Access any configuration value
-python3 database_config.py get skip_series_list
+# View system status
+python3 smart15_database_viewer.py --stats
 ```
 
 ## 🧠 **Intelligence Features**
@@ -194,26 +211,25 @@ success = ultimate.predict("114672", save_to_file=True)  # Save to predictions/
 
 ## 📈 **System Optimization**
 
-### ✅ **Ultra-Optimization Achievements**
-- **🗑️ 59% File Reduction**: 114 → 47 files (67 files removed)
-- **💾 60% Size Reduction**: 2.5MB → 1MB (1.5MB saved)
-- **🐍 44% Python Cleanup**: 45 → 25 files (20 files removed)
-- **🗄️ 100% Database-Driven**: Zero JSON config dependencies
-- **⚡ 2.2MB Cache Cleanup**: All __pycache__ directories removed
-- **📁 Structure Optimized**: Empty directories and duplicates eliminated
+### ✅ **Clean & Organized Achievements**
+- **🗂️ Organized Structure**: Separated `data/`, `docs/`, `config/`, `core_logic/` directories
+- **🧹 Auto Database Cleanup**: 60-day retention with AI learning preservation
+- **📋 No JSON Clutter**: Database-only storage, no prediction files created
+- **🎯 Performance-Based Logic**: Natural team distributions (3-8 to 8-3)
+- **📊 Complete Display**: Always shows all 15 teams automatically
 
-### 📊 **Performance Metrics**
-- **Startup Time**: < 2 seconds (optimized imports)
-- **Prediction Generation**: 5 teams in < 30 seconds
-- **Database Operations**: < 100ms for config access
-- **Memory Usage**: < 200MB (lightweight architecture)
-- **API Efficiency**: Intelligent caching and rate limiting
+### 📊 **15-Team Performance Metrics**
+- **Portfolio Generation**: 15 teams in < 45 seconds
+- **Strategy Diversity**: 15 unique strategic approaches
+- **Captain Variety**: 8-12 different captains per match
+- **Team Balance**: Natural performance-based distributions
+- **Display Completeness**: 100% team details always shown
 
 ### 🏆 **System Health**
-- **Core Systems**: 6/6 validated and working
-- **Databases**: 7/7 enhanced with additional tables
-- **Test Coverage**: Production-ready validation
-- **Error Handling**: Robust fallback mechanisms
+- **15-Team Generator**: Fully functional and optimized
+- **Database Cleanup**: Auto-running every 60 days
+- **Performance Selection**: Merit-based, no artificial constraints
+- **Complete Display**: All teams shown automatically every time
 
 ## 🛠️ **Installation & Setup**
 
@@ -226,8 +242,8 @@ cd Dream11_AI
 # Install dependencies (stored in database)
 python3 dependency_manager.py
 
-# Test the system
-python3 dream11_ultimate.py 114672 --no-save
+# Test the 15-team system
+python3 dream11_ultimate.py 113946
 ```
 
 ### Dependencies

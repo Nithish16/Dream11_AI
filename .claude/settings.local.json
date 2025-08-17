@@ -36,8 +36,16 @@
       "WebFetch(domain:www.espncricinfo.com)",
       "Bash(PYTHONPATH=/Users/nitish.natarajan/Downloads/Dream11_AI python3 /Users/nitish.natarajan/Downloads/Dream11_AI/test_world_class_ai.py)",
       "Bash(PYTHONPATH=/Users/nitish.natarajan/Downloads/Dream11_AI python3 /Users/nitish.natarajan/Downloads/Dream11_AI/debug_validation.py)",
-      "Bash(PYTHONPATH:*)"
+      "Bash(PYTHONPATH:*)",
+      "Bash(sqlite3:*)",
+      "Bash(for i in {1..15})",
+      "Bash(do echo \"\")",
+      "Bash(done)",
+      "WebSearch",
+      "WebFetch(domain:www.weatherapi.com)",
+      "Bash(sed:*)"
     ],
-    "deny": []
+    "deny": [],
+    "defaultMode": "acceptEdits"
   }
 }

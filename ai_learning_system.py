@@ -17,7 +17,7 @@ class Dream11LearningSystem:
     """
     
     def __init__(self):
-        self.learning_db_path = "ai_learning_database.db"
+        self.learning_db_path = "data/ai_learning_database.db"
         self.learning_data_dir = Path("learning_data")
         self.learning_data_dir.mkdir(exist_ok=True)
         self.setup_database()
@@ -490,7 +490,7 @@ def main():
     learning_system.create_auto_learning_hook()
     
     print("\n🚀 LEARNING SYSTEM UPDATED WITH NEW INSIGHTS!")
-    print("📁 Database: ai_learning_database.db")
+    print("📁 Database: data/ai_learning_database.db")
     print("🔗 Hook: auto_learning_hook.py")
 
 # Create alias for backward compatibility

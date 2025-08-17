@@ -98,3 +98,12 @@ docs/_build/
 api_usage.log
 cache_stats.json
 rate_limit.log
+
+# Enhanced analysis temporary files
+enhanced_analysis_*.json
+match_*_data.json
+
+# Database journal files
+*.db-journal
+*.db-wal
+*.db-shm

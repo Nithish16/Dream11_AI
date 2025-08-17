@@ -1,0 +1,194 @@
+{
+  "smart15_strategy": {
+    "description": "Smart 15 Strategy Configuration",
+    "version": "1.0",
+    "last_updated": "2025-01-14"
+  },
+  
+  "portfolio_settings": {
+    "total_teams": 15,
+    "tier_distribution": {
+      "tier1_core": {
+        "teams": 5,
+        "budget_allocation": 0.60,
+        "description": "High confidence, proven patterns",
+        "risk_level": "Low",
+        "target_ownership": [15, 60]
+      },
+      "tier2_diversified": {
+        "teams": 7, 
+        "budget_allocation": 0.30,
+        "description": "Balanced risk-reward variations",
+        "risk_level": "Medium",
+        "target_ownership": [5, 80]
+      },
+      "tier3_moonshot": {
+        "teams": 3,
+        "budget_allocation": 0.10,
+        "description": "High risk/high reward contrarian",
+        "risk_level": "High",
+        "target_ownership": [1, 25]
+      }
+    }
+  },
+  
+  "diversification_rules": {
+    "min_captain_diversity": 8,
+    "max_team_overlap": 0.70,
+    "correlation_threshold": 0.30,
+    "min_unique_players": 18,
+    "captain_role_distribution": {
+      "batsmen": 0.40,
+      "all_rounders": 0.35,
+      "bowlers": 0.20,
+      "wicket_keepers": 0.05
+    }
+  },
+  
+  "tier1_core_strategies": [
+    {
+      "name": "Format-Optimized Intelligence",
+      "focus": "Format-specific patterns",
+      "captain_approach": "Proven format specialists",
+      "risk_tolerance": "Conservative"
+    },
+    {
+      "name": "Player Intelligence Focus", 
+      "focus": "Individual player analysis",
+      "captain_approach": "High success rate captains",
+      "risk_tolerance": "Low"
+    },
+    {
+      "name": "Proven Winner Patterns",
+      "focus": "1 crore winner insights",
+      "captain_approach": "Historical winners",
+      "risk_tolerance": "Low"
+    },
+    {
+      "name": "Weather-Pitch Optimized",
+      "focus": "Conditions-based selection",
+      "captain_approach": "Condition specialists",
+      "risk_tolerance": "Low-Medium"
+    },
+    {
+      "name": "Ultimate Intelligence Fusion",
+      "focus": "All-system combination", 
+      "captain_approach": "AI consensus pick",
+      "risk_tolerance": "Low"
+    }
+  ],
+  
+  "tier2_diversified_strategies": [
+    {
+      "name": "Weather Extreme",
+      "focus": "Extreme weather advantage",
+      "captain_variation": "Weather-specific captains"
+    },
+    {
+      "name": "Venue Specialist",
+      "focus": "Ground-specific advantages",
+      "captain_variation": "Venue performers"
+    },
+    {
+      "name": "Opposition Focused",
+      "focus": "Head-to-head records",
+      "captain_variation": "Opposition crushers"
+    },
+    {
+      "name": "Role Balanced Heavy",
+      "focus": "Different role distributions",
+      "captain_variation": "Role-specific captains"
+    },
+    {
+      "name": "Form Momentum",
+      "focus": "Recent form emphasis",
+      "captain_variation": "In-form captains"
+    },
+    {
+      "name": "Contrarian Captain",
+      "focus": "Different captain choices",
+      "captain_variation": "Unused captains from core"
+    },
+    {
+      "name": "Bowling Attack Heavy",
+      "focus": "Bowling-friendly conditions",
+      "captain_variation": "Bowling captains"
+    }
+  ],
+  
+  "tier3_moonshot_strategies": [
+    {
+      "name": "Ultra Contrarian",
+      "focus": "Maximum differentiation",
+      "approach": "Minimal overlap with existing teams",
+      "ownership_target": [1, 15]
+    },
+    {
+      "name": "High Ceiling Differential",
+      "focus": "Maximum upside potential",
+      "approach": "Low owned, high ceiling players",
+      "ownership_target": [2, 20]
+    },
+    {
+      "name": "Weather Extreme Specialist",
+      "focus": "Extreme condition optimization", 
+      "approach": "Weather-specific contrarian picks",
+      "ownership_target": [1, 25]
+    }
+  ],
+  
+  "budget_guidelines": {
+    "small_leagues": {
+      "recommended_budget": 500,
+      "focus": "Core + Diversified heavy"
+    },
+    "grand_leagues": {
+      "recommended_budget": 1000,
+      "focus": "Full Smart 15 approach"
+    },
+    "mega_contests": {
+      "recommended_budget": 2000,
+      "focus": "Premium Smart 15 with higher stakes"
+    }
+  },
+  
+  "optimization_parameters": {
+    "confidence_thresholds": {
+      "core": 0.70,
+      "diversified": 0.50,
+      "moonshot": 0.30
+    },
+    "correlation_limits": {
+      "max_correlation": 0.30,
+      "ideal_correlation": 0.15
+    },
+    "risk_management": {
+      "max_high_risk_allocation": 0.15,
+      "min_safe_allocation": 0.55,
+      "balanced_allocation": 0.30
+    }
+  },
+  
+  "format_specific_adjustments": {
+    "T20I": {
+      "captain_preference": ["aggressive_batsmen", "death_bowlers"],
+      "moonshot_boost": 1.2,
+      "core_safety_factor": 0.9
+    },
+    "ODI": {
+      "captain_preference": ["consistent_performers", "wicket_keepers"],
+      "moonshot_boost": 1.0,
+      "core_safety_factor": 1.1
+    },
+    "Test": {
+      "captain_preference": ["experienced_players", "bowlers"],
+      "moonshot_boost": 0.8,
+      "core_safety_factor": 1.2
+    },
+    "The_Hundred": {
+      "captain_preference": ["explosive_batsmen", "wicket_takers"],
+      "moonshot_boost": 1.5,
+      "core_safety_factor": 0.8
+    }
+  }
+}
