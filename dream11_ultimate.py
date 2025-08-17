@@ -442,31 +442,24 @@ class Dream11Ultimate:
         print(f"\n🏆 COMPLETE 15-TEAM PORTFOLIO WITH ALL PLAYERS:")
         print(f"{'='*120}")
         
-        # Group teams by tier for better organization
-        core_teams = [team for team in teams if team['tier'] == 'Core']
-        diversified_teams = [team for team in teams if team['tier'] == 'Diversified']  
-        moonshot_teams = [team for team in teams if team['tier'] == 'Moonshot']
-        
-        # Display Core Teams
-        print(f"\n🛡️ TIER 1 - CORE TEAMS ({len(core_teams)} Teams - Low Risk, High Confidence)")
+        # ALWAYS DISPLAY ALL 15 TEAMS - NO GROUPING, SHOW EVERY SINGLE TEAM
+        print(f"\n🛡️ TIER 1 - CORE TEAMS (Teams 1-5 - Low Risk, High Confidence)")
         print("─" * 100)
-        for i, team in enumerate(core_teams):
-            team_num = teams.index(team) + 1
-            self._display_single_team(team_num, team)
+        for i in range(5):
+            if i < len(teams):
+                self._display_single_team(i + 1, teams[i])
         
-        # Display Diversified Teams
-        print(f"\n⚖️ TIER 2 - DIVERSIFIED TEAMS ({len(diversified_teams)} Teams - Medium Risk, Balanced)")
+        print(f"\n⚖️ TIER 2 - DIVERSIFIED TEAMS (Teams 6-12 - Medium Risk, Balanced)")
         print("─" * 100)
-        for i, team in enumerate(diversified_teams):
-            team_num = teams.index(team) + 1
-            self._display_single_team(team_num, team)
+        for i in range(5, 12):
+            if i < len(teams):
+                self._display_single_team(i + 1, teams[i])
         
-        # Display Moonshot Teams
-        print(f"\n🚀 TIER 3 - MOONSHOT TEAMS ({len(moonshot_teams)} Teams - High Risk, High Reward)")
+        print(f"\n🚀 TIER 3 - MOONSHOT TEAMS (Teams 13-15 - High Risk, High Reward)")
         print("─" * 100)
-        for i, team in enumerate(moonshot_teams):
-            team_num = teams.index(team) + 1
-            self._display_single_team(team_num, team)
+        for i in range(12, 15):
+            if i < len(teams):
+                self._display_single_team(i + 1, teams[i])
     
     def _display_single_team(self, team_num: int, team: Dict):
         """Display a single team with complete player details"""
@@ -476,13 +469,14 @@ class Dream11Ultimate:
         print(f"{'─' * 85}")
         print(f"👑 Captain: {team['captain']} | 🥈 Vice-Captain: {team['vice_captain']} | 🎯 Tier: {team['tier']} | ⚖️ Risk: {team['risk_level']} | 💰 Budget: {team['budget_weight']*100:.1f}%")
         
+        
         # Display all 11 players in a clear list format
         print(f"👥 COMPLETE 11-PLAYER LINEUP:")
         for j, player in enumerate(team['players'], 1):
             captain_mark = " 👑" if player == team['captain'] else " 🥈" if player == team['vice_captain'] else ""
             print(f"   {j:2d}. {player}{captain_mark}")
         
-        # Show team distribution
+        # Show team distribution  
         team1_count = len([p for p in team['players'] if any(t1.get('name') == p for t1 in getattr(self, 'team1_players', []))])
         team2_count = len([p for p in team['players'] if any(t2.get('name') == p for t2 in getattr(self, 'team2_players', []))])
         print(f"📊 Distribution: Northern Superchargers: {team1_count} | Birmingham Phoenix: {team2_count}")
