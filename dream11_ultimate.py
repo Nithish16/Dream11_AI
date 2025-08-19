@@ -1,8 +1,8 @@
 #!/usr/bin/env python3
 """
-🏆 DREAM11 ULTIMATE PREDICTION SYSTEM
-🧠 Universal Cricket Intelligence with Advanced Learning
-📊 The ONE system that combines all knowledge and capabilities
+DREAM11 ULTIMATE PREDICTION SYSTEM
+Universal Cricket Intelligence with Advanced Learning
+The ONE system that combines all knowledge and capabilities
 
 Features:
 - Universal Cricket Intelligence (all 12 formats)
@@ -30,24 +30,21 @@ from typing import Dict, List
 sys.path.append(os.path.dirname(os.path.abspath(__file__)))
 
 try:
-    from utils.api_client import fetch_match_center, fetch_upcoming_matches
-    from core_logic.unified_api_client import get_global_client
-    from core_logic.unified_database import get_unified_database
-    from dependency_manager import verify_dependencies
+    from utils.api_client import fetch_match_center
     from ai_learning_system import AILearningSystem
 except ImportError as e:
-    print(f"⚠️ Import warning: {e}")
-    print("🔄 Using fallback mode...")
+    print(f"Warning: Import issue: {e}")
+    print("Using fallback mode...")
 
 class Dream11Ultimate:
     """
-    🏆 The Ultimate Dream11 Prediction System
+    The Ultimate Dream11 Prediction System
     Combines all learning, intelligence, and prediction capabilities
     """
     
     def __init__(self):
         self.setup_logging()
-        self.logger.info("🚀 Initializing Dream11 Ultimate System")
+        self.logger.info("Initializing Dream11 Ultimate System")
         
         # Initialize learning system
         self.learning_system = None
@@ -59,7 +56,7 @@ class Dream11Ultimate:
         # Initialize cleanup system
         self.setup_cleanup_system()
         
-        self.logger.info("✅ Dream11 Ultimate System ready")
+        self.logger.info("Dream11 Ultimate System ready")
     
     def setup_logging(self):
         """Setup comprehensive logging"""
@@ -73,9 +70,9 @@ class Dream11Ultimate:
         """Initialize the AI learning system"""
         try:
             self.learning_system = AILearningSystem()
-            self.logger.info("✅ AI Learning System initialized")
+            self.logger.info("AI Learning System initialized")
         except Exception as e:
-            self.logger.warning(f"⚠️ Learning system not available: {e}")
+            self.logger.warning(f"Learning system not available: {e}")
             self.learning_system = None
     
     def setup_databases(self):
@@ -85,38 +82,36 @@ class Dream11Ultimate:
         # Universal Cricket Intelligence Database
         try:
             self.db_connections['universal'] = sqlite3.connect('data/universal_cricket_intelligence.db')
-            self.logger.info("✅ Universal Cricket Intelligence DB connected")
+            self.logger.info("Universal Cricket Intelligence DB connected")
         except Exception as e:
-            self.logger.warning(f"⚠️ Universal DB not available: {e}")
+            self.logger.warning(f"Universal DB not available: {e}")
         
         # Format-specific learning database
         try:
             self.db_connections['format'] = sqlite3.connect('data/format_specific_learning.db')
-            self.logger.info("✅ Format-specific Learning DB connected")
+            self.logger.info("Format-specific Learning DB connected")
         except Exception as e:
-            self.logger.warning(f"⚠️ Format DB not available: {e}")
+            self.logger.warning(f"Format DB not available: {e}")
         
         # AI learning database
         try:
             self.db_connections['ai_learning'] = sqlite3.connect('data/ai_learning_database.db')
-            self.logger.info("✅ AI Learning DB connected")
+            self.logger.info("AI Learning DB connected")
         except Exception as e:
-            self.logger.warning(f"⚠️ AI Learning DB not available: {e}")
+            self.logger.warning(f"AI Learning DB not available: {e}")
     
     def setup_cleanup_system(self):
         """Initialize automated database cleanup system"""
         try:
             # Simple cleanup without complex connection pooling
             self._run_simple_cleanup()
-            self.logger.info("✅ Database cleanup system initialized")
+            self.logger.info("Database cleanup system initialized")
         except Exception as e:
-            self.logger.warning(f"⚠️ Cleanup system not available: {e}")
+            self.logger.warning(f"Cleanup system not available: {e}")
     
     def _run_simple_cleanup(self):
         """Run simple 60-day cleanup without complex dependencies"""
         try:
-            from datetime import datetime, timedelta
-            
             # Calculate cutoff date (60 days ago)
             cutoff_date = datetime.now() - timedelta(days=60)
             cutoff_str = cutoff_date.strftime('%Y-%m-%d %H:%M:%S')
@@ -159,10 +154,10 @@ class Dream11Ultimate:
                     pass  # Skip non-existent databases
             
             if total_deleted > 0:
-                self.logger.info(f"🧹 Cleanup: Removed {total_deleted} predictions older than 60 days")
+                self.logger.info(f"Cleanup: Removed {total_deleted} predictions older than 60 days")
                 
         except Exception as e:
-            self.logger.warning(f"⚠️ Simple cleanup failed: {e}")
+            self.logger.warning(f"Simple cleanup failed: {e}")
     
     def _cleanup_database_simple(self, db_name: str, cutoff_date: str) -> int:
         """Simple database cleanup without connection pooling"""
@@ -208,7 +203,7 @@ class Dream11Ultimate:
     
     def get_format_intelligence(self, match_format: str, venue_type: str = None) -> Dict:
         """
-        🧠 Get format-specific intelligence from learning databases
+        Get format-specific intelligence from learning databases
         """
         intelligence = {
             'captain_patterns': [],
@@ -237,7 +232,6 @@ class Dream11Ultimate:
                 if result[0]:  # pattern_data
                     # Try to parse JSON pattern data
                     try:
-                        import json
                         pattern_data = json.loads(result[0])
                         if 'captain_patterns' in pattern_data:
                             intelligence['captain_patterns'].extend(pattern_data['captain_patterns'])
@@ -250,13 +244,13 @@ class Dream11Ultimate:
                     intelligence['confidence_level'] = result[1]
             
         except Exception as e:
-            self.logger.warning(f"⚠️ Error getting format intelligence: {e}")
+            self.logger.warning(f"Error getting format intelligence: {e}")
         
         return intelligence
     
     def get_player_intelligence(self, players: List[str], match_format: str) -> Dict:
         """
-        👥 Get player-specific intelligence from learning database
+        Get player-specific intelligence from learning database
         """
         player_intel = {}
         
@@ -283,13 +277,13 @@ class Dream11Ultimate:
                     }
         
         except Exception as e:
-            self.logger.warning(f"⚠️ Error getting player intelligence: {e}")
+            self.logger.warning(f"Error getting player intelligence: {e}")
         
         return player_intel
     
     def resolve_match_context(self, match_id: str) -> Dict:
         """
-        🔍 Resolve match context and determine format intelligence to apply
+        Resolve match context and determine format intelligence to apply
         """
         context = {
             'match_id': match_id,
@@ -313,11 +307,15 @@ class Dream11Ultimate:
                 venue_info = match_data.get('venueInfo', {})
                 venue_name = venue_info.get('ground', venue_info.get('city', 'Unknown'))
                 
+                # Smart format detection based on series name and match info
+                series_name = match_info.get('series', {}).get('name', 'Unknown') if isinstance(match_info.get('series'), dict) else 'Unknown'
+                detected_format = self.detect_match_format(match_info, series_name, match_id)
+                
                 context.update({
                     'teams': teams_str,
-                    'format': match_info.get('matchFormat', 'unknown').lower(),
+                    'format': detected_format,
                     'venue': venue_name,
-                    'series': match_info.get('series', {}).get('name', 'Unknown') if isinstance(match_info.get('series'), dict) else 'Unknown',
+                    'series': series_name,
                     'intelligence_level': 'api_enhanced'
                 })
                 
@@ -329,12 +327,54 @@ class Dream11Ultimate:
                 else:
                     context['series_type'] = 'domestic'
                 
-                self.logger.info(f"✅ Match context resolved: {context['teams']} ({context['format']})")
+                self.logger.info(f"Match context resolved: {context['teams']} ({context['format']})")
             
         except Exception as e:
-            self.logger.warning(f"⚠️ Could not resolve match context: {e}")
+            self.logger.warning(f"Could not resolve match context: {e}")
         
         return context
+    
+    def detect_match_format(self, match_info: Dict, series_name: str, match_id: str) -> str:
+        """
+        Smart format detection based on multiple indicators
+        """
+        series_lower = series_name.lower()
+        
+        # The Hundred detection
+        if 'hundred' in series_lower:
+            return 'hun'
+        
+        # IPL detection
+        if 'ipl' in series_lower or 'indian premier league' in series_lower:
+            return 't20'
+        
+        # CPL, BBL, PSL detection
+        if any(league in series_lower for league in ['cpl', 'big bash', 'psl', 'super league']):
+            return 't20'
+        
+        # ODI detection
+        if any(indicator in series_lower for indicator in ['odi', 'one day', 'world cup', 'champions trophy']):
+            return 'odi'
+        
+        # T20I detection
+        if any(indicator in series_lower for indicator in ['t20i', 't20 international', 't20 world']):
+            return 't20i'
+        
+        # Test detection
+        if any(indicator in series_lower for indicator in ['test', 'championship', 'ashes']):
+            return 'test'
+        
+        # Match ID based detection (The Hundred typically has specific ID patterns)
+        if match_id.startswith('113') or match_id.startswith('114'):  # The Hundred 2025 range
+            return 'hun'
+        
+        # Fallback to match format from API
+        api_format = match_info.get('matchFormat', 'unknown').lower()
+        if api_format in ['t20', 'odi', 'test', 't20i']:
+            return api_format
+        
+        # Default fallback
+        return 't20'  # Most common format
     
     def _get_enhanced_match_conditions(self, match_context: Dict):
         """Get enhanced weather and pitch conditions for match"""
@@ -347,16 +387,16 @@ class Dream11Ultimate:
             # Get comprehensive conditions
             conditions = get_match_conditions(match_id, venue)
             
-            self.logger.info(f"🌤️ Weather & Pitch Analysis: {venue}")
-            self.logger.info(f"   🏏 Captain Preference: {conditions.captain_preference}")
-            self.logger.info(f"   ⚡ Pace Advantage: {conditions.pace_bowler_advantage:.2f}")
-            self.logger.info(f"   🌀 Spin Advantage: {conditions.spin_bowler_advantage:.2f}")
-            self.logger.info(f"   🏏 Batting Advantage: {conditions.batsmen_advantage:.2f}")
+            self.logger.info(f"Weather & Pitch Analysis: {venue}")
+            self.logger.info(f"   Captain Preference: {conditions.captain_preference}")
+            self.logger.info(f"   Pace Advantage: {conditions.pace_bowler_advantage:.2f}")
+            self.logger.info(f"   Spin Advantage: {conditions.spin_bowler_advantage:.2f}")
+            self.logger.info(f"   Batting Advantage: {conditions.batsmen_advantage:.2f}")
             
             return conditions
             
         except Exception as e:
-            self.logger.warning(f"⚠️ Could not get enhanced match conditions: {e}")
+            self.logger.warning(f"Could not get enhanced match conditions: {e}")
             return None
     
     def generate_intelligent_teams(self, match_context: Dict, players: List[str]) -> List[Dict]:
@@ -431,31 +471,31 @@ class Dream11Ultimate:
         
         # Display each team in table row format
         for i, team in enumerate(teams, 1):
-            tier_emoji = "🛡️" if team['tier'] == 'Core' else "⚖️" if team['tier'] == 'Diversified' else "🚀"
-            risk_emoji = "🟢" if team['risk_level'] == 'Low' else "🟡" if team['risk_level'] == 'Medium' else "🔴"
+            tier_symbol = "[C]" if team['tier'] == 'Core' else "[D]" if team['tier'] == 'Diversified' else "[M]"
+            risk_symbol = "[L]" if team['risk_level'] == 'Low' else "[M]" if team['risk_level'] == 'Medium' else "[H]"
             
-            print(f"{i:<4} {team['strategy']:<25} {tier_emoji}{team['tier']:<11} {team['captain']:<18} {team['vice_captain']:<18} {risk_emoji}{team['risk_level']:<7} {team['budget_weight']*100:.1f}%")
+            print(f"{i:<4} {team['strategy']:<25} {tier_symbol}{team['tier']:<11} {team['captain']:<18} {team['vice_captain']:<18} {risk_symbol}{team['risk_level']:<7} {team['budget_weight']*100:.1f}%")
         
         print(f"{'='*120}")
         
         # ALWAYS DISPLAY ALL 15 TEAMS WITH COMPLETE DETAILS
-        print(f"\n🏆 COMPLETE 15-TEAM PORTFOLIO WITH ALL PLAYERS:")
+        print(f"\nCOMPLETE 15-TEAM PORTFOLIO WITH ALL PLAYERS:")
         print(f"{'='*120}")
         
         # ALWAYS DISPLAY ALL 15 TEAMS - NO GROUPING, SHOW EVERY SINGLE TEAM
-        print(f"\n🛡️ TIER 1 - CORE TEAMS (Teams 1-5 - Low Risk, High Confidence)")
+        print(f"\nTIER 1 - CORE TEAMS (Teams 1-5 - Low Risk, High Confidence)")
         print("─" * 100)
         for i in range(5):
             if i < len(teams):
                 self._display_single_team(i + 1, teams[i])
         
-        print(f"\n⚖️ TIER 2 - DIVERSIFIED TEAMS (Teams 6-12 - Medium Risk, Balanced)")
+        print(f"\nTIER 2 - DIVERSIFIED TEAMS (Teams 6-12 - Medium Risk, Balanced)")
         print("─" * 100)
         for i in range(5, 12):
             if i < len(teams):
                 self._display_single_team(i + 1, teams[i])
         
-        print(f"\n🚀 TIER 3 - MOONSHOT TEAMS (Teams 13-15 - High Risk, High Reward)")
+        print(f"\nTIER 3 - MOONSHOT TEAMS (Teams 13-15 - High Risk, High Reward)")
         print("─" * 100)
         for i in range(12, 15):
             if i < len(teams):
@@ -463,24 +503,77 @@ class Dream11Ultimate:
     
     def _display_single_team(self, team_num: int, team: Dict):
         """Display a single team with complete player details"""
-        tier_emoji = "🛡️" if team['tier'] == 'Core' else "⚖️" if team['tier'] == 'Diversified' else "🚀"
+        tier_prefix = "[CORE]" if team['tier'] == 'Core' else "[DIV]" if team['tier'] == 'Diversified' else "[MOON]"
         
-        print(f"\n{tier_emoji} TEAM {team_num}: {team['strategy'].upper()}")
+        print(f"\n{tier_prefix} TEAM {team_num}: {team['strategy'].upper()}")
         print(f"{'─' * 85}")
-        print(f"👑 Captain: {team['captain']} | 🥈 Vice-Captain: {team['vice_captain']} | 🎯 Tier: {team['tier']} | ⚖️ Risk: {team['risk_level']} | 💰 Budget: {team['budget_weight']*100:.1f}%")
+        print(f"Captain: {team['captain']} | Vice-Captain: {team['vice_captain']} | Tier: {team['tier']} | Risk: {team['risk_level']} | Budget: {team['budget_weight']*100:.1f}%")
         
         
-        # Display all 11 players in a clear list format
-        print(f"👥 COMPLETE 11-PLAYER LINEUP:")
+        # Display all 11 players in a clear list format with roles
+        print(f"COMPLETE 11-PLAYER LINEUP WITH ROLES:")
         for j, player in enumerate(team['players'], 1):
-            captain_mark = " 👑" if player == team['captain'] else " 🥈" if player == team['vice_captain'] else ""
-            print(f"   {j:2d}. {player}{captain_mark}")
+            captain_mark = " (C)" if player == team['captain'] else " (VC)" if player == team['vice_captain'] else ""
+            
+            # Get player role from team data
+            player_role = self.get_player_role(player)
+            role_emoji = self.get_role_emoji(player_role)
+            
+            print(f"   {j:2d}. {player}{captain_mark} {role_emoji} ({player_role})")
         
         # Show team distribution  
         team1_count = len([p for p in team['players'] if any(t1.get('name') == p for t1 in getattr(self, 'team1_players', []))])
         team2_count = len([p for p in team['players'] if any(t2.get('name') == p for t2 in getattr(self, 'team2_players', []))])
-        print(f"📊 Distribution: Northern Superchargers: {team1_count} | Birmingham Phoenix: {team2_count}")
+        print(f"Distribution: Northern Superchargers: {team1_count} | Birmingham Phoenix: {team2_count}")
         print()
+    
+    def get_player_role(self, player_name: str) -> str:
+        """Get the role of a specific player from team data"""
+        # Check team1 players
+        if hasattr(self, 'team1_players'):
+            for player in self.team1_players:
+                if player['name'] == player_name:
+                    return player.get('role', 'Unknown')
+        
+        # Check team2 players  
+        if hasattr(self, 'team2_players'):
+            for player in self.team2_players:
+                if player['name'] == player_name:
+                    return player.get('role', 'Unknown')
+        
+        return 'Unknown'
+    
+    def get_role_emoji(self, role: str) -> str:
+        """Get emoji for player role"""
+        role_lower = role.lower()
+        
+        if 'keeper' in role_lower or 'wk' in role_lower:
+            return '[WK]'  # Wicket-keeper
+        elif 'batsman' in role_lower or 'bat' in role_lower:
+            return '[BAT]'  # Batsman
+        elif 'bowler' in role_lower:
+            return '[BWL]'  # Bowler
+        elif 'allrounder' in role_lower or 'all-rounder' in role_lower:
+            return '[AR]'  # All-rounder
+        else:
+            return '[UNK]'  # Unknown role
+    
+    def is_player_from_team(self, player_name: str, team_name: str) -> bool:
+        """Check if a player belongs to a specific team"""
+        # Check team1 players
+        if hasattr(self, 'team1_players'):
+            for player in self.team1_players:
+                if player['name'] == player_name:
+                    # Simple team name matching
+                    return 'Manchester' in team_name or 'Northern' in team_name
+        
+        # Check team2 players  
+        if hasattr(self, 'team2_players'):
+            for player in self.team2_players:
+                if player['name'] == player_name:
+                    return 'Manchester' in team_name or 'Northern' in team_name
+        
+        return False
     
     def create_format_optimized_team(self, players: List[str], context: Dict, format_intel: Dict, player_intel: Dict, strategy: str) -> Dict:
         """Create team optimized for specific format"""
@@ -504,7 +597,7 @@ class Dream11Ultimate:
     
     def create_intelligent_team_base(self, players: List[str], context: Dict, format_intel: Dict, player_intel: Dict, strategy: str, priority_type: str) -> Dict:
         """
-        🎯 Base intelligent team creation with learning application
+        Base intelligent team creation with learning application
         """
         if len(players) < 11:
             # Fallback player generation
@@ -535,12 +628,27 @@ class Dream11Ultimate:
     
     def select_intelligent_captain(self, players: List[str], context: Dict, format_intel: Dict, player_intel: Dict, priority_type: str) -> str:
         """
-        👑 Intelligent captain selection using all available intelligence
+        Intelligent captain selection using all available intelligence + 1 Crore winner learnings
         """
         captain_scores = {}
         
         for player in players:
             score = 50  # Base score
+            
+            # CRITICAL: 1 Crore Winner Learning - Jos Buttler Priority for The Hundred
+            if context.get('format') == 'hun' and 'Jos Buttler' in player:
+                score += 100  # MASSIVE boost for Jos Buttler in The Hundred
+                self.logger.info(f"Applied 1Cr winner learning: Jos Buttler captain priority (+100)")
+            
+            # Enhanced format-specific captain selection based on learnings
+            if context.get('format') == 'hun':
+                # The Hundred specific patterns from 1 Cr winner analysis
+                if any(name in player for name in ['Jos Buttler', 'David Miller', 'Dawid Malan']):
+                    score += 50  # Proven The Hundred performers
+                elif any(role in self.get_player_role(player).lower() for role in ['keeper', 'wk']):
+                    score += 40  # Keeper-captains effective in The Hundred
+                elif 'Manchester Originals' in context.get('teams', '') and self.is_player_from_team(player, 'Manchester Originals'):
+                    score += 30  # Team batting first advantage
             
             # Apply format intelligence
             for pattern in format_intel.get('captain_patterns', []):
@@ -557,7 +665,7 @@ class Dream11Ultimate:
                 elif 'good' in intel.get('captaincy_success', '').lower():
                     score += 15
             
-            # Apply context bonuses based on role keywords
+            # Enhanced context bonuses with 1 Cr winner insights
             keywords = self.get_player_keywords(player)
             if context['format'] == 'international_t20' and any(keyword in ['batsman', 'allrounder', 'experienced'] for keyword in keywords):
                 score += 25
@@ -581,7 +689,7 @@ class Dream11Ultimate:
     
     def select_intelligent_vc(self, players: List[str], captain: str, context: Dict, format_intel: Dict, player_intel: Dict, priority_type: str) -> str:
         """
-        🥈 Intelligent VC selection complementing the captain
+        Intelligent VC selection complementing the captain
         """
         vc_scores = {}
         
@@ -763,15 +871,117 @@ class Dream11Ultimate:
         return applied
     
     def generate_fallback_players(self, context: Dict) -> List[str]:
-        """Generate fallback players when match data is not available"""
-        # This would implement intelligent fallback based on context
-        # For now, return a basic set for demonstration
-        return [
-            'Player1', 'Player2', 'Player3', 'Player4', 'Player5', 'Player6',
-            'Player7', 'Player8', 'Player9', 'Player10', 'Player11', 'Player12',
-            'Player13', 'Player14', 'Player15', 'Player16', 'Player17', 'Player18',
-            'Player19', 'Player20', 'Player21', 'Player22'
+        """Generate realistic fallback players when match data is not available"""
+        self.logger.info("Generating realistic players based on team context")
+        
+        # Extract team names from context
+        teams = context.get('teams', 'Team A vs Team B').split(' vs ')
+        team1_name = teams[0].strip() if len(teams) > 0 else 'Team A'
+        team2_name = teams[1].strip() if len(teams) > 1 else 'Team B'
+        
+        # Check if this is The Hundred and use realistic squads
+        if context.get('format') == 'hun' and 'Manchester Originals' in team1_name and 'Northern Superchargers' in team2_name:
+            return self.get_hundred_squad_players()
+        
+        # Fallback to generic but realistic players
+        return self.get_generic_realistic_players(team1_name, team2_name)
+    
+    def get_hundred_squad_players(self) -> List[str]:
+        """Get realistic The Hundred squad players for Manchester Originals vs Northern Superchargers"""
+        self.logger.info("Using realistic The Hundred squad players")
+        
+        # Manchester Originals typical squad
+        manchester_originals = [
+            {'name': 'Jos Buttler', 'role': 'Wicket-keeper', 'captain': True, 'keeper': True},
+            {'name': 'Phil Salt', 'role': 'Wicket-keeper', 'captain': False, 'keeper': True},
+            {'name': 'Laurie Evans', 'role': 'Batsman', 'captain': False, 'keeper': False},
+            {'name': 'Max Holden', 'role': 'Batsman', 'captain': False, 'keeper': False},
+            {'name': 'Paul Walter', 'role': 'All-rounder', 'captain': False, 'keeper': False},
+            {'name': 'Wayne Madsen', 'role': 'Batsman', 'captain': False, 'keeper': False},
+            {'name': 'Tom Hartley', 'role': 'Bowler', 'captain': False, 'keeper': False},
+            {'name': 'Josh Hull', 'role': 'Bowler', 'captain': False, 'keeper': False},
+            {'name': 'Fazalhaq Farooqi', 'role': 'Bowler', 'captain': False, 'keeper': False},
+            {'name': 'Scott Currie', 'role': 'Bowler', 'captain': False, 'keeper': False},
+            {'name': 'Usama Mir', 'role': 'Bowler', 'captain': False, 'keeper': False},
+            {'name': 'Jamie Overton', 'role': 'All-rounder', 'captain': False, 'keeper': False},
+            {'name': 'Michael Pepper', 'role': 'Wicket-keeper', 'captain': False, 'keeper': True},
+            {'name': 'Matthew Hurst', 'role': 'Wicket-keeper', 'captain': False, 'keeper': True},
+            {'name': 'Calvin Harrison', 'role': 'All-rounder', 'captain': False, 'keeper': False}
         ]
+        
+        # Northern Superchargers typical squad  
+        northern_superchargers = [
+            {'name': 'Harry Brook', 'role': 'Batsman', 'captain': True, 'keeper': False},
+            {'name': 'Nicholas Pooran', 'role': 'Wicket-keeper', 'captain': False, 'keeper': True},
+            {'name': 'Adam Hose', 'role': 'Batsman', 'captain': False, 'keeper': False},
+            {'name': 'Dan Lawrence', 'role': 'Batsman', 'captain': False, 'keeper': False},
+            {'name': 'Rehan Ahmed', 'role': 'Bowler', 'captain': False, 'keeper': False},
+            {'name': 'Ben Raine', 'role': 'All-rounder', 'captain': False, 'keeper': False},
+            {'name': 'Jordan Clark', 'role': 'All-rounder', 'captain': False, 'keeper': False},
+            {'name': 'Callum Parkinson', 'role': 'Bowler', 'captain': False, 'keeper': False},
+            {'name': 'Dillon Pennington', 'role': 'Bowler', 'captain': False, 'keeper': False},
+            {'name': 'Matthew Potts', 'role': 'Bowler', 'captain': False, 'keeper': False},
+            {'name': 'Olly Stone', 'role': 'Bowler', 'captain': False, 'keeper': False},
+            {'name': 'Graham Clark', 'role': 'Batsman', 'captain': False, 'keeper': False},
+            {'name': 'Bas de Leede', 'role': 'All-rounder', 'captain': False, 'keeper': False},
+            {'name': 'Brydon Carse', 'role': 'All-rounder', 'captain': False, 'keeper': False},
+            {'name': 'John Turner', 'role': 'Bowler', 'captain': False, 'keeper': False}
+        ]
+        
+        # Store team info for balanced selection
+        self.team1_players = manchester_originals
+        self.team2_players = northern_superchargers
+        
+        # Return combined player names
+        all_players = [p['name'] for p in manchester_originals] + [p['name'] for p in northern_superchargers]
+        self.logger.info(f"Generated {len(all_players)} realistic The Hundred players ({len(manchester_originals)} + {len(northern_superchargers)})")
+        
+        return all_players
+    
+    def get_generic_realistic_players(self, team1_name: str, team2_name: str) -> List[str]:
+        """Generate generic but realistic player names when specific squads aren't available"""
+        team1_players = []
+        team2_players = []
+        
+        # Common cricket player names for realistic fallback
+        first_names = ['Alex', 'Ben', 'Chris', 'David', 'Ethan', 'Frank', 'George', 'Harry', 'Ian', 'Jack', 'Kevin', 'Luke', 'Mark', 'Nathan', 'Oscar']
+        last_names = ['Anderson', 'Brown', 'Clark', 'Davies', 'Evans', 'Ford', 'Green', 'Hall', 'Jones', 'King', 'Lewis', 'Miller', 'Parker', 'Smith', 'Taylor']
+        
+        # Generate Team 1 players
+        for i in range(15):
+            first = first_names[i % len(first_names)]
+            last = last_names[i % len(last_names)]
+            player_name = f"{first} {last}"
+            team1_players.append({
+                'name': player_name,
+                'role': ['Batsman', 'Bowler', 'All-rounder', 'Wicket-keeper'][i % 4],
+                'captain': i == 0,
+                'keeper': i == 3
+            })
+        
+        # Generate Team 2 players (different combinations)
+        for i in range(15):
+            first_idx = (i + 7) % len(first_names)
+            last_idx = (i + 5) % len(last_names)
+            first = first_names[first_idx]
+            last = last_names[last_idx]
+            player_name = f"{first} {last}"
+            team2_players.append({
+                'name': player_name,
+                'role': ['Batsman', 'Bowler', 'All-rounder', 'Wicket-keeper'][i % 4],
+                'captain': i == 0,
+                'keeper': i == 3
+            })
+        
+        # Store team info for balanced selection
+        self.team1_players = team1_players
+        self.team2_players = team2_players
+        
+        # Return combined player names
+        all_players = [p['name'] for p in team1_players] + [p['name'] for p in team2_players]
+        self.logger.info(f"Generated {len(all_players)} generic fallback players ({len(team1_players)} + {len(team2_players)})")
+        
+        return all_players
     
     def save_predictions(self, match_id: str, context: Dict, teams: List[Dict], save_dir: str = "predictions") -> str:
         """Save predictions to file with comprehensive analysis"""
@@ -801,27 +1011,27 @@ class Dream11Ultimate:
     
     def display_predictions(self, match_id: str, context: Dict, teams: List[Dict]):
         """
-        🎨 Display beautiful, comprehensive predictions
+        Display beautiful, comprehensive predictions
         """
         print("\n" + "="*80)
-        print("🏆 DREAM11 ULTIMATE PREDICTION SYSTEM")
-        print("🧠 Universal Cricket Intelligence with Advanced Learning")
+        print("DREAM11 ULTIMATE PREDICTION SYSTEM")
+        print("Universal Cricket Intelligence with Advanced Learning")
         print("="*80)
         
-        print(f"\n🏏 MATCH DETAILS:")
-        print(f"🆔 Match ID: {match_id}")
-        print(f"⚽ Teams: {context['teams']}")
-        print(f"📊 Format: {context['format'].upper()}")
-        print(f"🏟️ Venue: {context['venue']}")
-        print(f"🎯 Intelligence Level: {context['intelligence_level'].upper()}")
+        print(f"\nMATCH DETAILS:")
+        print(f"Match ID: {match_id}")
+        print(f"Teams: {context['teams']}")
+        print(f"Format: {context['format'].upper()}")
+        print(f"Venue: {context['venue']}")
+        print(f"Intelligence Level: {context['intelligence_level'].upper()}")
         
-        print(f"\n🧠 UNIVERSAL INTELLIGENCE APPLIED:")
-        print(f"✅ Format-Specific Learning: {context['format']} patterns")
-        print(f"✅ Player Intelligence: Individual performance analysis")
-        print(f"✅ Context Awareness: {context['series_type']} series optimization")
-        print(f"✅ Proven Patterns: 1 Crore winner insights integrated")
+        print(f"\nUNIVERSAL INTELLIGENCE APPLIED:")
+        print(f"Format-Specific Learning: {context['format']} patterns")
+        print(f"Player Intelligence: Individual performance analysis")
+        print(f"Context Awareness: {context['series_type']} series optimization")
+        print(f"Proven Patterns: 1 Crore winner insights integrated")
         
-        print(f"\n🏆 DREAM11 - 15 TEAM PORTFOLIO:")
+        print(f"\nDREAM11 - 15 TEAM PORTFOLIO:")
         print("="*100)
         
         # Display teams in table format
@@ -831,32 +1041,32 @@ class Dream11Ultimate:
         captains = [team['captain'] for team in teams]
         vcs = [team['vice_captain'] for team in teams]
         
-        print(f"\n📊 PREDICTION SUMMARY:")
+        print(f"\nPREDICTION SUMMARY:")
         print("="*30)
-        print(f"👑 Captains: {captains}")
-        print(f"🥈 Vice-Captains: {vcs}")
-        print(f"🏏 Teams Generated: {len(teams)}")
-        print(f"✅ All teams have players from both sides")
+        print(f"Captains: {captains}")
+        print(f"Vice-Captains: {vcs}")
+        print(f"Teams Generated: {len(teams)}")
+        print(f"All teams have players from both sides")
         
-        print(f"\n🚀 ULTIMATE SYSTEM STATUS:")
+        print(f"\nULTIMATE SYSTEM STATUS:")
         print("="*30)
-        print("🧠 Intelligence Level: ULTIMATE (all formats + learning)")
-        print("📚 Learning Database: ACTIVE (never losing insights)")
-        print("👑 Captain Strategy: FORMAT-OPTIMIZED (context-aware)")
-        print("🥈 VC Strategy: PROVEN PATTERNS (intelligence-backed)")
-        print("📊 Prediction Quality: MAXIMUM (ultimate intelligence)")
+        print("Intelligence Level: ULTIMATE (all formats + learning)")
+        print("Learning Database: ACTIVE (never losing insights)")
+        print("Captain Strategy: FORMAT-OPTIMIZED (context-aware)")
+        print("VC Strategy: PROVEN PATTERNS (intelligence-backed)")
+        print("Prediction Quality: MAXIMUM (ultimate intelligence)")
         
-        print(f"\n🏆 15-TEAM PORTFOLIO COMPLETE!")
+        print(f"\n15-TEAM PORTFOLIO COMPLETE!")
         print("Your Ultimate Cricket Intelligence System has generated")
-        print("15 strategically diversified teams with maximum intelligence! 🧠⚡🚀")
-        print(f"🛡️ Core: 5 teams | ⚖️ Diversified: 7 teams | 🚀 Moonshot: 3 teams")
+        print("15 strategically diversified teams with maximum intelligence!")
+        print(f"Core: 5 teams | Diversified: 7 teams | Moonshot: 3 teams")
     
     def predict(self, match_id: str, save_to_file: bool = False, save_dir: str = "predictions") -> bool:
         """
-        🎯 Main prediction method - The ONE method to rule them all
+        Main prediction method - The ONE method to rule them all
         """
         try:
-            print("🚀 Starting Ultimate Prediction System...")
+            print("Starting Ultimate Prediction System...")
             
             # Resolve match context
             context = self.resolve_match_context(match_id)
@@ -873,9 +1083,9 @@ class Dream11Ultimate:
             # Log prediction to database (ALWAYS)
             try:
                 self.log_prediction_to_database(match_id, context, teams)
-                print("✅ Prediction logged to database")
+                print("Prediction logged to database")
             except Exception as e:
-                print(f"⚠️ Database logging unavailable: {e}")
+                print(f"Database logging unavailable: {e}")
             
             # Also log via learning system if available
             if self.learning_system:
@@ -895,19 +1105,19 @@ class Dream11Ultimate:
                         venue=context.get('venue'),
                         teams_playing=context.get('teams')
                     )
-                    print("✅ Prediction logged for continuous learning")
+                    print("Prediction logged for continuous learning")
                 except Exception as e:
-                    print(f"⚠️ Learning system unavailable: {e}")
+                    print(f"Learning system unavailable: {e}")
             
             return True
             
         except Exception as e:
-            self.logger.error(f"❌ Prediction failed: {e}")
-            print(f"❌ Prediction failed: {e}")
+            self.logger.error(f"Prediction failed: {e}")
+            print(f"Prediction failed: {e}")
             return False
     
     def get_match_players(self, match_id: str, context: Dict) -> List[str]:
-        """Get players for the match from API data"""
+        """Get players for the match from API data with commentary fallback"""
         try:
             # Import API client
             from utils.api_client import fetch_match_center
@@ -916,7 +1126,8 @@ class Dream11Ultimate:
             match_data = fetch_match_center(match_id)
             
             if not match_data or 'matchInfo' not in match_data:
-                return self.generate_fallback_players(context)
+                # Try commentary fallback before giving up
+                return self.get_players_from_commentary(match_id, context)
             
             match_info = match_data['matchInfo']
             
@@ -953,15 +1164,168 @@ class Dream11Ultimate:
             # Combine all player names for backward compatibility
             all_players = [p['name'] for p in self.team1_players] + [p['name'] for p in self.team2_players]
             
-            # Return real players if we found enough, otherwise fallback
+            # Return real players if we found enough, otherwise try commentary fallback
             if len(all_players) >= 22:  # Need at least 22 players for team generation
+                self.logger.info(f"Found {len(all_players)} players from squad data")
                 return all_players
             else:
-                return self.generate_fallback_players(context)
+                self.logger.warning(f"Only found {len(all_players)} players from squad, trying commentary fallback...")
+                return self.get_players_from_commentary(match_id, context)
                 
         except Exception as e:
-            self.logger.warning(f"⚠️ Error getting real players: {e}")
+            self.logger.warning(f"Error getting real players: {e}")
+            return self.get_players_from_commentary(match_id, context)
+    
+    def get_players_from_commentary(self, match_id: str, context: Dict) -> List[str]:
+        """
+        Fallback method to extract playing 11 or probable 11 from commentary section
+        """
+        try:
+            self.logger.info("Searching for playing 11 in commentary section...")
+            
+            # Import API client for commentary
+            from utils.api_client import fetch_match_commentary
+            
+            # Get commentary data
+            commentary_data = fetch_match_commentary(match_id)
+            
+            if not commentary_data or 'commentaryList' not in commentary_data:
+                self.logger.warning("No commentary data available")
+                return self.generate_fallback_players(context)
+            
+            # Initialize team players lists
+            self.team1_players = []
+            self.team2_players = []
+            team1_playing = []
+            team2_playing = []
+            
+            # Search for playing 11 patterns in commentary
+            playing_11_patterns = [
+                r'playing.*?11',
+                r'probable.*?11',
+                r'starting.*?11', 
+                r'line.*?up',
+                r'team.*?sheet',
+                r'squad.*?announced'
+            ]
+            
+            player_name_patterns = [
+                r'([A-Z][a-z]+ [A-Z][a-z]+)',  # First Last
+                r'([A-Z]\. [A-Z][a-z]+)',      # F. Last
+                r'([A-Z][a-z]+ [A-Z]\. [A-Z][a-z]+)',  # First F. Last
+            ]
+            
+            commentary_text = ""
+            
+            # Combine all commentary text
+            for commentary in commentary_data.get('commentaryList', []):
+                if 'commText' in commentary:
+                    commentary_text += commentary['commText'] + " "
+            
+            # Look for playing 11 mentions
+            import re
+            found_players = set()
+            
+            # Search for playing 11 sections
+            for pattern in playing_11_patterns:
+                matches = re.finditer(pattern, commentary_text, re.IGNORECASE)
+                for match in matches:
+                    # Get surrounding text (200 chars before and after)
+                    start = max(0, match.start() - 200)
+                    end = min(len(commentary_text), match.end() + 200)
+                    surrounding_text = commentary_text[start:end]
+                    
+                    # Extract player names from surrounding text
+                    for name_pattern in player_name_patterns:
+                        names = re.findall(name_pattern, surrounding_text)
+                        for name in names:
+                            if len(name.split()) >= 2:  # At least first and last name
+                                found_players.add(name.strip())
+            
+            # If we found some players, try to assign them to teams
+            if len(found_players) >= 10:  # Need at least 10 unique players
+                players_list = list(found_players)
+                
+                # Try to identify team names from context
+                team_names = context.get('teams', '').split(' vs ')
+                if len(team_names) == 2:
+                    team1_name = team_names[0].strip()
+                    team2_name = team_names[1].strip()
+                    
+                    # Smart assignment: first half to team1, second half to team2
+                    mid_point = len(players_list) // 2
+                    team1_names = players_list[:mid_point]
+                    team2_names = players_list[mid_point:]
+                    
+                    # Ensure we have enough players for each team
+                    while len(team1_names) < 11 and len(team2_names) > 11:
+                        team1_names.append(team2_names.pop())
+                    while len(team2_names) < 11 and len(team1_names) > 11:
+                        team2_names.append(team1_names.pop())
+                    
+                    # Create team player objects
+                    for i, name in enumerate(team1_names[:15]):  # Max 15 per team
+                        role = self.guess_player_role(name, commentary_text)
+                        self.team1_players.append({
+                            'name': name,
+                            'role': role,
+                            'captain': i == 0,  # First player as captain
+                            'keeper': 'keeper' in role.lower() or 'wk' in role.lower()
+                        })
+                    
+                    for i, name in enumerate(team2_names[:15]):  # Max 15 per team
+                        role = self.guess_player_role(name, commentary_text)
+                        self.team2_players.append({
+                            'name': name,
+                            'role': role,
+                            'captain': i == 0,  # First player as captain
+                            'keeper': 'keeper' in role.lower() or 'wk' in role.lower()
+                        })
+                    
+                    all_players = [p['name'] for p in self.team1_players] + [p['name'] for p in self.team2_players]
+                    
+                    if len(all_players) >= 22:
+                        self.logger.info(f"Found {len(all_players)} players from commentary")
+                        return all_players
+            
+            self.logger.warning("Could not find enough players in commentary, using fallback")
             return self.generate_fallback_players(context)
+            
+        except Exception as e:
+            self.logger.warning(f"Error extracting players from commentary: {e}")
+            return self.generate_fallback_players(context)
+    
+    def guess_player_role(self, player_name: str, commentary_text: str) -> str:
+        """Guess player role based on commentary context"""
+        name_lower = player_name.lower()
+        text_around_name = ""
+        
+        # Find text around player name
+        import re
+        pattern = rf'{re.escape(player_name)}'
+        matches = re.finditer(pattern, commentary_text, re.IGNORECASE)
+        for match in matches:
+            start = max(0, match.start() - 100)
+            end = min(len(commentary_text), match.end() + 100)
+            text_around_name += commentary_text[start:end] + " "
+        
+        text_lower = text_around_name.lower()
+        
+        # Role keywords
+        if any(word in text_lower for word in ['keeper', 'wicket-keeper', 'wk']):
+            return 'Wicket-keeper'
+        elif any(word in text_lower for word in ['bowler', 'bowling', 'pace', 'spin', 'seam']):
+            if any(word in text_lower for word in ['allrounder', 'all-rounder', 'batting']):
+                return 'All-rounder'
+            return 'Bowler'
+        elif any(word in text_lower for word in ['batsman', 'batting', 'opener', 'top-order', 'middle-order']):
+            if any(word in text_lower for word in ['allrounder', 'all-rounder', 'bowling']):
+                return 'All-rounder'
+            return 'Batsman'
+        elif any(word in text_lower for word in ['allrounder', 'all-rounder']):
+            return 'All-rounder'
+        else:
+            return 'Batsman'  # Default to batsman
     
     def select_balanced_team(self, players: List[str], context: Dict, strategy: str) -> List[str]:
         """
@@ -1016,8 +1380,19 @@ class Dream11Ultimate:
                 if player.get('captain', False):
                     score += 20
                 
-                # Role-specific scoring (you can enhance this with actual stats)
+                # Enhanced role-specific scoring with 1 Cr winner insights
                 role = player['role'].lower()
+                
+                # 1 Crore Winner Learning: Dual Keeper Strategy for The Hundred
+                if context.get('format') == 'hun' and ('wk' in role or 'keeper' in role):
+                    keeper_count = len([p for p in selected if 'wk' in self.get_player_role(p).lower() or 'keeper' in self.get_player_role(p).lower()])
+                    if keeper_count == 0:
+                        score += 25  # First keeper gets priority
+                    elif keeper_count == 1 and any(name in player['name'] for name in ['Jos Buttler', 'Heinrich Klaasen', 'Phil Salt']):
+                        score += 20  # Second keeper bonus for proven combinations
+                    else:
+                        score += 5   # Lower priority for third keeper
+                
                 if 'batsman' in role:
                     score += 15  # Base batting score
                 elif 'bowler' in role:
@@ -1026,6 +1401,18 @@ class Dream11Ultimate:
                     score += 18  # All-rounders get premium
                 elif 'wk' in role or 'keeper' in role:
                     score += 10  # Keeper base score
+                
+                # 1 Crore Winner Learning: Team Batting First Advantage
+                if context.get('format') == 'hun':
+                    # Identify which team is batting first (usually stronger batting team)
+                    teams_playing = context.get('teams', '')
+                    if 'Manchester Originals' in teams_playing:
+                        # Check if this player is from Manchester Originals (typically stronger batting)
+                        if hasattr(self, 'team1_players'):
+                            for team_player in self.team1_players:
+                                if team_player['name'] == player['name']:
+                                    score += 15  # Batting first team advantage
+                                    break
                 
                 # Add some randomization for strategy diversity
                 import random
@@ -1250,7 +1637,7 @@ class Dream11Ultimate:
                         if any(keyword in ['keeper', 'wicket_keeper'] for keyword in keywords):
                             captain_scores[player] += 20
                 
-                self.logger.debug(f"🔄 Applied correlation-based diversity for {priority_type}")
+                self.logger.debug(f"Applied correlation-based diversity for {priority_type}")
                 
             else:
                 # Fallback to simple diversity if not enough players
@@ -1258,7 +1645,7 @@ class Dream11Ultimate:
                 
         except Exception as e:
             # Fallback to simple diversity if correlation engine fails
-            self.logger.warning(f"⚠️ Correlation diversity failed, using fallback: {e}")
+            self.logger.warning(f"Correlation diversity failed, using fallback: {e}")
             self._apply_simple_diversity_fallback(captain_scores, priority_type)
     
     def _apply_simple_diversity_fallback(self, captain_scores: Dict, priority_type: str):
@@ -1323,14 +1710,14 @@ class Dream11Ultimate:
                         if diversity_score > 0.5:
                             vc_scores[player] += int(25 * diversity_score)
                 
-                self.logger.debug(f"🔄 Applied correlation-based VC diversity for {priority_type}")
+                self.logger.debug(f"Applied correlation-based VC diversity for {priority_type}")
                 
             else:
                 # Fallback to simple VC diversity
                 self._apply_simple_vc_diversity_fallback(vc_scores, priority_type)
                 
         except Exception as e:
-            self.logger.warning(f"⚠️ VC correlation diversity failed, using fallback: {e}")
+            self.logger.warning(f"VC correlation diversity failed, using fallback: {e}")
             self._apply_simple_vc_diversity_fallback(vc_scores, priority_type)
     
     def _apply_simple_vc_diversity_fallback(self, vc_scores: Dict, priority_type: str):
@@ -1394,7 +1781,7 @@ class Dream11Ultimate:
 
 def main():
     """Main entry point for Ultimate Prediction System"""
-    parser = argparse.ArgumentParser(description="🏆 Dream11 Ultimate Prediction System")
+    parser = argparse.ArgumentParser(description="Dream11 Ultimate Prediction System")
     parser.add_argument("match_id", help="Match ID to generate predictions for")
     
     args = parser.parse_args()
@@ -1407,16 +1794,16 @@ def main():
     try:
         success = ultimate_system.predict(match_id)
         if success:
-            print("\n🏆 Ultimate Prediction System completed successfully!")
+            print("\nUltimate Prediction System completed successfully!")
         else:
-            print("\n❌ Prediction failed. Check logs for details.")
+            print("\nPrediction failed. Check logs for details.")
             sys.exit(1)
     
     except KeyboardInterrupt:
-        print("\n⚠️ Prediction interrupted by user")
+        print("\nPrediction interrupted by user")
     
     except Exception as e:
-        print(f"\n❌ Unexpected error: {e}")
+        print(f"\nUnexpected error: {e}")
         sys.exit(1)
     
     finally:

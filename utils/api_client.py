@@ -62,7 +62,7 @@ def fetch_upcoming_matches():
     Fetches upcoming matches from Cricbuzz API with rate limiting and caching
     """
     if _MISSING_API_KEY:
-        print("⚠️ RAPIDAPI_KEY not set – returning fallback upcoming matches data")
+        print("Warning: RAPIDAPI_KEY not set – returning fallback upcoming matches data")
         return _get_sample_matches_data()
     if RATE_LIMITING_ENABLED:
         # Check cache first
@@ -126,7 +126,7 @@ def fetch_live_matches():
     Fetches live matches from Cricbuzz API
     """
     if _MISSING_API_KEY:
-        print("⚠️ RAPIDAPI_KEY not set – live matches not available; returning error")
+        print("Warning: RAPIDAPI_KEY not set – live matches not available; returning error")
         return {"error": "Missing RAPIDAPI_KEY"}
     try:
         url = f"{API_BASE_URL}/matches/v1/live"
@@ -142,7 +142,7 @@ def fetch_recent_matches():
     Fetches recent/completed matches from Cricbuzz API with improved error handling
     """
     if _MISSING_API_KEY:
-        print("⚠️ RAPIDAPI_KEY not set – returning fallback recent matches data")
+        print("Warning: RAPIDAPI_KEY not set – returning fallback recent matches data")
         return _get_sample_recent_matches_data()
     try:
         url = f"{API_BASE_URL}/matches/v1/recent"
@@ -273,7 +273,7 @@ def fetch_squads(series_id):
     Fetches squad information for a series from Cricbuzz API with rate limiting and caching
     """
     if _MISSING_API_KEY:
-        print(f"⚠️ RAPIDAPI_KEY not set – returning fallback squads for series {series_id}")
+        print(f"Warning: RAPIDAPI_KEY not set – returning fallback squads for series {series_id}")
         return _get_sample_squads_data(series_id)
     if RATE_LIMITING_ENABLED:
         # Check cache first
@@ -368,7 +368,7 @@ def fetch_player_stats(player_id):
     Fetches player statistics from Cricbuzz API
     """
     if _MISSING_API_KEY:
-        print(f"⚠️ RAPIDAPI_KEY not set – returning fallback player stats for {player_id}")
+        print(f"Warning: RAPIDAPI_KEY not set – returning fallback player stats for {player_id}")
         return _get_sample_player_stats(player_id)
     try:
         url = f"{API_BASE_URL}/stats/v1/player/{player_id}"
@@ -448,7 +448,7 @@ def fetch_venue_stats(venue_id):
     Fetches venue statistics from Cricbuzz API
     """
     if _MISSING_API_KEY:
-        print(f"⚠️ RAPIDAPI_KEY not set – returning fallback venue stats for {venue_id}")
+        print(f"Warning: RAPIDAPI_KEY not set – returning fallback venue stats for {venue_id}")
         return _get_sample_venue_stats(venue_id)
     try:
         url = f"{API_BASE_URL}/stats/v1/venue/{venue_id}"
@@ -494,7 +494,7 @@ def fetch_match_center(match_id):
     Fetches match center information from Cricbuzz API with optimization
     """
     if _MISSING_API_KEY:
-        print(f"⚠️ RAPIDAPI_KEY not set – returning fallback/empty match center for {match_id}")
+        print(f"Warning: RAPIDAPI_KEY not set – returning fallback/empty match center for {match_id}")
         return {"error": "Missing RAPIDAPI_KEY"}
     if RATE_LIMITING_ENABLED:
         # Check cache first
@@ -695,3 +695,52 @@ def invalidate_live_data():
         print("🔄 Invalidated live data cache")
     else:
         print("❌ Cache not available")
+
+def fetch_match_commentary(match_id):
+    """
+    Fetches match commentary from Cricbuzz API
+    """
+    if _MISSING_API_KEY:
+        print(f"Warning: RAPIDAPI_KEY not set – returning fallback commentary for {match_id}")
+        return {"error": "Missing RAPIDAPI_KEY"}
+    
+    if RATE_LIMITING_ENABLED:
+        # Check cache first
+        cache_key = f"commentary_{match_id}"
+        cached_data = _cache.get_match_data(cache_key)
+        if cached_data:
+            print(f"🎯 Cache hit: commentary {match_id}")
+            return cached_data
+        
+        # Check rate limit
+        if not _rate_limiter.acquire_request_slot("medium"):
+            print(f"🚫 Rate limited: commentary {match_id}")
+            return {"error": "Rate limited", "fallback": True}
+    
+    try:
+        # Try different commentary endpoints
+        commentary_urls = [
+            f"{API_BASE_URL}/mcenter/v1/{match_id}/comm",
+            f"{API_BASE_URL}/mcenter/v1/{match_id}/commentary", 
+            f"{API_BASE_URL}/commentary/v1/{match_id}"
+        ]
+        
+        for url in commentary_urls:
+            try:
+                response = requests.get(url, headers=API_HEADERS, timeout=30)
+                if response.status_code == 200:
+                    data = response.json()
+                    if data and 'commentaryList' in data:
+                        if RATE_LIMITING_ENABLED:
+                            _cache.store_match_data(cache_key, data)
+                        print(f"✅ Fetched commentary for match {match_id}")
+                        return data
+            except:
+                continue
+        
+        print(f"Warning: No commentary data available for match {match_id}")
+        return {"error": "No commentary data"}
+        
+    except Exception as e:
+        print(f"❌ Error fetching match commentary {match_id}: {e}")
+        return None
