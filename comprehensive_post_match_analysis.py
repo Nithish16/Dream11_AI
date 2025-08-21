@@ -64,6 +64,33 @@ class ComprehensivePostMatchAnalysis:
     def _load_our_predictions(self, match_id: str) -> Dict:
         """Load our predictions from the learning database"""
         try:
+            # First try Smart15 predictions database
+            conn = sqlite3.connect("data/smart15_predictions.db")
+            cursor = conn.cursor()
+            
+            cursor.execute('''
+                SELECT portfolio_analysis, total_budget, match_format, venue, teams
+                FROM smart15_predictions 
+                WHERE match_id = ? 
+                ORDER BY prediction_timestamp DESC 
+                LIMIT 1
+            ''', (match_id,))
+            
+            result = cursor.fetchone()
+            conn.close()
+            
+            if result:
+                portfolio_data = json.loads(result[0]) if result[0] else {}
+                return {
+                    'teams_data': portfolio_data,
+                    'ai_strategies': [],  # Smart15 uses different strategy structure
+                    'match_format': result[2],
+                    'venue': result[3],
+                    'teams_playing': result[4],
+                    'prediction_type': 'smart15'
+                }
+                
+            # Fallback to old predictions table
             conn = sqlite3.connect("data/ai_learning_database.db")
             cursor = conn.cursor()
             
@@ -84,7 +111,8 @@ class ComprehensivePostMatchAnalysis:
                     'ai_strategies': json.loads(result[1]) if result[1] else [],
                     'match_format': result[2],
                     'venue': result[3],
-                    'teams_playing': result[4]
+                    'teams_playing': result[4],
+                    'prediction_type': 'legacy'
                 }
         except Exception as e:
             print(f"Warning: Error loading predictions: {e}")

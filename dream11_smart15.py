@@ -33,6 +33,7 @@ try:
     from core_logic.correlation_diversity_engine import get_correlation_diversity_engine
     from core_logic.weather_pitch_analyzer import get_match_conditions
     from ai_learning_system import AILearningSystem
+    from database_storage_manager import DatabaseStorageManager
 except ImportError as e:
     print(f"⚠️ Import warning: {e}")
     print("🔄 Using fallback mode...")
@@ -49,6 +50,9 @@ class Dream11Smart15:
         
         # Initialize base Ultimate system
         self.ultimate_system = Dream11Ultimate()
+        
+        # Initialize database storage
+        self.db_storage = DatabaseStorageManager()
         
         # Smart 15 configuration
         self.portfolio_config = {
@@ -155,8 +159,8 @@ class Dream11Smart15:
         portfolio['captain_distribution'] = self.analyze_captain_distribution(portfolio)
         portfolio['risk_analysis'] = self.analyze_portfolio_risk(portfolio)
         
-        # Step 8: Save and display results
-        self.save_smart15_portfolio(match_id, portfolio)
+        # Step 8: Store predictions in database and display results
+        self.store_portfolio_in_database(match_id, portfolio, total_budget)
         self.display_smart15_portfolio(match_id, portfolio)
         
         return portfolio
@@ -516,30 +520,21 @@ class Dream11Smart15:
             }
         }
     
-    def save_smart15_portfolio(self, match_id: str, portfolio: Dict, save_dir: str = "predictions") -> str:
+    def store_portfolio_in_database(self, match_id: str, portfolio: Dict, total_budget: float):
         """
-        💾 Save Smart 15 portfolio to file
+        💾 Store Smart 15 portfolio in database for learning and analysis
         """
-        portfolio_data = {
-            'match_id': match_id,
-            'portfolio': portfolio,
-            'generation_time': datetime.now().isoformat(),
-            'system_version': 'Smart15 v1.0',
-            'strategy_type': 'Smart 15 Portfolio'
-        }
-        
-        # Create predictions directory if it doesn't exist
-        os.makedirs(save_dir, exist_ok=True)
-        
-        # Save to file
-        timestamp = datetime.now().strftime('%Y%m%d_%H%M%S')
-        filename = f'{save_dir}/smart15_portfolio_{match_id}_{timestamp}.json'
-        
-        with open(filename, 'w') as f:
-            json.dump(portfolio_data, f, indent=2)
-        
-        self.logger.info(f"💾 Smart 15 Portfolio saved to: {filename}")
-        return filename
+        try:
+            prediction_id = self.db_storage.store_smart15_prediction(
+                match_id=match_id,
+                portfolio=portfolio,
+                system_version="Smart15 v1.0"
+            )
+            self.logger.info(f"💾 Smart 15 Portfolio stored in database with ID: {prediction_id}")
+            return prediction_id
+        except Exception as e:
+            self.logger.error(f"❌ Failed to store portfolio in database: {e}")
+            return None
     
     def display_smart15_portfolio(self, match_id: str, portfolio: Dict):
         """
@@ -613,13 +608,11 @@ def main():
     parser = argparse.ArgumentParser(description="🏆 Dream11 Smart 15 Strategy Generator")
     parser.add_argument("match_id", help="Match ID to generate Smart 15 portfolio for")
     parser.add_argument("--budget", type=float, default=1000.0, help="Total budget for portfolio (default: ₹1000)")
-    parser.add_argument("--save-dir", default="predictions", help="Directory to save portfolio (default: predictions)")
     
     args = parser.parse_args()
     
     match_id = args.match_id
     total_budget = args.budget
-    save_directory = args.save_dir
     
     # Initialize and run Smart 15 System
     smart15_system = Dream11Smart15()
@@ -628,7 +621,6 @@ def main():
         portfolio = smart15_system.generate_smart15_portfolio(match_id, total_budget)
         
         print(f"\n🏆 Smart 15 Portfolio Generation Complete!")
-        print(f"📁 Saved to: {save_directory}/")
         print(f"💰 Total Budget Allocated: ₹{total_budget}")
         print(f"🎯 Ready for Contest Entry!")
         
